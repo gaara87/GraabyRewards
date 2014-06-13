@@ -1,0 +1,331 @@
+<?xml version="1.0" encoding="utf-8"?>
+<uk.co.senab.actionbarpulltorefresh.extras.actionbarcompat.PullToRefreshLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/ptr_layout"
+    tools:context=".fragments.ProfileFragment"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <ScrollView
+        android:id="@+id/profile_scrollview"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="@dimen/global8"
+                android:background="@color/midnightblue"
+                android:padding="@dimen/globalPadding8">
+
+                <RelativeLayout
+                    android:layout_width="@dimen/profile_pic_frame_size"
+                    android:layout_height="@dimen/profile_pic_frame_size"
+                    android:background="@android:color/transparent">
+
+                    <com.android.volley.toolbox.NetworkImageView
+                        android:id="@+id/profile_pic_imageview"
+                        android:layout_width="@dimen/profile_pic_frame_size"
+                        android:layout_height="@dimen/profile_pic_frame_size"
+                        android:background="@android:color/transparent"
+                        android:contentDescription="Profile picture"
+                        android:scaleType="fitCenter" />
+
+                    <ImageView
+                        android:id="@+id/profile_image_mask_imageView"
+                        android:layout_width="@dimen/profile_pic_frame_size"
+                        android:layout_height="@dimen/profile_pic_frame_size"
+                        android:layout_alignParentLeft="true"
+                        android:layout_alignParentRight="true"
+                        android:layout_alignParentTop="true"
+                        android:background="@android:color/transparent"
+                        android:contentDescription="@string/hint_placeholder"
+                        android:scaleType="fitCenter"
+                        android:src="@drawable/mask" />
+                </RelativeLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:background="@android:color/transparent"
+                    android:gravity="center_vertical|right"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:id="@+id/profile_name_textView"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:gravity="right"
+                        android:hint="@string/hint_placeholder"
+                        android:textAppearance="?android:attr/textAppearanceLarge"
+                        android:textColor="@android:color/white" />
+
+                    <TextView
+                        android:id="@+id/profile_moto_textView"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:gravity="right"
+                        android:hint="@string/hint_placeholder"
+                        android:textAppearance="?android:attr/textAppearanceSmall"
+                        android:textColor="@android:color/secondary_text_dark" />
+
+                    <TextView
+                        android:id="@+id/profile_loc_textView"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:gravity="right"
+                        android:hint="@string/hint_placeholder"
+                        android:textAppearance="?android:attr/textAppearanceSmall"
+                        android:textColor="@android:color/secondary_text_dark" />
+                </LinearLayout>
+            </LinearLayout>
+
+            <Button
+                android:id="@+id/profile_connect_button"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/connect"
+                android:textAppearance="?android:attr/textAppearanceMedium"
+                android:visibility="gone" />
+
+            <TableLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="@dimen/global8"
+                android:background="@android:color/transparent"
+                android:stretchColumns="*">
+
+                <TableRow
+                    android:id="@+id/tableRow1"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+
+                    <TextView
+                        android:id="@+id/profile_points_textView"
+                        style="@style/profile_stats"
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:layout_gravity="center_horizontal|bottom"
+                        android:drawableLeft="@drawable/ic_point"
+                        android:hint="@string/hint_placeholder"
+                        android:textColor="@color/holo_darkyellow"
+                        android:textSize="@dimen/important_font_size"
+                        android:textStyle="bold" />
+
+                    <TextView
+                        android:id="@+id/profile_total_savings_textView"
+                        style="@style/profile_stats"
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:layout_gravity="center_horizontal|bottom"
+                        android:drawableLeft="@drawable/ic_savings"
+                        android:hint="@string/hint_placeholder" />
+
+                    <TextView
+                        android:id="@+id/profile_total_points_textView"
+                        style="@style/profile_stats"
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:layout_gravity="center_horizontal|bottom"
+                        android:drawableLeft="@drawable/ic_earnings"
+                        android:hint="@string/hint_placeholder" />
+                </TableRow>
+
+                <TableRow
+                    android:id="@+id/tableRow2"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+
+                    <TextView
+                        style="@style/profile_subtext"
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:text="Balance" />
+
+                    <TextView
+                        style="@style/profile_subtext"
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:text="@string/profile_stat_name_savings" />
+
+                    <TextView
+                        style="@style/profile_subtext"
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:text="Earnings" />
+                </TableRow>
+            </TableLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@drawable/card_bg"
+                android:orientation="vertical">
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="center"
+                    android:text="You own"
+                    android:textAppearance="?android:attr/textAppearanceMedium" />
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:baselineAligned="false">
+
+                    <LinearLayout
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent"
+                        android:layout_marginRight="4dp"
+                        android:layout_weight="1"
+                        android:gravity="center"
+                        android:orientation="vertical">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Vouchers"
+                            android:textAppearance="?android:attr/textAppearanceMedium"
+                            android:textColor="@color/silver" />
+
+                        <TextView
+                            android:id="@+id/profile_total_vouchers_textView"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginBottom="@dimen/global8"
+                            android:layout_marginTop="@dimen/global8"
+                            android:drawableLeft="@drawable/voucher_withpadding"
+                            android:gravity="center"
+                            android:hint="@string/hint_placeholder"
+                            android:textSize="@dimen/important_font_size" />
+
+                        <Button
+                            android:id="@+id/profile_vouchers_viewall_button"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:text="@string/view_all" />
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent"
+                        android:layout_marginLeft="4dp"
+                        android:layout_weight="1"
+                        android:gravity="center"
+                        android:orientation="vertical">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Coupons"
+                            android:textAppearance="?android:attr/textAppearanceMedium"
+                            android:textColor="@color/silver" />
+
+                        <TextView
+                            android:id="@+id/profile_total_coupons_textView"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginBottom="@dimen/global8"
+                            android:layout_marginTop="@dimen/global8"
+                            android:drawableLeft="@drawable/coupon_withpadding"
+                            android:gravity="center"
+                            android:hint="@string/hint_placeholder"
+                            android:textSize="@dimen/important_font_size" />
+
+                        <Button
+                            android:id="@+id/profile_coupons_viewall_button"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:text="@string/view_all" />
+                    </LinearLayout>
+                </LinearLayout>
+            </LinearLayout>
+
+            <TableLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="@dimen/global8"
+                android:stretchColumns="*">
+
+                <TableRow
+                    android:id="@+id/TableRow02"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+
+                    <TextView
+                        android:id="@+id/profile_checkins_textview"
+                        style="@style/profile_stats"
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:layout_gravity="center_horizontal|bottom"
+                        android:drawableLeft="@drawable/ic_checkin"
+                        android:hint="@string/hint_placeholder" />
+
+                    <TextView
+                        android:id="@+id/profile_following_textview"
+                        style="@style/profile_stats"
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:layout_gravity="center_horizontal|bottom"
+                        android:drawableLeft="@drawable/ic_following"
+                        android:hint="@string/hint_placeholder" />
+
+                    <TextView
+                        android:id="@+id/profile_connections_textview"
+                        style="@style/profile_stats"
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:layout_gravity="center_horizontal|bottom"
+                        android:drawableLeft="@drawable/ic_connections"
+                        android:hint="@string/hint_placeholder" />
+                </TableRow>
+
+                <TableRow
+                    android:id="@+id/TableRow01"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+
+                    <TextView
+                        style="@style/profile_subtext"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Check-ins" />
+
+                    <TextView
+                        style="@style/profile_subtext"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Businesses" />
+
+                    <TextView
+                        style="@style/profile_subtext"
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:text="Contacts" />
+                </TableRow>
+            </TableLayout>
+
+            <LinearLayout
+                android:id="@+id/profile_recents"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@drawable/card_bg"
+                android:orientation="vertical">
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="center"
+                    android:text="Your recent activity"
+                    android:textAppearance="?android:attr/textAppearanceMedium" />
+            </LinearLayout>
+        </LinearLayout>
+
+    </ScrollView>
+</uk.co.senab.actionbarpulltorefresh.extras.actionbarcompat.PullToRefreshLayout>
