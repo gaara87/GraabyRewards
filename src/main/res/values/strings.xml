@@ -57,8 +57,4 @@
 
     <integer name="response_success">1</integer>
     <integer name="response_failure">0</integer>
-
-    <string name="onboarding_welcome">Graaby Rewards is a universal rewards program powered by NFC.\n\nKeep track of your Graaby points.\n\nDiscover &amp; obtain amazing rewards from the businesses you love.\n\nFind &amp; follow Graaby Businesses.\n\nSend rewards to your friends and family.
-    </string>
-
 </resources>

@@ -1,9 +1,9 @@
 package graaby.app.wallet.activities;
 
 import android.os.Bundle;
-import android.support.v4.app.FragmentActivity;
 import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
+import android.support.v7.app.ActionBarActivity;
 import android.view.View;
 import android.view.ViewGroup;
 
@@ -12,7 +12,7 @@ import graaby.app.wallet.R;
 /**
  * Created by gaara on 5/22/14.
  */
-public class OnboardingActivity extends FragmentActivity {
+public class OnboardingActivity extends ActionBarActivity {
     /**
      * The number of pages (wizard steps) to show in this demo.
      */
@@ -32,6 +32,7 @@ public class OnboardingActivity extends FragmentActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(false);
         setContentView(R.layout.activity_onboarding);
 
         // Instantiate a ViewPager and a PagerAdapter.
@@ -51,6 +52,27 @@ public class OnboardingActivity extends FragmentActivity {
             @Override
             public void onClick(View v) {
                 OnboardingActivity.this.finish();
+            }
+        });
+
+        mPager.setOnPageChangeListener(new ViewPager.OnPageChangeListener() {
+            @Override
+            public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
+
+            }
+
+            @Override
+            public void onPageSelected(int position) {
+                if(position==2){
+                    findViewById(R.id.onboarding_next).setVisibility(View.GONE);
+                }else {
+                    findViewById(R.id.onboarding_next).setVisibility(View.VISIBLE);
+                }
+            }
+
+            @Override
+            public void onPageScrollStateChanged(int state) {
+
             }
         });
 
@@ -77,6 +99,7 @@ public class OnboardingActivity extends FragmentActivity {
         public Object instantiateItem(View collection, int position) {
 
             int resId = 0;
+            boolean nextFlag = true;
             switch (position) {
                 case 0:
                     resId = R.id.page_one;
@@ -86,6 +109,7 @@ public class OnboardingActivity extends FragmentActivity {
                     break;
                 case 2:
                     resId = R.id.page_three;
+                    nextFlag = false;
                     break;
                 default:
                     resId = R.id.page_three;
