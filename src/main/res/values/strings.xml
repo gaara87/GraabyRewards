@@ -57,4 +57,9 @@
 
     <integer name="response_success">1</integer>
     <integer name="response_failure">0</integer>
+
+    <string name="title_activity_search_results">SearchResultsActivity</string>
+    <string name="hello_world">Hello world!</string>
+    <string name="action_settings">Settings</string>
+
 </resources>

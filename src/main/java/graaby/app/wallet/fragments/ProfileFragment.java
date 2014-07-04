@@ -15,6 +15,7 @@ import android.view.ViewGroup;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import com.android.volley.Cache;
 import com.android.volley.Response.ErrorListener;
 import com.android.volley.Response.Listener;
 import com.android.volley.VolleyError;
@@ -83,25 +84,29 @@ public class ProfileFragment extends Fragment implements OnClickListener,
                 })
                         // Finally commit the setup to our PullToRefreshLayout
                 .setup(mPullToRefreshLayout);
-        sendRequest();
         return v;
+    }
+
+    @Override
+    public void onActivityCreated(Bundle savedInstanceState) {
+        super.onActivityCreated(savedInstanceState);
+        sendRequest();
     }
 
     private void sendRequest() {
         HashMap<String, Object> params = new HashMap<String, Object>();
-
-        // TODO Create and save User ID
         params.put(getResources().getString(R.string.userid), "");
-
         try {
             profileRequest = new CustomRequest("user", params, this, this);
-
+            Cache.Entry entry = Helper.getRQ().getCache().get(profileRequest.getCacheKey());
+            if (entry != null) {
+                JSONObject jsonCachedResponse = CustomRequest.getCachedResponse(entry);
+                if (jsonCachedResponse != null) {
+                    onResponse(jsonCachedResponse);
+                }
+            }
             Helper.getRQ().add(profileRequest);
             mPullToRefreshLayout.setRefreshing(Boolean.TRUE);
-            JSONObject jsonCachedResponse = CustomRequest.getCachedResponse(Helper.getRQ().getCache().get(profileRequest.getCacheKey()));
-            if (jsonCachedResponse != null) {
-                onResponse(jsonCachedResponse);
-            }
         } catch (JSONException e) {
         } catch (NullPointerException npe) {
         } finally {

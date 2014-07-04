@@ -16,6 +16,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.android.volley.Cache;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.ImageLoader;
@@ -105,8 +106,12 @@ public class ContactsFragment extends ListFragment implements Response.Listener<
                 .options(Options.create()
                         .scrollDistance(.5f).build())
                 .setup(mPullToRefreshLayout);
-        sendRequest();
+    }
 
+    @Override
+    public void onActivityCreated(Bundle savedInstanceState) {
+        super.onActivityCreated(savedInstanceState);
+        sendRequest();
     }
 
     private void sendRequest() {
@@ -114,11 +119,15 @@ public class ContactsFragment extends ListFragment implements Response.Listener<
         params.put("last_updated_tstamp", 123456778);
         try {
             contactRequest = new CustomRequest("contacts", params, this, this);
-            Helper.getRQ().add(contactRequest);
-            JSONObject jsonCachedResponse = CustomRequest.getCachedResponse(Helper.getRQ().getCache().get(contactRequest.getCacheKey()));
-            if (jsonCachedResponse != null) {
-                onResponse(jsonCachedResponse);
+            Cache.Entry entry = Helper.getRQ().getCache().get(contactRequest.getCacheKey());
+            if (entry != null) {
+                JSONObject jsonCachedResponse = CustomRequest.getCachedResponse(entry);
+                if (jsonCachedResponse != null) {
+                    onResponse(jsonCachedResponse);
+                }
             }
+            Helper.getRQ().add(contactRequest);
+            mPullToRefreshLayout.setRefreshing(Boolean.TRUE);
         } catch (JSONException e) {
         } catch (NullPointerException npe) {
         } finally {

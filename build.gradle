@@ -1,19 +1,18 @@
-apply plugin: 'android'
+apply plugin: 'com.android.application'
 
 repositories {
-    maven {
-        url 'https://github.com/Goddchen/mvn-repo/raw/master/'
-    }
+    maven { url 'https://github.com/Goddchen/mvn-repo/raw/master/' }
     mavenCentral()
 }
 
 android {
-    compileSdkVersion 19
-    buildToolsVersion "19.1.0"
+    compileSdkVersion 'android-L'
+    buildToolsVersion '20'
 
     defaultConfig {
+        applicationId "graaby.app.wallet"
         minSdkVersion 10
-        targetSdkVersion 19
+        targetSdkVersion 20
         versionCode 15
         versionName "1.1.4"
     }
@@ -24,11 +23,10 @@ android {
         }
     }
 }
-
 dependencies {
-    compile 'com.android.support:support-v4:19.0.1'
-    compile 'com.android.support:appcompat-v7:19.0.1'
-    compile 'com.google.android.gms:play-services:4.3.23'
+    compile 'com.android.support:support-v4:21.0.0-rc1'
+    compile 'com.android.support:appcompat-v7:21.0.0-rc1'
+    compile 'com.google.android.gms:play-services:5.0.77'
     compile 'com.squareup.okhttp:okhttp:1.2.1'
     compile 'com.facebook.android:facebook:3.6'
     compile 'com.android:volley:1.0'

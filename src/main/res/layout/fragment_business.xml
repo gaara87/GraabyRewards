@@ -5,20 +5,33 @@
     android:layout_height="match_parent"
     android:gravity="center">
 
-    <com.google.android.gms.maps.MapView
+    <fragment
         android:id="@+id/map"
+        android:name="com.google.android.gms.maps.SupportMapFragment"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         map:cameraZoom="16"
         map:mapType="normal"
         map:uiCompass="false"
         map:uiZoomControls="true"
-        map:uiZoomGestures="true"></com.google.android.gms.maps.MapView>
+        map:uiZoomGestures="true"
+        map:useViewLifecycle="true" />
 
     <ListView
         android:id="@+id/business_listview"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:visibility="gone"></ListView>
+        android:visibility="gone" />
+
+    <Button
+        android:id="@+id/business_enable_location_btn"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/business_listview"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="@dimen/global8"
+        android:drawableLeft="@android:drawable/ic_menu_mylocation"
+        android:text="Enable Location"
+        android:visibility="gone" />
 
 </RelativeLayout>

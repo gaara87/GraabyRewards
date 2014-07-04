@@ -78,7 +78,7 @@ public class MainActivity extends ActionBarActivity
     private CharSequence mTitle;
     private AccountManager acm;
 
-    private LatLng latLng = new LatLng(13.060422, 80.249583);
+    private LatLng latLng = new LatLng(0, 0);
     private LocationManager locationManager;
 
     private NfcAdapter mNfcAdapter;

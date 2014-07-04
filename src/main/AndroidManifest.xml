@@ -35,10 +35,8 @@
         android:label="@string/app_name"
         android:theme="@style/AppTheme">
         <activity
-            android:name="graaby.app.wallet.MainActivity"
-            android:configChanges="orientation"
-            android:label="@string/app_name"
-            android:screenOrientation="portrait">
+            android:name=".MainActivity"
+            android:label="@string/app_name">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -54,39 +52,36 @@
                     android:host="wapi.graaby.com"
                     android:scheme="http" />
             </intent-filter>
+
+            <meta-data
+                android:name="android.app.default_searchable"
+                android:value=".activities.SearchResultsActivity" />
         </activity>
         <activity
-            android:name="graaby.app.wallet.activities.DiscountItemDetailsActivity"
-            android:configChanges="orientation"
-            android:parentActivityName="graaby.app.wallet.MainActivity"
-            android:screenOrientation="portrait">
+            android:name=".activities.DiscountItemDetailsActivity"
+            android:parentActivityName=".MainActivity">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".MainActivity" />
         </activity>
         <activity
-            android:name="graaby.app.wallet.activities.MyDiscountItemsActivity"
-            android:configChanges="orientation"
+            android:name=".activities.MyDiscountItemsActivity"
             android:label="@string/title_activity_my_cpn_vcr"
-            android:parentActivityName="graaby.app.wallet.MainActivity"
-            android:screenOrientation="portrait">
+            android:parentActivityName=".MainActivity">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".MainActivity" />
         </activity>
         <activity
-            android:name="graaby.app.wallet.activities.BusinessOutletDetailActivity"
-            android:configChanges="orientation"
+            android:name=".activities.BusinessOutletDetailActivity"
             android:icon="@drawable/nav_business"
-            android:label="@string/title_activity_business_outlet_detail"
-            android:screenOrientation="portrait" />
+            android:label="@string/title_activity_business_outlet_detail" />
         <activity
-            android:name="graaby.app.wallet.auth.UserLoginActivity"
-            android:configChanges="orientation"
+            android:name=".auth.UserLoginActivity"
             android:excludeFromRecents="true"
             android:label="@string/title_activity_login"
-            android:parentActivityName="graaby.app.wallet.MainActivity"
-            android:screenOrientation="portrait"
+            android:parentActivityName=".MainActivity"
+
             android:theme="@style/LoginTheme"
             android:windowSoftInputMode="adjustResize|stateHidden">
             <meta-data
@@ -94,15 +89,15 @@
                 android:value=".MainActivity" />
         </activity>
         <activity
-            android:name="graaby.app.wallet.activities.OnboardingActivity"
-            android:parentActivityName="graaby.app.wallet.auth.UserLoginActivity">
+            android:name=".activities.OnboardingActivity"
+            android:parentActivityName=".auth.UserLoginActivity">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".auth.UserLoginActivity" />
         </activity>
 
         <service
-            android:name="graaby.app.wallet.auth.UserAuthenticationService"
+            android:name=".auth.UserAuthenticationService"
             android:exported="true"
             android:permission="android.permission.GET_ACCOUNTS">
             <intent-filter>
@@ -126,9 +121,9 @@
 
         <activity android:name="com.facebook.LoginActivity" />
         <activity
-            android:name="graaby.app.wallet.SettingsActivity"
+            android:name=".SettingsActivity"
             android:label="@string/title_activity_settings"
-            android:parentActivityName="graaby.app.wallet.MainActivity">
+            android:parentActivityName=".MainActivity">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="MainActivity" />
@@ -148,6 +143,21 @@
 
         <service android:name="gcm.GcmIntentService" />
 
+        <activity
+            android:name=".activities.SearchResultsActivity"
+            android:label="@string/title_activity_search_results"
+            android:parentActivityName=".MainActivity">
+            <intent-filter>
+                <action android:name="android.intent.action.SEARCH" />
+            </intent-filter>
+
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="graaby.app.wallet.MainActivity" />
+            <meta-data
+                android:name="android.app.searchable"
+                android:resource="@xml/searchable" />
+        </activity>
     </application>
 
 </manifest>

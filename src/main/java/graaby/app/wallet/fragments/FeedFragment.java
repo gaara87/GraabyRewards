@@ -11,6 +11,7 @@ import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.TextView;
 
+import com.android.volley.Cache;
 import com.android.volley.Response.ErrorListener;
 import com.android.volley.Response.Listener;
 import com.android.volley.VolleyError;
@@ -86,10 +87,14 @@ public class FeedFragment extends ListFragment implements Listener<JSONObject>,
                 .options(Options.create()
                         .scrollDistance(.5f).build())
                 .setup(mPullToRefreshLayout);
-
-        sendRequest();
         mAdapter = new FeedsAdapter(mActivity, feedList);
         setListAdapter(mAdapter);
+    }
+
+    @Override
+    public void onActivityCreated(Bundle savedInstanceState) {
+        super.onActivityCreated(savedInstanceState);
+        sendRequest();
     }
 
     private void sendRequest() {
@@ -97,7 +102,15 @@ public class FeedFragment extends ListFragment implements Listener<JSONObject>,
         params.put("last_updated_tstamp", 123456778);
         try {
             feedRequest = new CustomRequest("feeds", params, this, this);
+            Cache.Entry entry = Helper.getRQ().getCache().get(feedRequest.getCacheKey());
+            if (entry != null) {
+                JSONObject jsonCachedResponse = CustomRequest.getCachedResponse(entry);
+                if (jsonCachedResponse != null) {
+                    onResponse(jsonCachedResponse);
+                }
+            }
             Helper.getRQ().add(feedRequest);
+            mPullToRefreshLayout.setRefreshing(Boolean.TRUE);
         } catch (JSONException e) {
             e.printStackTrace();
         } finally {

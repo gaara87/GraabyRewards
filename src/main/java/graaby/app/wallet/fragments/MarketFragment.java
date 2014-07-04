@@ -1,11 +1,15 @@
 package graaby.app.wallet.fragments;
 
 import android.app.Activity;
+import android.app.SearchManager;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v7.widget.SearchView;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
@@ -66,6 +70,7 @@ public class MarketFragment extends Fragment implements OnItemClickListener,
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        this.setHasOptionsMenu(Boolean.TRUE);
         if (getArguments() != null) {
             whatType = DiscountItemType.getType(getArguments().getInt(
                     Helper.KEY_TYPE));
@@ -101,6 +106,21 @@ public class MarketFragment extends Fragment implements OnItemClickListener,
         marketGrid.setAdapter(adapter);
         sendRequest();
         return v;
+    }
+
+    @Override
+    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+        super.onCreateOptionsMenu(menu, inflater);
+        if (areTheseMyDiscountItems.equals(Boolean.FALSE)) {
+            inflater.inflate(R.menu.menu_search, menu);
+            if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.HONEYCOMB) {
+                SearchManager searchManager = (SearchManager) mActivity.getSystemService(Context.SEARCH_SERVICE);
+                SearchView searchView = (SearchView) menu.findItem(R.id.action_search)
+                        .getActionView();
+                searchView.setSearchableInfo(searchManager
+                        .getSearchableInfo(mActivity.getComponentName()));
+            }
+        }
     }
 
     private void sendRequest() {

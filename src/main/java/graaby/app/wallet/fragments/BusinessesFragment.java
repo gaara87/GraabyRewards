@@ -1,9 +1,16 @@
 package graaby.app.wallet.fragments;
 
 import android.app.Activity;
+import android.app.SearchManager;
 import android.content.Context;
+import android.content.Intent;
+import android.location.Location;
+import android.location.LocationListener;
+import android.location.LocationManager;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v7.app.ActionBarActivity;
+import android.support.v7.widget.SearchView;
 import android.util.SparseArray;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -14,9 +21,12 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
 import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toast;
 
+import com.android.volley.Cache;
 import com.android.volley.Response.ErrorListener;
 import com.android.volley.Response.Listener;
 import com.android.volley.VolleyError;
@@ -24,8 +34,7 @@ import com.google.android.gms.maps.CameraUpdate;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.GoogleMap.OnInfoWindowClickListener;
-import com.google.android.gms.maps.MapView;
-import com.google.android.gms.maps.MapsInitializer;
+import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
@@ -46,19 +55,36 @@ import graaby.app.wallet.R;
 
 public class BusinessesFragment extends Fragment implements
         OnInfoWindowClickListener, OnItemClickListener, ErrorListener,
-        Listener<JSONObject> {
-    private MapView mMapView;
+        Listener<JSONObject>, LocationListener {
     private GoogleMap mMap;
     private Bundle mBundle;
     private String fieldNameLongitude;
     private String fieldNameLatitude;
     private ListView listView;
 
-    private Boolean playServiceAvailable = Boolean.TRUE;
     private CustomRequest businessesRequest;
     private SparseArray<JSONObject> markerJSONmapping = new SparseArray<JSONObject>();
     private BusinessesAdapter adapter;
     private Activity mActivity;
+
+    private LatLng latLng = new LatLng(0, 0);
+    private Boolean isLocationEnabled = Boolean.FALSE;
+    private LocationManager locationManager;
+    private Button enableLocationButton;
+
+    private boolean isLocationEnabled() {
+        if (locationManager.isProviderEnabled(LocationManager.NETWORK_PROVIDER) || locationManager
+                .isProviderEnabled(LocationManager.GPS_PROVIDER)) {
+            isLocationEnabled = Boolean.TRUE;
+            locationManager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, 3000, 20, this);
+            Location lastKnown = locationManager.getLastKnownLocation(LocationManager.NETWORK_PROVIDER);
+            if (lastKnown != null)
+                latLng = new LatLng(lastKnown.getLatitude(), lastKnown.getLongitude());
+        } else {
+            isLocationEnabled = Boolean.FALSE;
+        }
+        return isLocationEnabled;
+    }
 
     @Override
     public void onAttach(Activity activity) {
@@ -66,6 +92,9 @@ public class BusinessesFragment extends Fragment implements
         mActivity = activity;
         ((MainActivity) mActivity).onSectionAttached(
                 getArguments().getInt(Helper.ARG_SECTION_NUMBER));
+        locationManager = (LocationManager) mActivity
+                .getSystemService(Context.LOCATION_SERVICE);
+        isLocationEnabled();
     }
 
     @Override
@@ -86,42 +115,49 @@ public class BusinessesFragment extends Fragment implements
         View inflatedView = inflater.inflate(R.layout.fragment_business, container,
                 false);
 
-        MapsInitializer.initialize(mActivity);
-
         listView = (ListView) inflatedView.findViewById(R.id.business_listview);
         listView.setOnItemClickListener(this);
         listView.setAdapter(adapter);
-
-        mMapView = (MapView) inflatedView.findViewById(R.id.map);
-
-        if (playServiceAvailable) {
-            mMapView.onCreate(mBundle);
-            setUpMapIfNeeded(inflatedView);
-        } else {
-            mMapView.setVisibility(View.GONE);
-            listView.setVisibility(View.VISIBLE);
+        if (!isLocationEnabled) {
+            enableLocationButton = (Button) inflatedView.findViewById(R.id.business_enable_location_btn);
+            enableLocationButton.setVisibility(View.VISIBLE);
+            enableLocationButton.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Intent intent = new Intent(android.provider.Settings.ACTION_LOCATION_SOURCE_SETTINGS);
+                    startActivity(intent);
+                }
+            });
         }
-
-        sendRequest();
-
-        this.setHasOptionsMenu(Boolean.TRUE);
+        this.setHasOptionsMenu(isLocationEnabled);
+        setUpMapIfNeeded();
 
         return inflatedView;
+    }
+
+
+    @Override
+    public void onActivityCreated(Bundle savedInstanceState) {
+        super.onActivityCreated(savedInstanceState);
+        sendRequest();
     }
 
     private void sendRequest() {
         HashMap<String, Object> params = new HashMap<String, Object>();
 
-        LatLng ll = ((MainActivity) mActivity).getLocation();
-        params.put(fieldNameLatitude, ll.latitude);
-        params.put(fieldNameLongitude, ll.longitude);
+        params.put(fieldNameLatitude, latLng.latitude);
+        params.put(fieldNameLongitude, latLng.longitude);
         try {
             businessesRequest = new CustomRequest("stores", params, this, this);
-            Helper.getRQ().add(businessesRequest);
-            JSONObject jsonCachedResponse = CustomRequest.getCachedResponse(Helper.getRQ().getCache().get(businessesRequest.getCacheKey()));
-            if (jsonCachedResponse != null) {
-                onResponse(jsonCachedResponse);
+            Cache.Entry entry = Helper.getRQ().getCache().get(businessesRequest.getCacheKey());
+            if (entry != null) {
+                JSONObject jsonCachedResponse = CustomRequest.getCachedResponse(entry);
+                if (jsonCachedResponse != null) {
+                    onResponse(jsonCachedResponse);
+                }
             }
+            Helper.getRQ().add(businessesRequest);
+            showProgress(Boolean.TRUE);
         } catch (JSONException e) {
 
         } catch (NullPointerException npe) {
@@ -190,9 +226,16 @@ public class BusinessesFragment extends Fragment implements
 
     @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
-        if (playServiceAvailable) {
-            inflater.inflate(R.menu.menu_fragment_business, menu);
+        inflater.inflate(R.menu.menu_fragment_business, menu);
+        inflater.inflate(R.menu.menu_search, menu);
+        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.HONEYCOMB) {
+            SearchManager searchManager = (SearchManager) mActivity.getSystemService(Context.SEARCH_SERVICE);
+            SearchView searchView = (SearchView) menu.findItem(R.id.action_search)
+                    .getActionView();
+            searchView.setSearchableInfo(searchManager
+                    .getSearchableInfo(mActivity.getComponentName()));
         }
+
         super.onCreateOptionsMenu(menu, inflater);
     }
 
@@ -215,12 +258,12 @@ public class BusinessesFragment extends Fragment implements
                 if (item.getTitle().equals("List")) {
                     item.setTitle("Map");
                     item.setIcon(android.R.drawable.ic_menu_mapmode);
-                    mMapView.setVisibility(View.GONE);
+//                    mMap.setVisibility(View.GONE);
                     listView.setVisibility(View.VISIBLE);
                 } else if (item.getTitle().equals("Map")) {
                     item.setTitle("List");
                     item.setIcon(R.drawable.ic_action_view_as_list);
-                    mMapView.setVisibility(View.VISIBLE);
+//                    mMapView.setVisibility(View.VISIBLE);
                     listView.setVisibility(View.GONE);
                 }
             default:
@@ -229,9 +272,10 @@ public class BusinessesFragment extends Fragment implements
         return super.onOptionsItemSelected(item);
     }
 
-    private void setUpMapIfNeeded(View inflatedView) {
+    private void setUpMapIfNeeded() {
         if (mMap == null) {
-            mMap = ((MapView) inflatedView.findViewById(R.id.map)).getMap();
+            mMap = ((SupportMapFragment) ((ActionBarActivity) mActivity).getSupportFragmentManager().findFragmentById(R.id.map))
+                    .getMap();
             if (mMap != null) {
                 setUpMap();
             }
@@ -241,43 +285,35 @@ public class BusinessesFragment extends Fragment implements
     private void setUpMap() {
         mMap.setOnInfoWindowClickListener(this);
         mMap.setMyLocationEnabled(Boolean.TRUE);
-        LatLng ll = ((MainActivity) mActivity).getLocation();
-        CameraUpdate cameraUpdate = CameraUpdateFactory.newLatLng(ll);
+        CameraUpdate cameraUpdate = CameraUpdateFactory.newLatLng(latLng);
         try {
             mMap.moveCamera(cameraUpdate);
         } catch (NullPointerException npe) {
-            mMap.moveCamera(CameraUpdateFactory.newLatLng(new LatLng(13.060422,
-                    80.249583)));
+            mMap.moveCamera(CameraUpdateFactory.newLatLng(new LatLng(0,
+                    0)));
         }
     }
 
     @Override
     public void onResume() {
         super.onResume();
-        mMapView.onResume();
+        if (isLocationEnabled()) {
+            this.setHasOptionsMenu(isLocationEnabled);
+            if (enableLocationButton != null && enableLocationButton.getVisibility() == View.VISIBLE) {
+                enableLocationButton.setVisibility(View.GONE);
+            }
+        }
     }
 
     @Override
-    public void onPause() {
-        super.onPause();
-        mMapView.onPause();
-    }
-
-    @Override
-    public void onDestroy() {
-        mMapView.onDestroy();
-        super.onDestroy();
-    }
-
-    @Override
-    public void onLowMemory() {
-        mMapView.onLowMemory();
-        super.onLowMemory();
-    }
-
-    public void onSaveInstanceState(Bundle outState) {
-        super.onSaveInstanceState(outState);
-        mMapView.onSaveInstanceState(outState);
+    public void onDestroyView() {
+        super.onDestroyView();
+        locationManager.removeUpdates(this);
+        if (mMap != null) {
+            getActivity().getSupportFragmentManager().beginTransaction()
+                    .remove(getActivity().getSupportFragmentManager().findFragmentById(R.id.map)).commit();
+            mMap = null;
+        }
     }
 
     @Override
@@ -292,6 +328,28 @@ public class BusinessesFragment extends Fragment implements
         JSONObject node = adapter.getItem(position);
         Helper.openBusiness(mActivity, node);
 
+    }
+
+    @Override
+    public void onLocationChanged(Location location) {
+        latLng = new LatLng(location.getLatitude(), location.getLongitude());
+        setUpMap();
+        sendRequest();
+    }
+
+    @Override
+    public void onStatusChanged(String provider, int status, Bundle extras) {
+        Toast.makeText(mActivity, "Status Changed" + provider + status, Toast.LENGTH_SHORT).show();
+    }
+
+    @Override
+    public void onProviderEnabled(String provider) {
+        Toast.makeText(mActivity, "Provider Enabled" + provider, Toast.LENGTH_SHORT).show();
+    }
+
+    @Override
+    public void onProviderDisabled(String provider) {
+        Toast.makeText(mActivity, "Provider Disabled" + provider, Toast.LENGTH_SHORT).show();
     }
 
     class BusinessesAdapter extends ArrayAdapter<JSONObject> {
