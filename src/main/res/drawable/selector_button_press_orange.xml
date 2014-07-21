@@ -3,6 +3,6 @@
 
     <item android:drawable="@color/carrot" android:state_pressed="true" />
     <item android:drawable="@color/carrot" android:state_focused="true" />
-    <item android:drawable="@color/orange" />
+    <item android:drawable="@color/bootstrap_warning" />
 
 </selector>

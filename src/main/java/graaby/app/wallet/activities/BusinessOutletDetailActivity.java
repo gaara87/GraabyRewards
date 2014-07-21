@@ -54,6 +54,8 @@ public class BusinessOutletDetailActivity extends ActionBarActivity implements
 
         try {
             businessId = placeNode.getInt(getString(R.string.business_id));
+            getSupportActionBar().setTitle(placeNode.getString(getString(
+                    R.string.business_title)));
         } catch (JSONException e) {
             businessId = 0;
         }
@@ -117,21 +119,38 @@ public class BusinessOutletDetailActivity extends ActionBarActivity implements
             iv.setImageResource(R.drawable.default_business_profile_image);
         }
 
-        TextView tv = (TextView) findViewById(R.id.item_businessNameTextView);
         try {
-            tv.setText(response.getString(getResources().getString(
+            getSupportActionBar().setTitle(response.getString(getResources().getString(
                     R.string.business_name)));
+
         } catch (NotFoundException e) {
         } catch (JSONException e) {
         }
 
-        tv = (TextView) findViewById(R.id.item_businessAddressTextView);
+        TextView tv = (TextView) findViewById(R.id.item_businessAddressTextView);
         try {
             tv.setText(response.getString(getResources().getString(
                     R.string.business_address)));
         } catch (NotFoundException e) {
         } catch (JSONException e) {
         }
+
+        tv = (TextView) findViewById(R.id.item_businessPhoneTextView);
+        try {
+            tv.setText(response.getString(getResources().getString(
+                    R.string.business_phone)));
+        } catch (NotFoundException e) {
+        } catch (JSONException e) {
+        }
+
+        tv = (TextView) findViewById(R.id.item_businessSiteTextView);
+        try {
+            tv.setText(response.getString(getResources().getString(
+                    R.string.business_site)));
+        } catch (NotFoundException e) {
+        } catch (JSONException e) {
+        }
+
 
     }
 

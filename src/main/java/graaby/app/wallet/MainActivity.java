@@ -30,6 +30,7 @@ import android.widget.Toast;
 
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
+import com.android.volley.toolbox.RequestFuture;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GooglePlayServicesUtil;
 import com.google.android.gms.gcm.GoogleCloudMessaging;
@@ -43,6 +44,7 @@ import org.json.JSONObject;
 
 import java.io.IOException;
 import java.util.HashMap;
+import java.util.concurrent.ExecutionException;
 import java.util.concurrent.atomic.AtomicInteger;
 
 import graaby.app.wallet.auth.UserLoginActivity;
@@ -55,7 +57,6 @@ import graaby.app.wallet.fragments.ProfileFragment;
 public class MainActivity extends ActionBarActivity
         implements NavigationDrawerFragment.NavigationDrawerCallbacks, LocationListener {
 
-    public static final String EXTRA_MESSAGE = "message";
     public static final String PROPERTY_REG_ID = "registration_id";
     private static final String PROPERTY_APP_VERSION = "appVersion";
     private static final int PLAY_SERVICES_RESOLUTION_REQUEST = 9000;
@@ -78,7 +79,6 @@ public class MainActivity extends ActionBarActivity
     private CharSequence mTitle;
     private AccountManager acm;
 
-    private LatLng latLng = new LatLng(0, 0);
     private LocationManager locationManager;
 
     private NfcAdapter mNfcAdapter;
@@ -294,6 +294,7 @@ public class MainActivity extends ActionBarActivity
                         public void onResponse(JSONObject jsonObject) {
                             acm.removeAccount(accounts[0], null, null);
                             Toast.makeText(MainActivity.this, "Logged out successfully", Toast.LENGTH_SHORT).show();
+                            Helper.getRQ().getCache().clear();
                             MainActivity.this.finish();
                         }
                     }, new Response.ErrorListener() {
@@ -313,17 +314,9 @@ public class MainActivity extends ActionBarActivity
         return super.onOptionsItemSelected(item);
     }
 
-    public void showProgress(Boolean show) {
-        setProgressBarIndeterminateVisibility(show);
-    }
-
-    public LatLng getLocation() {
-        return latLng;
-    }
-
     @Override
     public void onLocationChanged(Location location) {
-        latLng = new LatLng(location.getLatitude(), location.getLongitude());
+        LatLng latLng = new LatLng(location.getLatitude(), location.getLongitude());
 
         locationManager.removeUpdates(this);
     }
@@ -379,7 +372,7 @@ public class MainActivity extends ActionBarActivity
         SharedPreferences.Editor editor = prefs.edit();
         editor.putString(PROPERTY_REG_ID, regId);
         editor.putInt(PROPERTY_APP_VERSION, appVersion);
-        editor.commit();
+        editor.apply();
     }
 
     /**
@@ -429,7 +422,7 @@ public class MainActivity extends ActionBarActivity
 
                     // You should send the registration ID to your server over HTTP, so it
                     // can use GCM/HTTP or CCS to send messages to your app.
-                    sendRegistrationIdToBackend();
+                    sendRegistrationIdToBackend(regid);
 
                     storeRegistrationId(context, regid);
                 } catch (IOException ex) {
@@ -475,8 +468,25 @@ public class MainActivity extends ActionBarActivity
      * Sends the registration ID to your server over HTTP, so it can use GCM/HTTP or CCS to send
      * messages to your app. Not needed for this demo since the device sends upstream messages
      * to a server that echoes back the message using the 'from' address in the message.
+     *
+     * @param regid
      */
-    private void sendRegistrationIdToBackend() {
-        // Your implementation here.
+    private void sendRegistrationIdToBackend(String regid) {
+        HashMap<String, Object> params = new HashMap<String, Object>();
+        params.put(getResources().getString(R.string.field_gcm_reg_id), regid);
+        try {
+            RequestFuture<JSONObject> future = RequestFuture.newFuture();
+            CustomRequest gcmRequest = new CustomRequest("gcm", params, future, future);
+            Helper.getRQ().add(gcmRequest);
+            JSONObject response = future.get();
+            if (response.getInt(getString(R.string.response_success)) == 1) {
+                Toast.makeText(this, "Your app has been registered successfully", Toast.LENGTH_SHORT).show();
+            }
+        } catch (JSONException e) {
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        } catch (ExecutionException e) {
+            e.printStackTrace();
+        }
     }
 }

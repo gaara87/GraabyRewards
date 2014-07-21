@@ -140,27 +140,20 @@
             android:layout_height="match_parent"
             android:layout_weight="1">
 
-            <EditText
-                android:id="@+id/editText"
+            <AutoCompleteTextView
+                android:id="@+id/onboarding_email"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_alignParentTop="true"
                 android:layout_centerHorizontal="true"
                 android:layout_marginTop="100dp"
+                android:ems="15"
                 android:hint="Enter your e-mail"
-                android:inputType="textEmailAddress" />
-
-            <Button
-                android:id="@+id/onboarding_register"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_below="@+id/editText"
-                android:layout_centerHorizontal="true"
-                android:layout_marginTop="8dp"
-                android:text="Register" />
+                android:imeActionLabel="Register"
+                android:inputType="textEmailAddress"
+                android:selectAllOnFocus="true" />
 
             <TextView
-                android:id="@+id/textView"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_alignParentTop="true"

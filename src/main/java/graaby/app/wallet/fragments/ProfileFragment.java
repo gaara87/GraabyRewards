@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.content.res.Resources.NotFoundException;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -33,17 +34,13 @@ import graaby.app.wallet.Helper.ActivityType;
 import graaby.app.wallet.MainActivity;
 import graaby.app.wallet.R;
 import graaby.app.wallet.activities.MyDiscountItemsActivity;
-import uk.co.senab.actionbarpulltorefresh.extras.actionbarcompat.PullToRefreshLayout;
-import uk.co.senab.actionbarpulltorefresh.library.ActionBarPullToRefresh;
-import uk.co.senab.actionbarpulltorefresh.library.Options;
-import uk.co.senab.actionbarpulltorefresh.library.listeners.OnRefreshListener;
 
 public class ProfileFragment extends Fragment implements OnClickListener,
-        ErrorListener, Listener<JSONObject> {
+        ErrorListener, Listener<JSONObject>, SwipeRefreshLayout.OnRefreshListener {
 
     private Activity mActivity;
-    private PullToRefreshLayout mPullToRefreshLayout;
     private CustomRequest profileRequest;
+    private SwipeRefreshLayout mPullToRefreshLayout;
 
     public void onAttach(Activity activity) {
         super.onAttach(activity);
@@ -64,26 +61,13 @@ public class ProfileFragment extends Fragment implements OnClickListener,
                              Bundle savedInstanceState) {
         super.onCreateView(inflater, container, savedInstanceState);
         View v = inflater.inflate(R.layout.fragment_profile, null);
-        v.findViewById(R.id.profile_coupons_viewall_button).setOnClickListener(
+        v.findViewById(R.id.profile_coupons_viewall_card).setOnClickListener(
                 this);
-        v.findViewById(R.id.profile_vouchers_viewall_button)
+        v.findViewById(R.id.profile_vouchers_viewall_card)
                 .setOnClickListener(this);
-        mPullToRefreshLayout = (PullToRefreshLayout) v.findViewById(R.id.ptr_layout);
-        ActionBarPullToRefresh.from(mActivity)
-                .options(Options.create()
-                        // Here we make the refresh scroll distance to 75% of the refreshable view's height
-                        .scrollDistance(.5f).build())
-                        // Mark All Children as pullable
-                .allChildrenArePullable()
-                        // Set the OnRefreshListener
-                .listener(new OnRefreshListener() {
-                    @Override
-                    public void onRefreshStarted(View view) {
-                        sendRequest();
-                    }
-                })
-                        // Finally commit the setup to our PullToRefreshLayout
-                .setup(mPullToRefreshLayout);
+        mPullToRefreshLayout = (SwipeRefreshLayout) v.findViewById(R.id.swiperefresh);
+        mPullToRefreshLayout.setOnRefreshListener(this);
+        mPullToRefreshLayout.setColorSchemeResources(R.color.emarald, R.color.peterriver, R.color.wisteria, R.color.sunflower);
         return v;
     }
 
@@ -136,7 +120,7 @@ public class ProfileFragment extends Fragment implements OnClickListener,
         } catch (Exception e) {
         } finally {
             try {
-                mPullToRefreshLayout.setRefreshComplete();
+                mPullToRefreshLayout.setRefreshing(Boolean.FALSE);
             } catch (NullPointerException npe) {
             }
         }
@@ -145,19 +129,15 @@ public class ProfileFragment extends Fragment implements OnClickListener,
 
     @Override
     public void onErrorResponse(VolleyError error) {
-
         Helper.handleVolleyError(error, mActivity);
-
         try {
             mPullToRefreshLayout.setRefreshing(Boolean.TRUE);
             onResponse(CustomRequest.getCachedResponse(profileRequest
                     .getCacheEntry()));
         } catch (Exception e) {
         } finally {
-            mPullToRefreshLayout.setRefreshComplete();
-
+            mPullToRefreshLayout.setRefreshing(Boolean.FALSE);
         }
-
     }
 
     @Override
@@ -368,15 +348,20 @@ public class ProfileFragment extends Fragment implements OnClickListener,
     public void onClick(View v) {
         Intent intent = new Intent(getActivity(), MyDiscountItemsActivity.class);
         switch (v.getId()) {
-            case R.id.profile_coupons_viewall_button:
+            case R.id.profile_coupons_viewall_card:
                 intent.putExtra(Helper.KEY_TYPE,
                         Helper.DiscountItemType.Coupons.getValue());
                 break;
-            case R.id.profile_vouchers_viewall_button:
+            case R.id.profile_vouchers_viewall_card:
                 intent.putExtra(Helper.KEY_TYPE,
                         Helper.DiscountItemType.Vouchers.getValue());
                 break;
         }
         startActivity(intent);
+    }
+
+    @Override
+    public void onRefresh() {
+        sendRequest();
     }
 }

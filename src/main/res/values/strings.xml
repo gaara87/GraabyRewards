@@ -52,6 +52,7 @@
     <string name="error_data_parsing">Data parsing error</string>
     <string name="error_data_connection_not_available">Data connection not available</string>
     <string name="error_server">Server error, please try again in a while</string>
+    <string name="error_unauthorized">Unauthorized Access, please re-login</string>
     <string name="profile_stat_name_savings">Savings(Rs)</string>
     <string name="market_item_punch_value">Surprise</string>
 

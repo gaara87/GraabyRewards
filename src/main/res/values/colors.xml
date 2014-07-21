@@ -36,5 +36,5 @@
     <color name="holo_darkred">#CC0000</color>
     <color name="navdrawer_bg">#212121</color>
     <color name="black_overlay">#66000000</color>
-
+    <color name="bootstrap_warning">#f1c40f</color>
 </resources>

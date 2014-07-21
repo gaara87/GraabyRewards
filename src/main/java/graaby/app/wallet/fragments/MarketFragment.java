@@ -6,6 +6,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.SearchView;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -18,6 +19,7 @@ import android.widget.ArrayAdapter;
 import android.widget.GridView;
 import android.widget.TextView;
 
+import com.android.volley.Response;
 import com.android.volley.Response.ErrorListener;
 import com.android.volley.VolleyError;
 
@@ -36,13 +38,9 @@ import graaby.app.wallet.MainActivity;
 import graaby.app.wallet.R;
 import graaby.app.wallet.activities.DiscountItemDetailsActivity;
 import graaby.app.wallet.activities.MyDiscountItemsActivity;
-import uk.co.senab.actionbarpulltorefresh.extras.actionbarcompat.PullToRefreshLayout;
-import uk.co.senab.actionbarpulltorefresh.library.ActionBarPullToRefresh;
-import uk.co.senab.actionbarpulltorefresh.library.Options;
-import uk.co.senab.actionbarpulltorefresh.library.listeners.OnRefreshListener;
 
 public class MarketFragment extends Fragment implements OnItemClickListener,
-        com.android.volley.Response.Listener<JSONObject>, ErrorListener {
+        Response.Listener<JSONObject>, ErrorListener, SwipeRefreshLayout.OnRefreshListener {
 
     private GridView marketGrid;
 
@@ -54,7 +52,7 @@ public class MarketFragment extends Fragment implements OnItemClickListener,
 
     private Boolean areTheseMyDiscountItems;
     private Activity mActivity;
-    private PullToRefreshLayout mPullToRefreshLayout;
+    private SwipeRefreshLayout mPullToRefreshLayout;
 
     @Override
     public void onAttach(Activity activity) {
@@ -84,23 +82,9 @@ public class MarketFragment extends Fragment implements OnItemClickListener,
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View v = inflater.inflate(R.layout.fragment_marketplace, null);
-        mPullToRefreshLayout = (PullToRefreshLayout) v.findViewById(R.id.ptr_layout);
-        ActionBarPullToRefresh.from(mActivity)
-                .options(Options.create()
-                        // Here we make the refresh scroll distance to 75% of the refreshable view's height
-                        .scrollDistance(.5f).build())
-                        // Mark All Children as pullable
-                .allChildrenArePullable()
-                        // Set the OnRefreshListener
-                .listener(new OnRefreshListener() {
-                    @Override
-                    public void onRefreshStarted(View view) {
-                        sendRequest();
-                    }
-                })
-                        // Finally commit the setup to our PullToRefreshLayout
-                .setup(mPullToRefreshLayout);
-
+        mPullToRefreshLayout = (SwipeRefreshLayout) v.findViewById(R.id.swiperefresh);
+        mPullToRefreshLayout.setOnRefreshListener(this);
+        mPullToRefreshLayout.setColorSchemeResources(R.color.sunflower, R.color.nephritis, R.color.peterriver, R.color.pumpkin);
         marketGrid = (GridView) v.findViewById(R.id.discountItemsGridView);
         marketGrid.setOnItemClickListener(this);
         marketGrid.setAdapter(adapter);
@@ -127,17 +111,15 @@ public class MarketFragment extends Fragment implements OnItemClickListener,
         HashMap<String, Object> params = new HashMap<String, Object>();
 
         String specificURL = "";
-        if (areTheseMyDiscountItems) {
+        if (areTheseMyDiscountItems && whatType != null) {
             // viewing user coupons or vouchers
-            if (whatType != null) {
-                switch (whatType) {
-                    case Coupons:
-                        specificURL += "/mine/c";
-                        break;
-                    case Vouchers:
-                        specificURL += "/mine/v";
-                        break;
-                }
+            switch (whatType) {
+                case Coupons:
+                    specificURL += "/mine/c";
+                    break;
+                case Vouchers:
+                    specificURL += "/mine/v";
+                    break;
             }
         }
 
@@ -161,7 +143,7 @@ public class MarketFragment extends Fragment implements OnItemClickListener,
     public void onResponse(JSONObject response) {
         JSONArray discountItemsArray = new JSONArray();
         try {
-            discountItemsArray = response.getJSONArray(getString(R.string.market_items));
+            discountItemsArray = response.getJSONArray(mActivity.getString(R.string.market_items));
         } catch (JSONException e) {
             e.printStackTrace();
         }
@@ -172,7 +154,7 @@ public class MarketFragment extends Fragment implements OnItemClickListener,
         }
         adapter.notifyDataSetChanged();
         try {
-            mPullToRefreshLayout.setRefreshComplete();
+            mPullToRefreshLayout.setRefreshing(Boolean.FALSE);
         } catch (NullPointerException npe) {
         }
     }
@@ -188,7 +170,7 @@ public class MarketFragment extends Fragment implements OnItemClickListener,
         } catch (Exception e) {
         } finally {
             try {
-                mPullToRefreshLayout.setRefreshing(Boolean.TRUE);
+                mPullToRefreshLayout.setRefreshing(Boolean.FALSE);
             } catch (NullPointerException npe) {
 
             }
@@ -206,6 +188,11 @@ public class MarketFragment extends Fragment implements OnItemClickListener,
         intent.putExtra(Helper.MY_DISCOUNT_ITEMS_FLAG, areTheseMyDiscountItems);
         intent.setClass(mActivity, DiscountItemDetailsActivity.class);
         startActivity(intent);
+    }
+
+    @Override
+    public void onRefresh() {
+        sendRequest();
     }
 
     private class MarketAdapter extends ArrayAdapter<JSONObject> {

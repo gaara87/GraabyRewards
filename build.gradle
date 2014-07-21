@@ -1,7 +1,6 @@
 apply plugin: 'com.android.application'
 
 repositories {
-    maven { url 'https://github.com/Goddchen/mvn-repo/raw/master/' }
     mavenCentral()
 }
 
@@ -9,14 +8,17 @@ android {
     compileSdkVersion 'android-L'
     buildToolsVersion '20'
 
-    defaultConfig {
+    defaultConfig {''
         applicationId "graaby.app.wallet"
-        minSdkVersion 10
+        minSdkVersion 11
         targetSdkVersion 20
         versionCode 15
         versionName "1.1.4"
     }
     buildTypes {
+        debug {
+            applicationIdSuffix '.dev'
+        }
         release {
             runProguard true
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.txt'
@@ -24,12 +26,14 @@ android {
     }
 }
 dependencies {
+    compile 'com.android.support:cardview-v7:+'
     compile 'com.android.support:support-v4:21.0.0-rc1'
     compile 'com.android.support:appcompat-v7:21.0.0-rc1'
     compile 'com.google.android.gms:play-services:5.0.77'
-    compile 'com.squareup.okhttp:okhttp:1.2.1'
-    compile 'com.facebook.android:facebook:3.6'
-    compile 'com.android:volley:1.0'
-    compile 'com.github.chrisbanes.actionbarpulltorefresh:library:+'
-    compile 'com.github.chrisbanes.actionbarpulltorefresh:extra-abc:+'
+    compile 'com.google.maps.android:android-maps-utils:0.3+'
+    compile 'com.squareup.okio:okio:1.0.0'
+    compile 'com.squareup.okhttp:okhttp:2.0.0'
+    compile 'com.squareup.okhttp:okhttp-urlconnection:2.0.0'
+    compile 'fr.avianey:facebook-android-api:+@aar'
+    compile 'com.mcxiaoke.volley:library:1.0.6'
 }

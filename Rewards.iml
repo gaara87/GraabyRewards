@@ -62,16 +62,16 @@
     <orderEntry type="jdk" jdkName="Android API 20, L preview Platform" jdkType="Android SDK" />
     <orderEntry type="sourceFolder" forTests="false" />
     <orderEntry type="library" exported="" name="appcompat-v7-21.0.0-rc1" level="project" />
+    <orderEntry type="library" exported="" name="okhttp-urlconnection-2.0.0" level="project" />
     <orderEntry type="library" exported="" name="support-annotations-21.0.0-rc1" level="project" />
-    <orderEntry type="library" exported="" name="volley-1.0" level="project" />
+    <orderEntry type="library" exported="" name="facebook-android-api-3.15.0" level="project" />
     <orderEntry type="library" exported="" name="support-v4-21.0.0-rc1" level="project" />
-    <orderEntry type="library" exported="" name="facebook-3.6" level="project" />
-    <orderEntry type="library" exported="" name="extra-abc-0.9.9" level="project" />
-    <orderEntry type="library" exported="" name="library-0.9.9" level="project" />
+    <orderEntry type="library" exported="" name="cardview-v7-21.0.0-rc1" level="project" />
+    <orderEntry type="library" exported="" name="okio-1.0.0" level="project" />
     <orderEntry type="library" exported="" name="play-services-5.0.77" level="project" />
-    <orderEntry type="library" exported="" name="okhttp-1.2.1" level="project" />
-    <orderEntry type="library" exported="" name="library-0.4.0" level="project" />
-    <orderEntry type="library" exported="" name="okhttp-protocols-1.2.1" level="project" />
+    <orderEntry type="library" exported="" name="okhttp-2.0.0" level="project" />
+    <orderEntry type="library" exported="" name="library-1.0.6" level="project" />
+    <orderEntry type="library" exported="" name="android-maps-utils-0.3.1" level="project" />
   </component>
 </module>
 

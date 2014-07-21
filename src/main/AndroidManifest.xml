@@ -44,12 +44,10 @@
             </intent-filter>
             <intent-filter>
                 <action android:name="android.intent.action.VIEW" />
-
                 <category android:name="android.intent.category.DEFAULT" />
                 <category android:name="android.intent.category.BROWSABLE" />
-
                 <data
-                    android:host="wapi.graaby.com"
+                    android:host="www.graaby.com"
                     android:scheme="http" />
             </intent-filter>
 
@@ -78,7 +76,6 @@
             android:label="@string/title_activity_business_outlet_detail" />
         <activity
             android:name=".auth.UserLoginActivity"
-            android:excludeFromRecents="true"
             android:label="@string/title_activity_login"
             android:parentActivityName=".MainActivity"
 

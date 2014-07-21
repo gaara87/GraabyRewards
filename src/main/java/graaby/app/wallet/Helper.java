@@ -5,11 +5,13 @@ import android.content.Context;
 import android.content.Intent;
 import android.nfc.NdefMessage;
 import android.nfc.NdefRecord;
+import android.os.Build;
 import android.os.Parcel;
 import android.os.Parcelable;
 import android.util.Base64;
 import android.widget.Toast;
 
+import com.android.volley.AuthFailureError;
 import com.android.volley.NetworkError;
 import com.android.volley.ParseError;
 import com.android.volley.RequestQueue;
@@ -113,7 +115,12 @@ public class Helper {
 
     public static void initializeAppWorkers(String token, Context context) {
         mAuthToken = token;
-        mRequestQ = Volley.newRequestQueue(context, new OkHttpStack());
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT_WATCH) {
+            mRequestQ = Volley.newRequestQueue(context);
+        } else {
+            mRequestQ = Volley.newRequestQueue(context, new OkHttpStack());
+        }
+
         mImageLoader = new ImageLoader(mRequestQ, new BitmapLruCache());
     }
 
@@ -136,16 +143,20 @@ public class Helper {
     }
 
     public static void handleVolleyError(VolleyError error, Context context) {
+        int errorResourceString = -1;
         if (error instanceof ParseError) {
-            Toast.makeText(context, R.string.error_data_parsing,
-                    Toast.LENGTH_SHORT).show();
+            errorResourceString = R.string.error_data_parsing;
         } else if (error instanceof NetworkError) {
-            Toast.makeText(context, R.string.error_data_connection_not_available,
-                    Toast.LENGTH_SHORT).show();
+            errorResourceString = R.string.error_data_connection_not_available;
         } else if (error instanceof ServerError) {
-            Toast.makeText(context, R.string.error_server,
-                    Toast.LENGTH_SHORT).show();
+            errorResourceString = R.string.error_server;
+        } else if (error instanceof AuthFailureError) {
+            errorResourceString = R.string.error_unauthorized;
+            getRQ().getCache().clear();
         }
+        if (errorResourceString != -1)
+            Toast.makeText(context, errorResourceString,
+                    Toast.LENGTH_SHORT).show();
     }
 
     public static String getRepString(String original) {

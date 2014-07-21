@@ -6,6 +6,7 @@ import android.content.DialogInterface;
 import android.content.res.Resources;
 import android.os.Bundle;
 import android.support.v4.app.ListFragment;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -35,16 +36,12 @@ import graaby.app.wallet.CustomRequest;
 import graaby.app.wallet.Helper;
 import graaby.app.wallet.MainActivity;
 import graaby.app.wallet.R;
-import uk.co.senab.actionbarpulltorefresh.extras.actionbarcompat.PullToRefreshLayout;
-import uk.co.senab.actionbarpulltorefresh.library.ActionBarPullToRefresh;
-import uk.co.senab.actionbarpulltorefresh.library.Options;
-import uk.co.senab.actionbarpulltorefresh.library.listeners.OnRefreshListener;
 
 /**
  * Created by gaara on 1/6/14.
  */
 public class ContactsFragment extends ListFragment implements Response.Listener<JSONObject>,
-        Response.ErrorListener, View.OnClickListener, DialogInterface.OnClickListener {
+        Response.ErrorListener, View.OnClickListener, DialogInterface.OnClickListener, SwipeRefreshLayout.OnRefreshListener {
 
     private Activity mActivity;
     private ContactsAdapter mAdapter;
@@ -53,7 +50,7 @@ public class ContactsFragment extends ListFragment implements Response.Listener<
     private AlertDialog sendPointsDialog;
     private int pointsToSend;
     private Integer contactIDToSendPointsTo = -1;
-    private PullToRefreshLayout mPullToRefreshLayout;
+    private SwipeRefreshLayout mPullToRefreshLayout;
 
     @Override
     public void onAttach(Activity activity) {
@@ -78,34 +75,12 @@ public class ContactsFragment extends ListFragment implements Response.Listener<
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View v = inflater.inflate(R.layout.fragment_contacts, null);
+        mPullToRefreshLayout = (SwipeRefreshLayout) v.findViewById(R.id.swiperefresh);
+        mPullToRefreshLayout.setOnRefreshListener(this);
+        mPullToRefreshLayout.setColorSchemeResources(R.color.belizehole, R.color.pomegranate, R.color.orange, R.color.peterriver);
         mAdapter = new ContactsAdapter(mActivity, contactList, this);
         setListAdapter(mAdapter);
         return v;
-    }
-
-    @Override
-    public void onViewCreated(View view, Bundle savedInstanceState) {
-        super.onViewCreated(view, savedInstanceState);
-
-        // This is the View which is created by ListFragment
-        ViewGroup viewGroup = (ViewGroup) view;
-
-        // We need to create a PullToRefreshLayout manually
-        mPullToRefreshLayout = new PullToRefreshLayout(viewGroup.getContext());
-
-        // We can now setup the PullToRefreshLayout
-        ActionBarPullToRefresh.from(getActivity())
-                .insertLayoutInto(viewGroup)
-                .theseChildrenArePullable(getListView(), getListView().getEmptyView())
-                .listener(new OnRefreshListener() {
-                    @Override
-                    public void onRefreshStarted(View view) {
-                        sendRequest();
-                    }
-                })
-                .options(Options.create()
-                        .scrollDistance(.5f).build())
-                .setup(mPullToRefreshLayout);
     }
 
     @Override
@@ -155,7 +130,7 @@ public class ContactsFragment extends ListFragment implements Response.Listener<
         } catch (JSONException e) {
         } finally {
             try {
-                mPullToRefreshLayout.setRefreshComplete();
+                mPullToRefreshLayout.setRefreshing(Boolean.FALSE);
             } catch (NullPointerException npe) {
             }
         }
@@ -172,7 +147,7 @@ public class ContactsFragment extends ListFragment implements Response.Listener<
                     .getCacheEntry()));
         } catch (Exception e) {
         } finally {
-            mPullToRefreshLayout.setRefreshComplete();
+            mPullToRefreshLayout.setRefreshing(Boolean.FALSE);
 
         }
     }
@@ -220,6 +195,11 @@ public class ContactsFragment extends ListFragment implements Response.Listener<
         } catch (Resources.NotFoundException e1) {
         } catch (JSONException e1) {
         }
+    }
+
+    @Override
+    public void onRefresh() {
+        sendRequest();
     }
 
     private class ContactsAdapter extends ArrayAdapter<JSONObject> {

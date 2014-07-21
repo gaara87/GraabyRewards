@@ -2,13 +2,14 @@ package graaby.app.wallet;
 
 import com.android.volley.toolbox.HurlStack;
 import com.squareup.okhttp.OkHttpClient;
+import com.squareup.okhttp.OkUrlFactory;
 
 import java.io.IOException;
 import java.net.HttpURLConnection;
 import java.net.URL;
 
 public class OkHttpStack extends HurlStack {
-    private final OkHttpClient client;
+    private final OkUrlFactory mFactory;
 
     public OkHttpStack() {
         this(new OkHttpClient());
@@ -18,11 +19,10 @@ public class OkHttpStack extends HurlStack {
         if (client == null) {
             throw new NullPointerException("Client must not be null.");
         }
-        this.client = client;
+        mFactory = new OkUrlFactory(client);
     }
 
-    @Override
-    protected HttpURLConnection createConnection(URL url) throws IOException {
-        return client.open(url);
+    @Override protected HttpURLConnection createConnection(URL url) throws IOException {
+        return mFactory.open(url);
     }
 }

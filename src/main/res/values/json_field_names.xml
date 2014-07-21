@@ -9,6 +9,8 @@
     <string name="business_name">bname</string>
     <string name="business_address">baddr</string>
     <string name="business_area">area</string>
+    <string name="business_phone">phone</string>
+    <string name="business_site">site</string>
     <string name="oauth">oauth</string>
     <string name="userid">uid</string>
     <string name="url">url</string>
@@ -69,4 +71,5 @@
     <string name="contact_send_to">to_id</string>
     <string name="contact_send_amount">amt</string>
     <string name="core_iv">iv</string>
+    <string name="field_gcm_reg_id">reg_id</string>
 </resources>

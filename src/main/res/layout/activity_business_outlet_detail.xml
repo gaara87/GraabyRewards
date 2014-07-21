@@ -15,15 +15,6 @@
         android:scaleType="centerCrop" />
 
     <TextView
-        android:id="@+id/item_businessNameTextView"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:drawableLeft="@drawable/nav_business"
-        android:gravity="center_vertical"
-        android:hint="Business/Restaurant"
-        android:textAppearance="?android:attr/textAppearanceLarge" />
-
-    <TextView
         android:id="@+id/item_businessAddressTextView"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"

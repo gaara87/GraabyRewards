@@ -14,7 +14,6 @@ import android.nfc.NfcAdapter;
 import android.os.Build;
 import android.os.Bundle;
 import android.text.TextUtils;
-import android.text.method.LinkMovementMethod;
 import android.util.Log;
 import android.view.KeyEvent;
 import android.view.Menu;
@@ -154,10 +153,6 @@ public class UserLoginActivity extends AccountAuthenticatorActivity implements
         findViewById(R.id.google_login).setOnClickListener(this);
         findViewById(R.id.fb_login).setOnClickListener(this);
 
-        {
-            TextView t2 = (TextView) findViewById(R.id.login_register_textView);
-            t2.setMovementMethod(LinkMovementMethod.getInstance());
-        }
         mEmailView = (EditText) findViewById(R.id.email);
 
         mPasswordView = (EditText) findViewById(R.id.password);
@@ -287,8 +282,7 @@ public class UserLoginActivity extends AccountAuthenticatorActivity implements
             }
             try {
 
-                RequestQueue mRequestQ = Volley.newRequestQueue(this,
-                        new OkHttpStack());
+                RequestQueue mRequestQ = Volley.newRequestQueue(this);
 
                 CustomRequest loginRequest = new CustomRequest("login", requestParams, this,
                         this);
@@ -544,6 +538,7 @@ public class UserLoginActivity extends AccountAuthenticatorActivity implements
         Session session = Session.getActiveSession();
         Session.saveSession(session, outState);
     }
+
 
     /**
      * This class helps in providing a unique id for the device to track installation

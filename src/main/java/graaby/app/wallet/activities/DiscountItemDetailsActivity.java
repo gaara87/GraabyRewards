@@ -96,7 +96,8 @@ public class DiscountItemDetailsActivity extends ActionBarActivity implements On
                 params.put(
                         getResources().getString(R.string.market_id),
                         discountItemNode.getString(getResources().getString(
-                                R.string.market_id)));
+                                R.string.market_id))
+                );
                 Helper.getRQ().add(
                         new CustomRequest("market/" + customURL, params, this, this));
             } catch (NotFoundException e1) {
@@ -190,6 +191,7 @@ public class DiscountItemDetailsActivity extends ActionBarActivity implements On
         switch (v.getId()) {
             case R.id.item_businessNameTextView:
             case R.id.item_businessPicImageView:
+
                 Helper.openBusiness(this, discountItemNode);
                 break;
 
@@ -202,11 +204,12 @@ public class DiscountItemDetailsActivity extends ActionBarActivity implements On
                                     Toast.makeText(DiscountItemDetailsActivity.this, "Unable to acquire the item", Toast.LENGTH_SHORT).show();
                                     changeButtonState();
                                 }
-                            }));
+                            })
+                    );
                     if (graabItButton != null) {
                         graabItButton.setEnabled(Boolean.FALSE);
                         graabItButton.setText(getString(R.string.button_grab_it_process));
-                        graabItButton.setBackgroundResource(R.color.orange);
+                        graabItButton.setBackgroundColor(getResources().getColor(R.color.orange));
                     }
                 } catch (JSONException e) {
                 }
@@ -296,7 +299,7 @@ public class DiscountItemDetailsActivity extends ActionBarActivity implements On
     private void changeButtonState() {
         if (isItemGraabed == Boolean.TRUE) {
             graabItButton.setText("Congrats, its yours!");
-            graabItButton.setBackgroundResource(R.color.turquoise);
+            graabItButton.setBackgroundColor(getResources().getColor(R.color.turquoise));
             graabItButton.setEnabled(Boolean.FALSE);
             graabItButton.setOnClickListener(null);
         } else {

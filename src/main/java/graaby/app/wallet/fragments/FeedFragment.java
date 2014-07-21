@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.content.res.Resources.NotFoundException;
 import android.os.Bundle;
 import android.support.v4.app.ListFragment;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
@@ -30,19 +31,15 @@ import graaby.app.wallet.CustomRequest;
 import graaby.app.wallet.Helper;
 import graaby.app.wallet.MainActivity;
 import graaby.app.wallet.R;
-import uk.co.senab.actionbarpulltorefresh.extras.actionbarcompat.PullToRefreshLayout;
-import uk.co.senab.actionbarpulltorefresh.library.ActionBarPullToRefresh;
-import uk.co.senab.actionbarpulltorefresh.library.Options;
-import uk.co.senab.actionbarpulltorefresh.library.listeners.OnRefreshListener;
 
 public class FeedFragment extends ListFragment implements Listener<JSONObject>,
-        ErrorListener {
+        ErrorListener, SwipeRefreshLayout.OnRefreshListener {
 
     private List<JSONObject> feedList = new ArrayList<JSONObject>();
     private FeedsAdapter mAdapter;
     private CustomRequest feedRequest;
     private Activity mActivity;
-    private PullToRefreshLayout mPullToRefreshLayout;
+    private SwipeRefreshLayout mPullToRefreshLayout;
 
     @Override
     public void onAttach(Activity activity) {
@@ -61,34 +58,12 @@ public class FeedFragment extends ListFragment implements Listener<JSONObject>,
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View v = inflater.inflate(R.layout.fragment_feeds, null);
-        return v;
-    }
-
-    @Override
-    public void onViewCreated(View view, Bundle savedInstanceState) {
-        super.onViewCreated(view, savedInstanceState);
-
-        // This is the View which is created by ListFragment
-        ViewGroup viewGroup = (ViewGroup) view;
-
-        // We need to create a PullToRefreshLayout manually
-        mPullToRefreshLayout = new PullToRefreshLayout(viewGroup.getContext());
-
-        // We can now setup the PullToRefreshLayout
-        ActionBarPullToRefresh.from(getActivity())
-                .insertLayoutInto(viewGroup)
-                .theseChildrenArePullable(getListView(), getListView().getEmptyView())
-                .listener(new OnRefreshListener() {
-                    @Override
-                    public void onRefreshStarted(View view) {
-                        sendRequest();
-                    }
-                })
-                .options(Options.create()
-                        .scrollDistance(.5f).build())
-                .setup(mPullToRefreshLayout);
+        mPullToRefreshLayout = (SwipeRefreshLayout) v.findViewById(R.id.swiperefresh);
+        mPullToRefreshLayout.setOnRefreshListener(this);
+        mPullToRefreshLayout.setColorSchemeResources(R.color.alizarin, R.color.pomegranate, R.color.wisteria, R.color.peterriver);
         mAdapter = new FeedsAdapter(mActivity, feedList);
         setListAdapter(mAdapter);
+        return v;
     }
 
     @Override
@@ -139,7 +114,7 @@ public class FeedFragment extends ListFragment implements Listener<JSONObject>,
         } catch (JSONException e) {
         } finally {
             try {
-                mPullToRefreshLayout.setRefreshComplete();
+                mPullToRefreshLayout.setRefreshing(Boolean.FALSE);
             } catch (NullPointerException npe) {
             }
         }
@@ -156,8 +131,7 @@ public class FeedFragment extends ListFragment implements Listener<JSONObject>,
                     .getCacheEntry()));
         } catch (Exception e) {
         } finally {
-            mPullToRefreshLayout.setRefreshComplete();
-
+            mPullToRefreshLayout.setRefreshing(Boolean.FALSE);
         }
     }
 
@@ -173,6 +147,11 @@ public class FeedFragment extends ListFragment implements Listener<JSONObject>,
         }
 
         return super.onOptionsItemSelected(item);
+    }
+
+    @Override
+    public void onRefresh() {
+        sendRequest();
     }
 
     private class FeedsAdapter extends ArrayAdapter<JSONObject> {

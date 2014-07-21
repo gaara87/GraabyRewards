@@ -1,10 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
-<uk.co.senab.actionbarpulltorefresh.extras.actionbarcompat.PullToRefreshLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<android.support.v4.widget.SwipeRefreshLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:card_view="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/ptr_layout"
-    tools:context=".fragments.ProfileFragment"
+    android:id="@+id/swiperefresh"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    tools:context=".fragments.ProfileFragment">
 
     <ScrollView
         android:id="@+id/profile_scrollview"
@@ -21,6 +22,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="@dimen/global8"
                 android:background="@color/midnightblue"
+                android:elevation="2dp"
                 android:padding="@dimen/globalPadding8">
 
                 <RelativeLayout
@@ -161,29 +163,28 @@
                 </TableRow>
             </TableLayout>
 
+
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:background="@drawable/card_bg"
-                android:orientation="vertical">
+                android:baselineAligned="false"
+                android:orientation="horizontal">
 
-                <TextView
-                    android:layout_width="match_parent"
+                <android.support.v7.widget.CardView
+                    android:id="@+id/profile_vouchers_viewall_card"
+                    android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:gravity="center"
-                    android:text="You own"
-                    android:textAppearance="?android:attr/textAppearanceMedium" />
-
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:baselineAligned="false">
+                    android:layout_margin="2dp"
+                    android:layout_weight="1"
+                    android:clickable="true"
+                    android:elevation="5dp"
+                    android:foreground="?android:attr/selectableItemBackground"
+                    card_view:cardCornerRadius="4dp">
 
                     <LinearLayout
-                        android:layout_width="0dp"
+                        android:layout_width="match_parent"
                         android:layout_height="match_parent"
-                        android:layout_marginRight="4dp"
-                        android:layout_weight="1"
+                        android:background="@color/sunflower"
                         android:gravity="center"
                         android:orientation="vertical">
 
@@ -191,8 +192,7 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:text="Vouchers"
-                            android:textAppearance="?android:attr/textAppearanceMedium"
-                            android:textColor="@color/silver" />
+                            android:textAppearance="?android:attr/textAppearanceMedium" />
 
                         <TextView
                             android:id="@+id/profile_total_vouchers_textView"
@@ -204,19 +204,24 @@
                             android:gravity="center"
                             android:hint="@string/hint_placeholder"
                             android:textSize="@dimen/important_font_size" />
-
-                        <Button
-                            android:id="@+id/profile_vouchers_viewall_button"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:text="@string/view_all" />
                     </LinearLayout>
+                </android.support.v7.widget.CardView>
+
+                <android.support.v7.widget.CardView
+                    android:id="@+id/profile_coupons_viewall_card"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="2dp"
+                    android:layout_weight="1"
+                    android:elevation="5dp"
+                    android:foreground="?android:attr/selectableItemBackground"
+                    card_view:cardCornerRadius="4dp">
 
                     <LinearLayout
-                        android:layout_width="0dp"
+                        android:layout_width="match_parent"
                         android:layout_height="match_parent"
-                        android:layout_marginLeft="4dp"
                         android:layout_weight="1"
+                        android:background="@color/peterriver"
                         android:gravity="center"
                         android:orientation="vertical">
 
@@ -224,8 +229,7 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:text="Coupons"
-                            android:textAppearance="?android:attr/textAppearanceMedium"
-                            android:textColor="@color/silver" />
+                            android:textAppearance="?android:attr/textAppearanceMedium" />
 
                         <TextView
                             android:id="@+id/profile_total_coupons_textView"
@@ -238,14 +242,10 @@
                             android:hint="@string/hint_placeholder"
                             android:textSize="@dimen/important_font_size" />
 
-                        <Button
-                            android:id="@+id/profile_coupons_viewall_button"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:text="@string/view_all" />
                     </LinearLayout>
-                </LinearLayout>
+                </android.support.v7.widget.CardView>
             </LinearLayout>
+
 
             <TableLayout
                 android:layout_width="match_parent"
@@ -316,6 +316,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:background="@drawable/card_bg"
+                android:elevation="5dp"
                 android:orientation="vertical">
 
                 <TextView
@@ -328,4 +329,4 @@
         </LinearLayout>
 
     </ScrollView>
-</uk.co.senab.actionbarpulltorefresh.extras.actionbarcompat.PullToRefreshLayout>
+</android.support.v4.widget.SwipeRefreshLayout>
