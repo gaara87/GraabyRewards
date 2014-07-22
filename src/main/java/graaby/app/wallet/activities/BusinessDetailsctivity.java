@@ -28,7 +28,7 @@ import graaby.app.wallet.CustomRequest;
 import graaby.app.wallet.Helper;
 import graaby.app.wallet.R;
 
-public class BusinessOutletDetailActivity extends ActionBarActivity implements
+public class BusinessDetailsctivity extends ActionBarActivity implements
         ErrorListener, Listener<JSONObject> {
 
     private int businessId;
@@ -53,7 +53,7 @@ public class BusinessOutletDetailActivity extends ActionBarActivity implements
 
 
         try {
-            businessId = placeNode.getInt(getString(R.string.business_id));
+            businessId = placeNode.getInt(getString(R.string.business_outlet_id));
             getSupportActionBar().setTitle(placeNode.getString(getString(
                     R.string.business_title)));
         } catch (JSONException e) {
@@ -63,7 +63,7 @@ public class BusinessOutletDetailActivity extends ActionBarActivity implements
         HashMap<String, Object> params = new HashMap<String, Object>();
 
         try {
-            params.put(getString(R.string.business_id), businessId);
+            params.put(getString(R.string.business_outlet_id), businessId);
             Helper.getRQ().add(new CustomRequest("store", params, this, this));
         } catch (NotFoundException e1) {
         } catch (JSONException e1) {

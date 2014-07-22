@@ -8,12 +8,12 @@ android {
     compileSdkVersion 'android-L'
     buildToolsVersion '20'
 
-    defaultConfig {''
+    defaultConfig {
         applicationId "graaby.app.wallet"
         minSdkVersion 11
         targetSdkVersion 20
-        versionCode 15
-        versionName "1.1.4"
+        versionCode 16
+        versionName "1.1.5"
     }
     buildTypes {
         debug {
@@ -30,7 +30,7 @@ dependencies {
     compile 'com.android.support:support-v4:21.0.0-rc1'
     compile 'com.android.support:appcompat-v7:21.0.0-rc1'
     compile 'com.google.android.gms:play-services:5.0.77'
-    compile 'com.google.maps.android:android-maps-utils:0.3+'
+    compile 'com.google.maps.android:android-maps-utils:0.3.+'
     compile 'com.squareup.okio:okio:1.0.0'
     compile 'com.squareup.okhttp:okhttp:2.0.0'
     compile 'com.squareup.okhttp:okhttp-urlconnection:2.0.0'

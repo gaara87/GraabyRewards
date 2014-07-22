@@ -1,5 +1,6 @@
 package graaby.app.wallet.activities;
 
+import android.content.Intent;
 import android.content.res.Resources.NotFoundException;
 import android.nfc.NfcAdapter;
 import android.os.Build;
@@ -191,8 +192,9 @@ public class DiscountItemDetailsActivity extends ActionBarActivity implements On
         switch (v.getId()) {
             case R.id.item_businessNameTextView:
             case R.id.item_businessPicImageView:
-
-                Helper.openBusiness(this, discountItemNode);
+                Intent intent = new Intent(this, BrandDetailsActivity.class);
+                intent.putExtra(Helper.INTENT_CONTAINER_INFO, discountItemNode.toString());
+                startActivity(intent);
                 break;
 
             case R.id.grab_it_button:

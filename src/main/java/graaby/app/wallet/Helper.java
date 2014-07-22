@@ -26,7 +26,7 @@ import java.io.DataInputStream;
 import java.io.FileInputStream;
 import java.nio.charset.Charset;
 
-import graaby.app.wallet.activities.BusinessOutletDetailActivity;
+import graaby.app.wallet.activities.BusinessDetailsctivity;
 
 public class Helper {
 
@@ -37,7 +37,7 @@ public class Helper {
     public static String INTENT_CONTAINER_INFO = "jsonnode_key";
     public static String KEY_TYPE = "type";
     public static String MY_DISCOUNT_ITEMS_FLAG = "market";
-    public static String BUSINESS_ID_BUNDLE_KEY = "bidkey";
+    public static String BRAND_ID_BUNDLE_KEY = "bidkey";
     public static final String ARG_SECTION_NUMBER = "section_number";
 
     public static enum DiscountItemType {
@@ -137,7 +137,7 @@ public class Helper {
     }
 
     public static void openBusiness(Activity activity, JSONObject node) {
-        Intent intent = new Intent(activity, BusinessOutletDetailActivity.class);
+        Intent intent = new Intent(activity, BusinessDetailsctivity.class);
         intent.putExtra(Helper.INTENT_CONTAINER_INFO, node.toString());
         activity.startActivity(intent);
     }

@@ -8,7 +8,9 @@ import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
 import android.os.Bundle;
+import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.SearchView;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -34,6 +36,7 @@ import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.MapView;
 import com.google.android.gms.maps.MapsInitializer;
 import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.LatLngBounds;
 import com.google.maps.android.clustering.ClusterManager;
 
 import org.json.JSONArray;
@@ -53,24 +56,29 @@ import graaby.app.wallet.model.BusinessMarkerRenderer;
 
 public class BusinessesFragment extends Fragment implements
         OnItemClickListener, ErrorListener,
-        Listener<JSONObject>, LocationListener, ClusterManager.OnClusterItemInfoWindowClickListener<BusinessMarker> {
+        Listener<JSONObject>, LocationListener, ClusterManager.OnClusterItemInfoWindowClickListener<BusinessMarker>, SwipeRefreshLayout.OnRefreshListener {
     MapView mapView;
     GoogleMap mMap;
 
     private Bundle mBundle;
-    private String fieldNameLongitude;
-    private String fieldNameLatitude;
+    private String fieldNameLongitude, fieldNameLatitude, fieldNameBrandID;
+
     private ListView listView;
+    private Button enableLocationButton;
+    private SwipeRefreshLayout mPullToRefreshLayout;
 
     private CustomRequest businessesRequest;
     private BusinessesAdapter adapter;
     private Activity mActivity;
-
-    private LatLng latLng = new LatLng(0, 0);
-    private Boolean isLocationEnabled = Boolean.FALSE;
     private LocationManager locationManager;
-    private Button enableLocationButton;
+    private Boolean isLocationEnabled = Boolean.FALSE;
+
     private ClusterManager<BusinessMarker> mClusterManager;
+
+    private Integer mBrandId = -1;
+    private LatLng mLatLng = new LatLng(0, 0);
+    private LatLngBounds mLatLngBounds;
+    ;
 
     private boolean isLocationEnabled() {
         if (locationManager.isProviderEnabled(LocationManager.NETWORK_PROVIDER) || locationManager
@@ -78,8 +86,9 @@ public class BusinessesFragment extends Fragment implements
             isLocationEnabled = Boolean.TRUE;
             locationManager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, 3000, 20, this);
             Location lastKnown = locationManager.getLastKnownLocation(LocationManager.NETWORK_PROVIDER);
-            if (lastKnown != null)
-                latLng = new LatLng(lastKnown.getLatitude(), lastKnown.getLongitude());
+            if (lastKnown != null) {
+                mLatLng = new LatLng(lastKnown.getLatitude(), lastKnown.getLongitude());
+            }
         } else {
             isLocationEnabled = Boolean.FALSE;
         }
@@ -90,10 +99,15 @@ public class BusinessesFragment extends Fragment implements
     public void onAttach(Activity activity) {
         super.onAttach(activity);
         mActivity = activity;
-        ((MainActivity) mActivity).onSectionAttached(
-                getArguments().getInt(Helper.ARG_SECTION_NUMBER));
+        try {
+            ((MainActivity) mActivity).onSectionAttached(
+                    getArguments().getInt(Helper.ARG_SECTION_NUMBER));
+        } catch (Exception e) {
+        }
+        mBrandId = getArguments().getInt(Helper.BRAND_ID_BUNDLE_KEY, -1);
         locationManager = (LocationManager) mActivity
                 .getSystemService(Context.LOCATION_SERVICE);
+
         isLocationEnabled();
     }
 
@@ -105,7 +119,7 @@ public class BusinessesFragment extends Fragment implements
                 R.string.business_longitude);
         fieldNameLatitude = getString(
                 R.string.business_latitude);
-
+        fieldNameBrandID = getString(R.string.business_id);
         adapter = new BusinessesAdapter(mActivity, new ArrayList<JSONObject>());
     }
 
@@ -114,10 +128,15 @@ public class BusinessesFragment extends Fragment implements
                              Bundle savedInstanceState) {
         View inflatedView = inflater.inflate(R.layout.fragment_business, container,
                 false);
+
+        mPullToRefreshLayout = (SwipeRefreshLayout) inflatedView.findViewById(R.id.swiperefresh);
+        mPullToRefreshLayout.setOnRefreshListener(this);
+        mPullToRefreshLayout.setEnabled(false);
+        mPullToRefreshLayout.setColorSchemeResources(R.color.wisteria, R.color.amethyst, R.color.holo_darkpurple, R.color.holo_lightpurple);
         listView = (ListView) inflatedView.findViewById(R.id.business_listview);
         listView.setOnItemClickListener(this);
         listView.setAdapter(adapter);
-        if (!isLocationEnabled) {
+        if (!isLocationEnabled && mBrandId == -1) {
             enableLocationButton = (Button) inflatedView.findViewById(R.id.business_enable_location_btn);
             enableLocationButton.setVisibility(View.VISIBLE);
             enableLocationButton.setOnClickListener(new View.OnClickListener() {
@@ -137,34 +156,38 @@ public class BusinessesFragment extends Fragment implements
         return inflatedView;
     }
 
-
     @Override
-    public void onActivityCreated(Bundle savedInstanceState) {
-        super.onActivityCreated(savedInstanceState);
+    public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
         sendRequest();
     }
 
     private void sendRequest() {
         HashMap<String, Object> params = new HashMap<String, Object>();
 
-        params.put(fieldNameLatitude, latLng.latitude);
-        params.put(fieldNameLongitude, latLng.longitude);
+        params.put(fieldNameLatitude, mLatLng.latitude);
+        params.put(fieldNameLongitude, mLatLng.longitude);
+        if (mBrandId != -1) {
+            params.put(fieldNameBrandID, mBrandId);
+        }
         try {
             businessesRequest = new CustomRequest("stores", params, this, this);
-            Cache.Entry entry = Helper.getRQ().getCache().get(businessesRequest.getCacheKey());
-            if (entry != null) {
-                JSONObject jsonCachedResponse = CustomRequest.getCachedResponse(entry);
-                if (jsonCachedResponse != null) {
-                    onResponse(jsonCachedResponse);
+            if (mBrandId == -1) {
+                Cache.Entry entry = Helper.getRQ().getCache().get(businessesRequest.getCacheKey());
+                if (entry != null) {
+                    JSONObject jsonCachedResponse = CustomRequest.getCachedResponse(entry);
+                    if (jsonCachedResponse != null) {
+                        onResponse(jsonCachedResponse);
+                    }
                 }
             }
             Helper.getRQ().add(businessesRequest);
-            showProgress(Boolean.TRUE);
+            mPullToRefreshLayout.setRefreshing(Boolean.TRUE);
         } catch (JSONException e) {
 
         } catch (NullPointerException npe) {
         } finally {
-            showProgress(Boolean.TRUE);
+            mPullToRefreshLayout.setRefreshing(Boolean.TRUE);
         }
     }
 
@@ -178,20 +201,28 @@ public class BusinessesFragment extends Fragment implements
                     mMap.clear();
             }
             mClusterManager.clearItems();
+            LatLngBounds.Builder builder = LatLngBounds.builder();
             for (int i = 0; i < placesArray.length(); i++) {
                 JSONObject place = placesArray.optJSONObject(i);
-                Double lat = place.getDouble(fieldNameLatitude), lon = place
-                        .getDouble(fieldNameLongitude);
+                LatLng point = new LatLng(place.getDouble(fieldNameLatitude), place
+                        .getDouble(fieldNameLongitude));
+                if (mBrandId != -1) {
+                    builder.include(point);
+                }
                 if (mMap != null) {
-                    mClusterManager.addItem(new BusinessMarker(mActivity, lat, lon, place));
+                    mClusterManager.addItem(new BusinessMarker(mActivity, point, place));
                 }
                 adapter.add(place);
             }
             mClusterManager.cluster();
+            if (mBrandId != -1) {
+                mLatLngBounds = builder.build();
+                moveMapCamera();
+            }
         } catch (JSONException e) {
         } catch (IllegalStateException ise) {
         } finally {
-            showProgress(Boolean.FALSE);
+            mPullToRefreshLayout.setRefreshing(Boolean.FALSE);
         }
 
     }
@@ -200,31 +231,27 @@ public class BusinessesFragment extends Fragment implements
     public void onErrorResponse(VolleyError error) {
         Helper.handleVolleyError(error, mActivity);
         try {
-            showProgress(Boolean.TRUE);
+            mPullToRefreshLayout.setRefreshing(Boolean.TRUE);
             onResponse(CustomRequest.getCachedResponse(businessesRequest
                     .getCacheEntry()));
         } catch (Exception e) {
         } finally {
-            showProgress(Boolean.FALSE);
-
+            mPullToRefreshLayout.setRefreshing(Boolean.FALSE);
         }
-    }
-
-    private void showProgress(Boolean done) {
-
     }
 
     @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
         inflater.inflate(R.menu.menu_fragment_business, menu);
-        inflater.inflate(R.menu.menu_search, menu);
+        //TODO remove below line for search implementation
+        /*inflater.inflate(R.menu.menu_search, menu);
         if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.HONEYCOMB) {
             SearchManager searchManager = (SearchManager) mActivity.getSystemService(Context.SEARCH_SERVICE);
             SearchView searchView = (SearchView) menu.findItem(R.id.action_search)
                     .getActionView();
             searchView.setSearchableInfo(searchManager
                     .getSearchableInfo(mActivity.getComponentName()));
-        }
+        }*/
 
         super.onCreateOptionsMenu(menu, inflater);
     }
@@ -241,9 +268,6 @@ public class BusinessesFragment extends Fragment implements
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
-            case R.id.action_menu_item_refresh:
-                sendRequest();
-                break;
             case R.id.action_menu_item_view_toggle:
                 if (item.getTitle().equals("List")) {
                     item.setTitle("Map");
@@ -273,18 +297,22 @@ public class BusinessesFragment extends Fragment implements
                 mMap.setOnInfoWindowClickListener(mClusterManager);
                 mClusterManager.setOnClusterItemInfoWindowClickListener(this);
                 mClusterManager.setRenderer(new BusinessMarkerRenderer(mActivity, mMap, mClusterManager));
-                setUpMap();
+                moveMapCamera();
             }
         }
     }
 
-    private void setUpMap() {
-        CameraUpdate cameraUpdate = CameraUpdateFactory.newLatLng(latLng);
+    private void moveMapCamera() {
+        CameraUpdate cameraUpdate = null;
+        if (mBrandId == -1)
+            cameraUpdate = CameraUpdateFactory.newLatLng(mLatLng);
+        else if (mLatLngBounds != null)
+            cameraUpdate = CameraUpdateFactory.newLatLngBounds(mLatLngBounds, 100);
         try {
-            mMap.moveCamera(cameraUpdate);
+            if (cameraUpdate != null)
+                mMap.moveCamera(cameraUpdate);
         } catch (NullPointerException npe) {
-            mMap.moveCamera(CameraUpdateFactory.newLatLng(new LatLng(0,
-                    0)));
+            npe.printStackTrace();
         }
     }
 
@@ -324,8 +352,8 @@ public class BusinessesFragment extends Fragment implements
 
     @Override
     public void onLocationChanged(Location location) {
-        latLng = new LatLng(location.getLatitude(), location.getLongitude());
-        setUpMap();
+        mLatLng = new LatLng(location.getLatitude(), location.getLongitude());
+        moveMapCamera();
         sendRequest();
     }
 
@@ -348,6 +376,11 @@ public class BusinessesFragment extends Fragment implements
     public void onClusterItemInfoWindowClick(BusinessMarker businessMarker) {
         JSONObject place = businessMarker.getPlace();
         Helper.openBusiness(mActivity, place);
+    }
+
+    @Override
+    public void onRefresh() {
+        sendRequest();
     }
 
 

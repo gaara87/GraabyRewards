@@ -6,6 +6,7 @@
     <string name="business_title">title</string>
     <string name="business_places">places</string>
     <string name="business_id">bid</string>
+    <string name="business_outlet_id">oid</string>
     <string name="business_name">bname</string>
     <string name="business_address">baddr</string>
     <string name="business_area">area</string>

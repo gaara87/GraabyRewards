@@ -96,14 +96,15 @@ public class MarketFragment extends Fragment implements OnItemClickListener,
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
         super.onCreateOptionsMenu(menu, inflater);
         if (areTheseMyDiscountItems.equals(Boolean.FALSE)) {
-            inflater.inflate(R.menu.menu_search, menu);
+            //TODO remove below line for search implementation
+            /*inflater.inflate(R.menu.menu_search, menu);
             if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.HONEYCOMB) {
                 SearchManager searchManager = (SearchManager) mActivity.getSystemService(Context.SEARCH_SERVICE);
                 SearchView searchView = (SearchView) menu.findItem(R.id.action_search)
                         .getActionView();
                 searchView.setSearchableInfo(searchManager
                         .getSearchableInfo(mActivity.getComponentName()));
-            }
+            }*/
         }
     }
 
