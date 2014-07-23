@@ -1,6 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="graaby.app.wallet" >
+    xmlns:tools="http://schemas.android.com/tools"
+    package="graaby.app.wallet">
+
+    <uses-sdk tools:node="replace" />
 
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.NFC" />
@@ -33,10 +36,10 @@
         android:allowBackup="true"
         android:icon="@drawable/ic_launcher"
         android:label="@string/app_name"
-        android:theme="@style/AppTheme" >
+        android:theme="@style/AppTheme">
         <activity
             android:name=".MainActivity"
-            android:label="@string/app_name" >
+            android:label="@string/app_name">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -59,7 +62,7 @@
         </activity>
         <activity
             android:name=".activities.DiscountItemDetailsActivity"
-            android:parentActivityName=".MainActivity" >
+            android:parentActivityName=".MainActivity">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".MainActivity" />
@@ -67,7 +70,7 @@
         <activity
             android:name=".activities.MyDiscountItemsActivity"
             android:label="@string/title_activity_my_cpn_vcr"
-            android:parentActivityName=".MainActivity" >
+            android:parentActivityName=".MainActivity">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".MainActivity" />
@@ -81,14 +84,14 @@
             android:label="@string/title_activity_login"
             android:parentActivityName=".MainActivity"
             android:theme="@style/LoginTheme"
-            android:windowSoftInputMode="adjustResize|stateHidden" >
+            android:windowSoftInputMode="adjustResize|stateHidden">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".MainActivity" />
         </activity>
         <activity
             android:name=".activities.OnboardingActivity"
-            android:parentActivityName=".auth.UserLoginActivity" >
+            android:parentActivityName=".auth.UserLoginActivity">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".auth.UserLoginActivity" />
@@ -97,7 +100,7 @@
         <service
             android:name=".auth.UserAuthenticationService"
             android:exported="true"
-            android:permission="android.permission.GET_ACCOUNTS" >
+            android:permission="android.permission.GET_ACCOUNTS">
             <intent-filter>
                 <action android:name="android.accounts.AccountAuthenticator" />
             </intent-filter>
@@ -121,7 +124,7 @@
         <activity
             android:name=".SettingsActivity"
             android:label="@string/title_activity_settings"
-            android:parentActivityName=".MainActivity" >
+            android:parentActivityName=".MainActivity">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="MainActivity" />
@@ -129,7 +132,7 @@
 
         <receiver
             android:name="gcm.GcmBroadcastReceiver"
-            android:permission="com.google.android.c2dm.permission.SEND" >
+            android:permission="com.google.android.c2dm.permission.SEND">
             <intent-filter>
 
                 <!-- Receives the actual messages. -->
@@ -144,7 +147,7 @@
         <activity
             android:name=".activities.SearchResultsActivity"
             android:label="@string/title_activity_search_results"
-            android:parentActivityName=".MainActivity" >
+            android:parentActivityName=".MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.SEARCH" />
             </intent-filter>
@@ -158,8 +161,7 @@
         </activity>
         <activity
             android:name=".activities.BrandDetailsActivity"
-            android:label="@string/title_activity_brand_details" >
-        </activity>
+            android:label="@string/title_activity_brand_details"></activity>
     </application>
 
 </manifest>
