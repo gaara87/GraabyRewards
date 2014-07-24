@@ -40,6 +40,10 @@
         <activity
             android:name=".MainActivity"
             android:label="@string/app_name">
+            <meta-data
+                android:name="android.app.default_searchable"
+                android:value="graaby.app.wallet.activities.SearchResultsActivity" />
+
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -55,10 +59,6 @@
                     android:host="www.graaby.com"
                     android:scheme="http" />
             </intent-filter>
-
-            <meta-data
-                android:name="android.app.default_searchable"
-                android:value=".activities.SearchResultsActivity" />
         </activity>
         <activity
             android:name=".activities.DiscountItemDetailsActivity"
@@ -147,6 +147,7 @@
         <activity
             android:name=".activities.SearchResultsActivity"
             android:label="@string/title_activity_search_results"
+            android:launchMode="singleTop"
             android:parentActivityName=".MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.SEARCH" />
@@ -161,7 +162,7 @@
         </activity>
         <activity
             android:name=".activities.BrandDetailsActivity"
-            android:label="@string/title_activity_brand_details"></activity>
+            android:label="@string/title_activity_brand_details" />
     </application>
 
 </manifest>

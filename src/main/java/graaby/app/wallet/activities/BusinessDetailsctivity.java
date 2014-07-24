@@ -53,9 +53,9 @@ public class BusinessDetailsctivity extends ActionBarActivity implements
 
 
         try {
-            businessId = placeNode.getInt(getString(R.string.business_outlet_id));
+            businessId = placeNode.getInt(getString(R.string.field_business_outlet_id));
             getSupportActionBar().setTitle(placeNode.getString(getString(
-                    R.string.business_title)));
+                    R.string.field_business_title)));
         } catch (JSONException e) {
             businessId = 0;
         }
@@ -63,7 +63,7 @@ public class BusinessDetailsctivity extends ActionBarActivity implements
         HashMap<String, Object> params = new HashMap<String, Object>();
 
         try {
-            params.put(getString(R.string.business_outlet_id), businessId);
+            params.put(getString(R.string.field_business_outlet_id), businessId);
             Helper.getRQ().add(new CustomRequest("store", params, this, this));
         } catch (NotFoundException e1) {
         } catch (JSONException e1) {
@@ -79,7 +79,7 @@ public class BusinessDetailsctivity extends ActionBarActivity implements
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        if (placeNode.has(getString(R.string.business_latitude)) && placeNode.has(getString(R.string.business_longitude)))
+        if (placeNode.has(getString(R.string.field_business_latitude)) && placeNode.has(getString(R.string.field_business_longitude)))
             getMenuInflater().inflate(R.menu.menu_business_detail, menu);
         return super.onCreateOptionsMenu(menu);
     }
@@ -94,7 +94,7 @@ public class BusinessDetailsctivity extends ActionBarActivity implements
 
                 String geoUri = null;
                 try {
-                    geoUri = "http://maps.google.com/maps?f=d&daddr=" + placeNode.getDouble(getString(R.string.business_latitude)) + "," + placeNode.getDouble(getString(R.string.business_longitude));
+                    geoUri = "http://maps.google.com/maps?f=d&daddr=" + placeNode.getDouble(getString(R.string.field_business_latitude)) + "," + placeNode.getDouble(getString(R.string.field_business_longitude));
                     Intent intent = new Intent(Intent.ACTION_VIEW,
                             Uri.parse(geoUri));
                     intent.setComponent(new ComponentName("com.google.android.apps.maps",
@@ -121,7 +121,7 @@ public class BusinessDetailsctivity extends ActionBarActivity implements
 
         try {
             getSupportActionBar().setTitle(response.getString(getResources().getString(
-                    R.string.business_name)));
+                    R.string.field_business_name)));
 
         } catch (NotFoundException e) {
         } catch (JSONException e) {
@@ -130,7 +130,7 @@ public class BusinessDetailsctivity extends ActionBarActivity implements
         TextView tv = (TextView) findViewById(R.id.item_businessAddressTextView);
         try {
             tv.setText(response.getString(getResources().getString(
-                    R.string.business_address)));
+                    R.string.field_)));
         } catch (NotFoundException e) {
         } catch (JSONException e) {
         }

@@ -19,7 +19,7 @@ public class BusinessMarker implements ClusterItem {
     public BusinessMarker(Context ctxt, LatLng point, JSONObject place) {
         mPosition = point;
         mPlace = place;
-        mFieldTitleName = ctxt.getString(R.string.business_title);
+        mFieldTitleName = ctxt.getString(R.string.field_business_title);
         mFieldArea = ctxt.getString(R.string.business_area);
     }
 

@@ -151,7 +151,7 @@ public class DiscountItemDetailsActivity extends ActionBarActivity implements On
         tv = (TextView) findViewById(R.id.item_businessNameTextView);
         try {
             tv.setText(discountItemNode.getString(getResources().getString(
-                    R.string.business_name)));
+                    R.string.field_business_name)));
         } catch (NotFoundException e) {
         } catch (JSONException e) {
         }

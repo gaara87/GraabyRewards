@@ -4,9 +4,7 @@ import android.nfc.NfcAdapter;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
-import android.support.v4.app.NavUtils;
 import android.support.v7.app.ActionBarActivity;
-import android.view.MenuItem;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -27,8 +25,8 @@ public class BrandDetailsActivity extends ActionBarActivity {
         int bid = -1;
         try {
             JSONObject brandNode = new JSONObject(info);
-            bid = brandNode.getInt(getString(R.string.business_id));
-            getSupportActionBar().setTitle(brandNode.getString(getString(R.string.business_name)));
+            bid = brandNode.getInt(getString(R.string.field_business_id));
+            getSupportActionBar().setTitle(brandNode.getString(getString(R.string.field_business_name)));
         } catch (JSONException e1) {
 
         }

@@ -20,10 +20,8 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
-import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ListView;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import com.android.volley.Cache;
@@ -45,12 +43,12 @@ import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 
 import graaby.app.wallet.CustomRequest;
 import graaby.app.wallet.Helper;
 import graaby.app.wallet.MainActivity;
 import graaby.app.wallet.R;
+import graaby.app.wallet.adapter.BusinessesAdapter;
 import graaby.app.wallet.model.BusinessMarker;
 import graaby.app.wallet.model.BusinessMarkerRenderer;
 
@@ -68,7 +66,7 @@ public class BusinessesFragment extends Fragment implements
     private SwipeRefreshLayout mPullToRefreshLayout;
 
     private CustomRequest businessesRequest;
-    private BusinessesAdapter adapter;
+    private BusinessesAdapter mAdapter;
     private Activity mActivity;
     private LocationManager locationManager;
     private Boolean isLocationEnabled = Boolean.FALSE;
@@ -116,11 +114,11 @@ public class BusinessesFragment extends Fragment implements
         super.onCreate(savedInstanceState);
         mBundle = savedInstanceState;
         fieldNameLongitude = getString(
-                R.string.business_longitude);
+                R.string.field_business_longitude);
         fieldNameLatitude = getString(
-                R.string.business_latitude);
-        fieldNameBrandID = getString(R.string.business_id);
-        adapter = new BusinessesAdapter(mActivity, new ArrayList<JSONObject>());
+                R.string.field_business_latitude);
+        fieldNameBrandID = getString(R.string.field_business_id);
+        mAdapter = new BusinessesAdapter(mActivity, new ArrayList<JSONObject>());
     }
 
     @Override
@@ -135,7 +133,7 @@ public class BusinessesFragment extends Fragment implements
         mPullToRefreshLayout.setColorSchemeResources(R.color.wisteria, R.color.amethyst, R.color.holo_darkpurple, R.color.holo_lightpurple);
         listView = (ListView) inflatedView.findViewById(R.id.business_listview);
         listView.setOnItemClickListener(this);
-        listView.setAdapter(adapter);
+        listView.setAdapter(mAdapter);
         if (!isLocationEnabled && mBrandId == -1) {
             enableLocationButton = (Button) inflatedView.findViewById(R.id.business_enable_location_btn);
             enableLocationButton.setVisibility(View.VISIBLE);
@@ -194,9 +192,9 @@ public class BusinessesFragment extends Fragment implements
     @Override
     public void onResponse(JSONObject response) {
         try {
-            JSONArray placesArray = response.getJSONArray(getString(R.string.business_places));
+            JSONArray placesArray = response.getJSONArray(getString(R.string.field_business_places));
             if (placesArray.length() != 0) {
-                adapter.clear();
+                mAdapter.clear();
                 if (mMap != null)
                     mMap.clear();
             }
@@ -212,7 +210,7 @@ public class BusinessesFragment extends Fragment implements
                 if (mMap != null) {
                     mClusterManager.addItem(new BusinessMarker(mActivity, point, place));
                 }
-                adapter.add(place);
+                mAdapter.add(place);
             }
             mClusterManager.cluster();
             if (mBrandId != -1) {
@@ -243,15 +241,14 @@ public class BusinessesFragment extends Fragment implements
     @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
         inflater.inflate(R.menu.menu_fragment_business, menu);
-        //TODO remove below line for search implementation
-        /*inflater.inflate(R.menu.menu_search, menu);
+        inflater.inflate(R.menu.menu_search, menu);
         if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.HONEYCOMB) {
             SearchManager searchManager = (SearchManager) mActivity.getSystemService(Context.SEARCH_SERVICE);
             SearchView searchView = (SearchView) menu.findItem(R.id.action_search)
                     .getActionView();
             searchView.setSearchableInfo(searchManager
                     .getSearchableInfo(mActivity.getComponentName()));
-        }*/
+        }
 
         super.onCreateOptionsMenu(menu, inflater);
     }
@@ -345,7 +342,7 @@ public class BusinessesFragment extends Fragment implements
     @Override
     public void onItemClick(AdapterView<?> adapterView, View arg1,
                             int position, long arg3) {
-        JSONObject node = adapter.getItem(position);
+        JSONObject node = mAdapter.getItem(position);
         Helper.openBusiness(mActivity, node);
 
     }
@@ -381,37 +378,6 @@ public class BusinessesFragment extends Fragment implements
     @Override
     public void onRefresh() {
         sendRequest();
-    }
-
-
-    class BusinessesAdapter extends ArrayAdapter<JSONObject> {
-
-        private final LayoutInflater inflater;
-        private String bName_field, bArea_field;
-
-        public BusinessesAdapter(Context context, List<JSONObject> places) {
-            super(context, R.layout.item_list_business, places);
-            bName_field = context.getString(R.string.business_title);
-            bArea_field = context.getString(R.string.business_area);
-            inflater = LayoutInflater.from(context);
-        }
-
-        @Override
-        public View getView(int position, View convertView, ViewGroup parent) {
-            convertView = inflater.inflate(R.layout.item_list_business, null);
-            JSONObject place = getItem(position);
-
-            try {
-                ((TextView) convertView.findViewById(R.id.item_businessNameTextView)).setText(place.getString(bName_field));
-            } catch (JSONException e) {
-            }
-
-            try {
-                ((TextView) convertView.findViewById(R.id.item_businessAddressTextView)).setText(place.getString(bArea_field));
-            } catch (JSONException e) {
-            }
-            return convertView;
-        }
     }
 }
 

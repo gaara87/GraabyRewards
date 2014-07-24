@@ -1,14 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-    <string name="business_latitude">lt</string>
-    <string name="business_longitude">lg</string>
-    <string name="business_title">title</string>
-    <string name="business_places">places</string>
-    <string name="business_id">bid</string>
-    <string name="business_outlet_id">oid</string>
-    <string name="business_name">bname</string>
-    <string name="business_address">baddr</string>
+    <string name="field_business_latitude">lt</string>
+    <string name="field_business_longitude">lg</string>
+    <string name="field_business_title">title</string>
+    <string name="field_business_places">places</string>
+    <string name="field_business_id">bid</string>
+    <string name="field_business_outlet_id">oid</string>
+    <string name="field_business_name">bname</string>
+    <string name="field_">baddr</string>
     <string name="business_area">area</string>
     <string name="business_phone">phone</string>
     <string name="business_site">site</string>
@@ -73,4 +73,6 @@
     <string name="contact_send_amount">amt</string>
     <string name="core_iv">iv</string>
     <string name="field_gcm_reg_id">reg_id</string>
+    <string name="field_search_query">query</string>
+    <string name="field_collapse">collapse</string>
 </resources>

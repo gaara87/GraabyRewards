@@ -47,6 +47,7 @@ import java.util.HashMap;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.atomic.AtomicInteger;
 
+import graaby.app.wallet.activities.SearchResultsActivity;
 import graaby.app.wallet.auth.UserLoginActivity;
 import graaby.app.wallet.fragments.BusinessesFragment;
 import graaby.app.wallet.fragments.ContactsFragment;
@@ -82,6 +83,8 @@ public class MainActivity extends ActionBarActivity
     private LocationManager locationManager;
 
     private NfcAdapter mNfcAdapter;
+
+    Class currentFrag;
 
 
     @Override
@@ -217,18 +220,23 @@ public class MainActivity extends ActionBarActivity
         switch (number) {
             case 0:
                 mTitle = getString(R.string.title_profile);
+                currentFrag = ProfileFragment.class;
                 break;
             case 1:
                 mTitle = getString(R.string.title_marketplace);
+                currentFrag = MarketFragment.class;
                 break;
             case 2:
                 mTitle = getString(R.string.title_businesses);
+                currentFrag = BusinessesFragment.class;
                 break;
             case 3:
                 mTitle = getString(R.string.title_feed);
+                currentFrag = FeedFragment.class;
                 break;
             case 4:
                 mTitle = getString(R.string.title_contacts);
+                currentFrag = ContactsFragment.class;
                 break;
         }
 
@@ -312,6 +320,21 @@ public class MainActivity extends ActionBarActivity
             }
         }
         return super.onOptionsItemSelected(item);
+    }
+
+    @Override
+    public void startActivity(Intent intent) {
+        if (Intent.ACTION_SEARCH.equals(intent.getAction())) {
+            if (currentFrag == MarketFragment.class) {
+                intent.putExtra(SearchResultsActivity.COLLAPSE, true);
+            } else {
+                intent.putExtra(SearchResultsActivity.COLLAPSE, false);
+            }
+            intent.putExtra("KEY", "VALUE");
+        }
+
+        super.startActivity(intent);
+
     }
 
     @Override
