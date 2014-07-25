@@ -68,7 +68,8 @@
                 android:value=".MainActivity" />
         </activity>
         <activity
-            android:name=".activities.MyDiscountItemsActivity"
+            android:name=".activities.MarketActivity"
+            android:icon="@drawable/nav_market"
             android:label="@string/title_activity_my_cpn_vcr"
             android:parentActivityName=".MainActivity">
             <meta-data
@@ -127,7 +128,7 @@
             android:parentActivityName=".MainActivity">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value="MainActivity" />
+                android:value=".MainActivity" />
         </activity>
 
         <receiver
@@ -163,6 +164,11 @@
         <activity
             android:name=".activities.BrandDetailsActivity"
             android:label="@string/title_activity_brand_details" />
+
+        <provider
+            android:name=".model.GraabySearchSuggestionsProvider"
+            android:authorities="graaby.app.wallet.model.GraabySearchSuggestionsProvider" />
+
     </application>
 
 </manifest>

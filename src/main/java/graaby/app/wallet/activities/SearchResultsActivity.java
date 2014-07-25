@@ -3,8 +3,11 @@ package graaby.app.wallet.activities;
 import android.app.SearchManager;
 import android.content.Intent;
 import android.os.Bundle;
+import android.provider.SearchRecentSuggestions;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.ActionBarActivity;
+import android.view.View;
+import android.widget.AdapterView;
 import android.widget.ListView;
 
 import com.android.volley.Response;
@@ -20,10 +23,11 @@ import graaby.app.wallet.CustomRequest;
 import graaby.app.wallet.Helper;
 import graaby.app.wallet.R;
 import graaby.app.wallet.adapter.BusinessesAdapter;
+import graaby.app.wallet.fragments.MarketFragment;
+import graaby.app.wallet.model.GraabySearchSuggestionsProvider;
 
-public class SearchResultsActivity extends ActionBarActivity implements Response.Listener<JSONObject>, Response.ErrorListener {
+public class SearchResultsActivity extends ActionBarActivity implements Response.Listener<JSONObject>, Response.ErrorListener, AdapterView.OnItemClickListener {
 
-    public static final String COLLAPSE = "collapse";
     private SwipeRefreshLayout mPullToRefreshLayout;
     private String mQueryString;
     private CustomRequest searchRequest;
@@ -39,9 +43,15 @@ public class SearchResultsActivity extends ActionBarActivity implements Response
             mQueryString = intent.getStringExtra(SearchManager.QUERY);
             getSupportActionBar().setTitle('"' + mQueryString + '"');
             try {
-                collapseFlag = intent.getBooleanExtra(COLLAPSE, Boolean.FALSE);
+                String type = intent.getStringExtra(Helper.KEY_TYPE);
+                if (type.equals(MarketFragment.class.toString()))
+                    collapseFlag = true;
+                else {
+                    collapseFlag = false;
+                }
             } catch (NullPointerException npe) {
                 npe.printStackTrace();
+                collapseFlag = false;
             }
             mPullToRefreshLayout = (SwipeRefreshLayout) findViewById(R.id.swiperefresh);
             mPullToRefreshLayout.setEnabled(Boolean.FALSE);
@@ -49,6 +59,7 @@ public class SearchResultsActivity extends ActionBarActivity implements Response
             ListView mListView = (ListView) findViewById(android.R.id.list);
             mAdapter = new BusinessesAdapter(this);
             mListView.setAdapter(mAdapter);
+            mListView.setOnItemClickListener(this);
             sendRequest();
         }
     }
@@ -82,6 +93,9 @@ public class SearchResultsActivity extends ActionBarActivity implements Response
             JSONArray placesArray = response.getJSONArray(getString(R.string.field_business_places));
             if (placesArray.length() != 0) {
                 mAdapter.clear();
+                SearchRecentSuggestions suggestions = new SearchRecentSuggestions(this,
+                        GraabySearchSuggestionsProvider.AUTHORITY, GraabySearchSuggestionsProvider.MODE);
+                suggestions.saveRecentQuery(mQueryString, null);
             }
             for (int i = 0; i < placesArray.length(); i++) {
                 JSONObject place = placesArray.optJSONObject(i);
@@ -96,5 +110,19 @@ public class SearchResultsActivity extends ActionBarActivity implements Response
     public void onErrorResponse(VolleyError error) {
         mPullToRefreshLayout.setRefreshing(Boolean.FALSE);
         Helper.handleVolleyError(error, this);
+    }
+
+
+    @Override
+    public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+        Intent intent;
+        if (collapseFlag) {
+            intent = new Intent(this, MarketActivity.class);
+
+        } else {
+            intent = new Intent(this, BusinessDetailsctivity.class);
+        }
+        intent.putExtra(Helper.INTENT_CONTAINER_INFO, mAdapter.getItem(i).toString());
+        startActivity(intent);
     }
 }

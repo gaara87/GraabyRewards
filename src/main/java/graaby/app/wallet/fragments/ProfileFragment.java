@@ -33,7 +33,7 @@ import graaby.app.wallet.Helper;
 import graaby.app.wallet.Helper.ActivityType;
 import graaby.app.wallet.MainActivity;
 import graaby.app.wallet.R;
-import graaby.app.wallet.activities.MyDiscountItemsActivity;
+import graaby.app.wallet.activities.MarketActivity;
 
 public class ProfileFragment extends Fragment implements OnClickListener,
         ErrorListener, Listener<JSONObject>, SwipeRefreshLayout.OnRefreshListener {
@@ -346,7 +346,7 @@ public class ProfileFragment extends Fragment implements OnClickListener,
 
     @Override
     public void onClick(View v) {
-        Intent intent = new Intent(getActivity(), MyDiscountItemsActivity.class);
+        Intent intent = new Intent(getActivity(), MarketActivity.class);
         switch (v.getId()) {
             case R.id.profile_coupons_viewall_card:
                 intent.putExtra(Helper.KEY_TYPE,

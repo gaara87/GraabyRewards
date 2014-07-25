@@ -37,7 +37,6 @@ import graaby.app.wallet.Helper.DiscountItemType;
 import graaby.app.wallet.MainActivity;
 import graaby.app.wallet.R;
 import graaby.app.wallet.activities.DiscountItemDetailsActivity;
-import graaby.app.wallet.activities.MyDiscountItemsActivity;
 
 public class MarketFragment extends Fragment implements OnItemClickListener,
         Response.Listener<JSONObject>, ErrorListener, SwipeRefreshLayout.OnRefreshListener {
@@ -53,6 +52,8 @@ public class MarketFragment extends Fragment implements OnItemClickListener,
     private Boolean areTheseMyDiscountItems;
     private Activity mActivity;
     private SwipeRefreshLayout mPullToRefreshLayout;
+
+    private Integer mBrandID = -1;
 
     @Override
     public void onAttach(Activity activity) {
@@ -73,9 +74,10 @@ public class MarketFragment extends Fragment implements OnItemClickListener,
             whatType = DiscountItemType.getType(getArguments().getInt(
                     Helper.KEY_TYPE));
             areTheseMyDiscountItems = getArguments().getBoolean(Helper.MY_DISCOUNT_ITEMS_FLAG);
+            mBrandID = getArguments().getInt(Helper.BRAND_ID_BUNDLE_KEY, -1);
         }
 
-        adapter = new MarketAdapter(mActivity, discountItemList);
+        adapter = new MarketAdapter(mActivity, discountItemList, areTheseMyDiscountItems);
     }
 
     @Override
@@ -109,6 +111,10 @@ public class MarketFragment extends Fragment implements OnItemClickListener,
 
     private void sendRequest() {
         HashMap<String, Object> params = new HashMap<String, Object>();
+
+        if (mBrandID != -1) {
+            params.put(getString(R.string.field_business_id), mBrandID);
+        }
 
         String specificURL = "";
         if (areTheseMyDiscountItems && whatType != null) {
@@ -205,7 +211,7 @@ public class MarketFragment extends Fragment implements OnItemClickListener,
         private String type;
         private Boolean myDiscountItems = Boolean.FALSE;
 
-        public MarketAdapter(Context context, List<JSONObject> discountItems) {
+        public MarketAdapter(Context context, List<JSONObject> discountItems, Boolean areTheseMyDiscountItems) {
             super(context, R.layout.item_grid_market,
                     R.id.discount_item_discountValue, discountItems);
             inflater = LayoutInflater.from(context);
@@ -216,9 +222,7 @@ public class MarketFragment extends Fragment implements OnItemClickListener,
             rupeeSymbol = getString(R.string.Rs);
             type = getString(R.string.market_item_type);
             cost = getString(R.string.market_cost);
-            if (context.getClass() == MyDiscountItemsActivity.class) {
-                myDiscountItems = Boolean.TRUE;
-            }
+            myDiscountItems = areTheseMyDiscountItems;
 
         }
 

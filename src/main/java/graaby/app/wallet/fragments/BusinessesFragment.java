@@ -97,11 +97,9 @@ public class BusinessesFragment extends Fragment implements
     public void onAttach(Activity activity) {
         super.onAttach(activity);
         mActivity = activity;
-        try {
+        if (activity.getClass() == MainActivity.class)
             ((MainActivity) mActivity).onSectionAttached(
                     getArguments().getInt(Helper.ARG_SECTION_NUMBER));
-        } catch (Exception e) {
-        }
         mBrandId = getArguments().getInt(Helper.BRAND_ID_BUNDLE_KEY, -1);
         locationManager = (LocationManager) mActivity
                 .getSystemService(Context.LOCATION_SERVICE);

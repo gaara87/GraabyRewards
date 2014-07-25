@@ -17,6 +17,7 @@ import android.nfc.NfcAdapter;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
+import android.provider.SearchRecentSuggestions;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.widget.DrawerLayout;
@@ -47,13 +48,13 @@ import java.util.HashMap;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.atomic.AtomicInteger;
 
-import graaby.app.wallet.activities.SearchResultsActivity;
 import graaby.app.wallet.auth.UserLoginActivity;
 import graaby.app.wallet.fragments.BusinessesFragment;
 import graaby.app.wallet.fragments.ContactsFragment;
 import graaby.app.wallet.fragments.FeedFragment;
 import graaby.app.wallet.fragments.MarketFragment;
 import graaby.app.wallet.fragments.ProfileFragment;
+import graaby.app.wallet.model.GraabySearchSuggestionsProvider;
 
 public class MainActivity extends ActionBarActivity
         implements NavigationDrawerFragment.NavigationDrawerCallbacks, LocationListener {
@@ -318,6 +319,10 @@ public class MainActivity extends ActionBarActivity
                 }
 
             }
+        } else if (id == R.id.action_menu_item_clear_search) {
+            SearchRecentSuggestions suggestions = new SearchRecentSuggestions(this,
+                    GraabySearchSuggestionsProvider.AUTHORITY, GraabySearchSuggestionsProvider.MODE);
+            suggestions.clearHistory();
         }
         return super.onOptionsItemSelected(item);
     }
@@ -325,12 +330,7 @@ public class MainActivity extends ActionBarActivity
     @Override
     public void startActivity(Intent intent) {
         if (Intent.ACTION_SEARCH.equals(intent.getAction())) {
-            if (currentFrag == MarketFragment.class) {
-                intent.putExtra(SearchResultsActivity.COLLAPSE, true);
-            } else {
-                intent.putExtra(SearchResultsActivity.COLLAPSE, false);
-            }
-            intent.putExtra("KEY", "VALUE");
+            intent.putExtra(Helper.KEY_TYPE, currentFrag.toString());
         }
 
         super.startActivity(intent);
