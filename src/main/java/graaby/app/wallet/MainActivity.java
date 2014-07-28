@@ -445,9 +445,9 @@ public class MainActivity extends ActionBarActivity
 
                     // You should send the registration ID to your server over HTTP, so it
                     // can use GCM/HTTP or CCS to send messages to your app.
-                    sendRegistrationIdToBackend(regid);
-
-                    storeRegistrationId(context, regid);
+                    if (sendRegistrationIdToBackend(regid)) {
+                        storeRegistrationId(context, regid);
+                    }
                 } catch (IOException ex) {
                     msg = "Error :" + ex.getMessage();
                     // If there is an error, don't just keep trying to register.
@@ -494,7 +494,7 @@ public class MainActivity extends ActionBarActivity
      *
      * @param regid
      */
-    private void sendRegistrationIdToBackend(String regid) {
+    private boolean sendRegistrationIdToBackend(String regid) {
         HashMap<String, Object> params = new HashMap<String, Object>();
         params.put(getResources().getString(R.string.field_gcm_reg_id), regid);
         try {
@@ -504,6 +504,9 @@ public class MainActivity extends ActionBarActivity
             JSONObject response = future.get();
             if (response.getInt(getString(R.string.response_success)) == 1) {
                 Toast.makeText(this, "Your app has been registered successfully", Toast.LENGTH_SHORT).show();
+                return true;
+            } else if (response.getInt(getString(R.string.response_success)) == 0) {
+                return false;
             }
         } catch (JSONException e) {
         } catch (InterruptedException e) {
@@ -511,5 +514,6 @@ public class MainActivity extends ActionBarActivity
         } catch (ExecutionException e) {
             e.printStackTrace();
         }
+        return false;
     }
 }

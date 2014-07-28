@@ -70,9 +70,13 @@
     <string name="contact_name">name</string>
     <string name="contact_id">id</string>
     <string name="contact_send_to">to_id</string>
+    <string name="contact_send_from">sender</string>
     <string name="contact_send_amount">amt</string>
+    <string name="contact_email">email</string>
+    <string name="contact_phone">phone</string>
     <string name="core_iv">iv</string>
     <string name="field_gcm_reg_id">reg_id</string>
+    <string name="field_gcm_msg_type">type</string>
     <string name="field_search_query">query</string>
     <string name="field_collapse">collapse</string>
 </resources>

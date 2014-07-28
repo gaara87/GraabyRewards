@@ -3,13 +3,22 @@ package graaby.app.wallet.fragments;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.content.res.Resources;
+import android.database.Cursor;
+import android.net.Uri;
 import android.os.Bundle;
+import android.provider.ContactsContract;
 import android.support.v4.app.ListFragment;
+import android.support.v4.view.MenuItemCompat;
 import android.support.v4.widget.SwipeRefreshLayout;
+import android.support.v7.widget.ShareActionProvider;
+import android.telephony.PhoneNumberUtils;
+import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
@@ -53,6 +62,7 @@ public class ContactsFragment extends ListFragment implements Response.Listener<
     private int pointsToSend;
     private Integer contactIDToSendPointsTo = -1;
     private SwipeRefreshLayout mPullToRefreshLayout;
+    private ShareActionProvider mShareActionProvider;
 
     @Override
     public void onAttach(Activity activity) {
@@ -96,6 +106,18 @@ public class ContactsFragment extends ListFragment implements Response.Listener<
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
         super.onCreateOptionsMenu(menu, inflater);
         inflater.inflate(R.menu.menu_fragment_contacts, menu);
+        mShareActionProvider = (ShareActionProvider) MenuItemCompat.getActionProvider(menu.findItem(R.id.menu_item_share));
+        Intent sendIntent = getIntent();
+        mShareActionProvider.setShareIntent(sendIntent);
+    }
+
+    private Intent getIntent() {
+        String text = "I see you don't have Graaby. Check it out right away. http://goo.gl/jgIIn1";
+        Intent sendIntent = new Intent();
+        sendIntent.setAction(Intent.ACTION_SEND);
+        sendIntent.putExtra(Intent.EXTRA_TEXT, text);
+        sendIntent.setType("text/plain");
+        return sendIntent;
     }
 
     private void sendRequest() {
@@ -186,6 +208,7 @@ public class ContactsFragment extends ListFragment implements Response.Listener<
                         } else if (responseValue == getResources().getInteger(R.integer.response_failure)) {
                             String errorMsg = jsonObject.getString(getString(R.string.response_msg));
                             Toast.makeText(getActivity(), errorMsg, Toast.LENGTH_LONG).show();
+
                         }
                     } catch (Exception e) {
 
@@ -201,6 +224,88 @@ public class ContactsFragment extends ListFragment implements Response.Listener<
             ));
         } catch (Resources.NotFoundException e1) {
         } catch (JSONException e1) {
+        }
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.action_menu_item_add_contact:
+                Intent contactPickerIntent = new Intent(Intent.ACTION_PICK,
+                        ContactsContract.Contacts.CONTENT_URI);
+                contactPickerIntent.setType(ContactsContract.CommonDataKinds.Phone.CONTENT_TYPE);
+                startActivityForResult(contactPickerIntent, 1001);
+                return true;
+        }
+        return false;
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (resultCode == Activity.RESULT_OK && requestCode == 1001) {
+            Uri uriContact = data.getData();
+            /*Cursor contacts = mActivity.getContentResolver().query(uriContact, null, null, null, null);
+            String email = "";
+            if (contacts.moveToFirst()) {
+                int nameColumn = contacts.getColumnIndex(ContactsContract.CommonDataKinds.Email.ADDRESS);
+                email = contacts.getString(nameColumn);
+                contacts.close();
+            }*/
+
+            String phone = "";
+            Cursor phones = mActivity.getContentResolver().query(uriContact, null, null, null, null);
+            if (phones.moveToFirst()) {
+                phone = phones.getString(phones.getColumnIndex(ContactsContract.CommonDataKinds.Phone.NUMBER));
+            }
+            phones.close();
+
+            HashMap<String, Object> params = new HashMap<String, Object>();
+
+            try {
+                if (!TextUtils.isEmpty(phone)) {
+                    String formattedPhone = PhoneNumberUtils.stripSeparators(phone);
+
+                    int length = formattedPhone.length();
+                    if (length > 10) {
+                        formattedPhone = formattedPhone.substring(length - 10, length);
+                    }
+                    params.put(getString(R.string.contact_phone), formattedPhone);
+                /*if (!TextUtils.isEmpty(email))
+                    params.put(getString(R.string.contact_email), email);*/
+                    Helper.getRQ().add(new CustomRequest("contact/add", params, new Response.Listener<JSONObject>() {
+                        @Override
+                        public void onResponse(JSONObject jsonObject) {
+                            mPullToRefreshLayout.setRefreshing(Boolean.FALSE);
+                            try {
+                                int responseCode = jsonObject.getInt(getString(R.string.response_success));
+                                if (responseCode == 1) {
+                                    Toast.makeText(mActivity, jsonObject.getString(getString(R.string.response_msg)), Toast.LENGTH_SHORT).show();
+                                    sendRequest();
+                                } else if (responseCode == 0) {
+                                    Toast.makeText(mActivity, "Contact not available. Please invite them!", Toast.LENGTH_LONG).show();
+                                    startActivity(Intent.createChooser(getIntent(), "Invite through.."));
+                                }
+                            } catch (JSONException e) {
+                                e.printStackTrace();
+                            }
+                        }
+                    }, new Response.ErrorListener() {
+                        @Override
+                        public void onErrorResponse(VolleyError volleyError) {
+                            Helper.handleVolleyError(volleyError, mActivity);
+                            mPullToRefreshLayout.setRefreshing(Boolean.FALSE);
+                        }
+                    }
+                    ));
+                    mPullToRefreshLayout.setRefreshing(Boolean.TRUE);
+                } else {
+                    Toast.makeText(mActivity, "Contact info not available. Please invite them!", Toast.LENGTH_LONG).show();
+                    startActivity(Intent.createChooser(getIntent(), "Invite through.."));
+                }
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
         }
     }
 

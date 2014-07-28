@@ -20,6 +20,7 @@
     <uses-permission android:name="android.permission.WAKE_LOCK" />
     <uses-permission android:name="com.google.android.c2dm.permission.RECEIVE" />
     <uses-permission android:name="graaby.app.wallet.permission.C2D_MESSAGE" />
+    <uses-permission android:name="android.permission.SEND_SMS" />
 
     <permission
         android:name="graaby.app.wallet.permission.C2D_MESSAGE"
@@ -132,7 +133,7 @@
         </activity>
 
         <receiver
-            android:name="gcm.GcmBroadcastReceiver"
+            android:name=".gcm.GcmBroadcastReceiver"
             android:permission="com.google.android.c2dm.permission.SEND">
             <intent-filter>
 
@@ -143,7 +144,7 @@
             </intent-filter>
         </receiver>
 
-        <service android:name="gcm.GcmIntentService" />
+        <service android:name=".gcm.GcmIntentService" />
 
         <activity
             android:name=".activities.SearchResultsActivity"
