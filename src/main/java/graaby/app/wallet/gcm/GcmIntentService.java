@@ -63,7 +63,7 @@ public class GcmIntentService extends IntentService {
                 sendNotification("Deleted messages on server: " + extras.toString());
                 // If it's a regular GCM message, do some work.
             } else if (GoogleCloudMessaging.MESSAGE_TYPE_MESSAGE.equals(messageType)) {
-                sendNotification(extras.toString());
+                sendNotification(extras.getString(getString(R.string.field_gcm_data)));
             }
         }
         // Release the wake lock provided by the WakefulBroadcastReceiver.
@@ -82,8 +82,8 @@ public class GcmIntentService extends IntentService {
                 case 5:
                     String sender = object.getString(getString(R.string.contact_send_from));
                     int amount = object.getInt(getString(R.string.contact_send_amount));
-                    notificationTitle = String.format(getString(R.string.gcm_message_recieved_points), sender, amount);
-                    smallContentText = getString(R.string.gcm_message_recieved_points_content);
+                    notificationTitle = getString(R.string.gcm_message_recieved_points);
+                    smallContentText = String.format(getString(R.string.gcm_message_recieved_points_content), sender, amount);
                     notificationImageResource = R.drawable.ic_gcm_point;
                     break;
                 default:

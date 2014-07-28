@@ -66,7 +66,7 @@
     <string name="search_hint">Search business or area</string>
     <string name="title_activity_add_contacts">Add/Invite Contacts</string>
 
-    <string name="gcm_message_recieved_points">%1$s sent you %2$d Graaby Points</string>
-    <string name="gcm_message_recieved_points_content">Check your balance</string>
+    <string name="gcm_message_recieved_points">Graaby Points received</string>
+    <string name="gcm_message_recieved_points_content">%1$s sent you %2$d Graaby Points</string>
 
 </resources>
