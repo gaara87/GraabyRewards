@@ -18,6 +18,7 @@ import android.widget.AdapterView.OnItemClickListener;
 import android.widget.ArrayAdapter;
 import android.widget.GridView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.android.volley.Response;
 import com.android.volley.Response.ErrorListener;
@@ -73,7 +74,7 @@ public class MarketFragment extends Fragment implements OnItemClickListener,
         if (getArguments() != null) {
             whatType = DiscountItemType.getType(getArguments().getInt(
                     Helper.KEY_TYPE));
-            areTheseMyDiscountItems = getArguments().getBoolean(Helper.MY_DISCOUNT_ITEMS_FLAG);
+            areTheseMyDiscountItems = getArguments().getBoolean(Helper.MY_DISCOUNT_ITEMS_FLAG, Boolean.FALSE);
             mBrandID = getArguments().getInt(Helper.BRAND_ID_BUNDLE_KEY, -1);
         }
 
@@ -157,6 +158,9 @@ public class MarketFragment extends Fragment implements OnItemClickListener,
         discountItemList.clear();
         for (int i = 0; i < discountItemsArray.length(); i++) {
             discountItemList.add(discountItemsArray.optJSONObject(i));
+        }
+        if (discountItemList.size() == 0) {
+            Toast.makeText(mActivity, "There are no items available", Toast.LENGTH_SHORT).show();
         }
         adapter.notifyDataSetChanged();
         try {

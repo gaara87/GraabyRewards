@@ -8,12 +8,14 @@ import android.os.Bundle;
 import android.support.v4.app.ListFragment;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
-import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -41,7 +43,7 @@ import graaby.app.wallet.R;
  * Created by gaara on 1/6/14.
  */
 public class ContactsFragment extends ListFragment implements Response.Listener<JSONObject>,
-        Response.ErrorListener, View.OnClickListener, DialogInterface.OnClickListener, SwipeRefreshLayout.OnRefreshListener {
+        Response.ErrorListener, DialogInterface.OnClickListener, SwipeRefreshLayout.OnRefreshListener {
 
     private Activity mActivity;
     private ContactsAdapter mAdapter;
@@ -69,6 +71,7 @@ public class ContactsFragment extends ListFragment implements Response.Listener<
                 .setView(tempView).setPositiveButton("Send", this)
                 .setNegativeButton("Cancel", null)
                 .setCancelable(Boolean.TRUE).create();
+        this.setHasOptionsMenu(true);
     }
 
     @Override
@@ -78,7 +81,7 @@ public class ContactsFragment extends ListFragment implements Response.Listener<
         mPullToRefreshLayout = (SwipeRefreshLayout) v.findViewById(R.id.swiperefresh);
         mPullToRefreshLayout.setOnRefreshListener(this);
         mPullToRefreshLayout.setColorSchemeResources(R.color.belizehole, R.color.pomegranate, R.color.orange, R.color.peterriver);
-        mAdapter = new ContactsAdapter(mActivity, contactList, this);
+        mAdapter = new ContactsAdapter(mActivity, contactList);
         setListAdapter(mAdapter);
         return v;
     }
@@ -87,6 +90,12 @@ public class ContactsFragment extends ListFragment implements Response.Listener<
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
         sendRequest();
+    }
+
+    @Override
+    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+        super.onCreateOptionsMenu(menu, inflater);
+        inflater.inflate(R.menu.menu_fragment_contacts, menu);
     }
 
     private void sendRequest() {
@@ -152,12 +161,10 @@ public class ContactsFragment extends ListFragment implements Response.Listener<
         }
     }
 
-
     @Override
-    public void onClick(View v) {
+    public void onListItemClick(ListView l, View v, int position, long id) {
         contactIDToSendPointsTo = (Integer) v.getTag();
         sendPointsDialog.show();
-
     }
 
     @Override
@@ -206,16 +213,14 @@ public class ContactsFragment extends ListFragment implements Response.Listener<
 
         private LayoutInflater inflater;
         private String contactNameField, contactIDField;
-        private View.OnClickListener listener;
 
-        public ContactsAdapter(Activity activity, List<JSONObject> contacts, View.OnClickListener l) {
+        public ContactsAdapter(Activity activity, List<JSONObject> contacts) {
             super(activity, R.layout.fragment_contacts, R.layout.item_list_contacts, contacts);
             inflater = LayoutInflater.from(getContext());
             contactNameField = getContext().getResources().getString(
                     R.string.contact_name);
             contactIDField = getContext().getResources().getString(
                     R.string.contact_id);
-            listener = l;
 
         }
 
@@ -241,10 +246,8 @@ public class ContactsFragment extends ListFragment implements Response.Listener<
             } catch (JSONException e) {
             }
 
-            Button sendPointsButton = (Button) convertView.findViewById(R.id.contacts_btn_sendPoints);
-            sendPointsButton.setOnClickListener(listener);
             try {
-                sendPointsButton.setTag(node.getInt(contactIDField));
+                convertView.setTag(node.getInt(contactIDField));
             } catch (JSONException e) {
             }
 

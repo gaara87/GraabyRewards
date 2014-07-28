@@ -7,12 +7,12 @@ import android.net.Uri;
 import android.nfc.NfcAdapter;
 import android.os.Build;
 import android.os.Bundle;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.ActionBarActivity;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.android.volley.Response.ErrorListener;
 import com.android.volley.Response.Listener;
@@ -29,15 +29,20 @@ import graaby.app.wallet.Helper;
 import graaby.app.wallet.R;
 
 public class BusinessDetailsctivity extends ActionBarActivity implements
-        ErrorListener, Listener<JSONObject> {
+        ErrorListener, Listener<JSONObject>, SwipeRefreshLayout.OnRefreshListener {
 
     private int businessId;
     private JSONObject placeNode;
+    private SwipeRefreshLayout mPullToRefreshLayout;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_business_outlet_detail);
+        setContentView(R.layout.activity_business_details);
+
+        mPullToRefreshLayout = (SwipeRefreshLayout) findViewById(R.id.swiperefresh);
+        mPullToRefreshLayout.setOnRefreshListener(this);
+        mPullToRefreshLayout.setColorSchemeResources(R.color.midnightblue, R.color.wetasphalt, R.color.asbestos, R.color.concrete);
 
         getSupportActionBar().setTitle(R.string.title_activity_business_details);
         getSupportActionBar().setDisplayHomeAsUpEnabled(Boolean.TRUE);
@@ -60,20 +65,25 @@ public class BusinessDetailsctivity extends ActionBarActivity implements
             businessId = 0;
         }
 
-        HashMap<String, Object> params = new HashMap<String, Object>();
-
-        try {
-            params.put(getString(R.string.field_business_outlet_id), businessId);
-            Helper.getRQ().add(new CustomRequest("store", params, this, this));
-        } catch (NotFoundException e1) {
-        } catch (JSONException e1) {
-        }
+        sendRequest();
 
         NfcAdapter mNfcAdapter = NfcAdapter.getDefaultAdapter(this);
         if (mNfcAdapter != null) {
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.ICE_CREAM_SANDWICH) {
                 mNfcAdapter.setNdefPushMessage(Helper.createNdefMessage(this), this);
             }
+        }
+    }
+
+    private void sendRequest() {
+        HashMap<String, Object> params = new HashMap<String, Object>();
+
+        try {
+            params.put(getString(R.string.field_business_outlet_id), businessId);
+            Helper.getRQ().add(new CustomRequest("store", params, this, this));
+            mPullToRefreshLayout.setRefreshing(Boolean.TRUE);
+        } catch (NotFoundException e1) {
+        } catch (JSONException e1) {
         }
     }
 
@@ -109,6 +119,7 @@ public class BusinessDetailsctivity extends ActionBarActivity implements
 
     @Override
     public void onResponse(JSONObject response) {
+        mPullToRefreshLayout.setRefreshing(Boolean.FALSE);
         ImageView iv = (ImageView) findViewById(R.id.item_businessPicImageView);
         try {
             Helper.getImageLoader().get(response.getString(getString(
@@ -156,8 +167,12 @@ public class BusinessDetailsctivity extends ActionBarActivity implements
 
     @Override
     public void onErrorResponse(VolleyError error) {
-        Toast.makeText(this, "Unable to fetch information", Toast.LENGTH_SHORT)
-                .show();
+        Helper.handleVolleyError(error, this);
+        mPullToRefreshLayout.setRefreshing(Boolean.FALSE);
     }
 
+    @Override
+    public void onRefresh() {
+        sendRequest();
+    }
 }

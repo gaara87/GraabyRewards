@@ -3,5 +3,4 @@
     android:hint="@string/search_hint"
     android:label="@string/app_name"
     android:searchSuggestAuthority="graaby.app.wallet.model.GraabySearchSuggestionsProvider"
-    android:searchSuggestSelection=" ?"
-    android:voiceSearchMode="showVoiceSearchButton|launchRecognizer" />
+    android:searchSuggestSelection=" ?" />

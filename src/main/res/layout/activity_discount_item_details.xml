@@ -1,97 +1,103 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<android.support.v4.widget.SwipeRefreshLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/swiperefresh"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <LinearLayout
-        android:id="@+id/discount_item_details_activity_layout"
+    <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
-        android:layout_alignParentTop="true"
-        android:background="@android:color/white"
-        android:orientation="vertical">
+        android:layout_height="match_parent">
 
-        <RelativeLayout
+        <LinearLayout
+            android:id="@+id/discount_item_details_activity_layout"
             android:layout_width="match_parent"
-            android:layout_height="@dimen/business_picture_height"
-            android:layout_marginBottom="@dimen/globalPadding8">
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:layout_alignParentTop="true"
+            android:background="@android:color/white"
+            android:orientation="vertical">
 
-            <ImageView
-                android:id="@+id/item_businessPicImageView"
+            <RelativeLayout
                 android:layout_width="match_parent"
                 android:layout_height="@dimen/business_picture_height"
-                android:layout_gravity="center"
-                android:contentDescription="business picture"
-                android:onClick="onClick"
-                android:scaleType="centerCrop" />
+                android:layout_marginBottom="@dimen/globalPadding8">
+
+                <ImageView
+                    android:id="@+id/item_businessPicImageView"
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/business_picture_height"
+                    android:layout_gravity="center"
+                    android:contentDescription="business picture"
+                    android:onClick="onClick"
+                    android:scaleType="centerCrop" />
+
+                <TextView
+                    android:id="@+id/item_businessNameTextView"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentBottom="true"
+                    android:background="@drawable/overlay_gradient"
+                    android:drawableLeft="@drawable/nav_business"
+                    android:gravity="center_vertical"
+                    android:hint="@string/hint_placeholder"
+                    android:textAppearance="?android:attr/textAppearanceLarge"
+                    android:textColor="@android:color/primary_text_dark" />
+            </RelativeLayout>
 
             <TextView
-                android:id="@+id/item_businessNameTextView"
+                android:id="@+id/item_valueTextView"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_alignParentBottom="true"
-                android:background="@drawable/overlay_gradient"
-                android:drawableLeft="@drawable/nav_business"
-                android:gravity="center_vertical"
+                android:drawableLeft="@drawable/ic_rupee"
+                android:gravity="left|center_vertical"
                 android:hint="@string/hint_placeholder"
                 android:textAppearance="?android:attr/textAppearanceLarge"
-                android:textColor="@android:color/primary_text_dark" />
-        </RelativeLayout>
+                android:textColor="@android:color/black"
+                android:textIsSelectable="false"
+                android:textSize="@dimen/important_font_size"
+                android:textStyle="bold" />
 
-        <TextView
-            android:id="@+id/item_valueTextView"
+            <TextView
+                android:id="@+id/item_expiry_textView"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/global8"
+                android:drawableLeft="@drawable/ic_time"
+                android:gravity="center_vertical"
+                android:textAppearance="?android:attr/textAppearanceMedium"
+                android:textColor="@color/silver" />
+
+            <TextView
+                android:id="@+id/item_generated_textView"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/global8"
+                android:textAppearance="?android:attr/textAppearanceSmall"
+                android:textColor="@color/silver"
+                android:visibility="invisible" />
+
+            <TextView
+                android:id="@+id/item_id_textView"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:drawableLeft="@android:drawable/ic_menu_info_details"
+                android:gravity="center_vertical"
+                android:layout_marginTop="@dimen/global8"
+                android:layout_marginLeft="@dimen/global8"
+                android:textAppearance="?android:attr/textAppearanceSmall"
+                android:textColor="@color/silver" />
+
+        </LinearLayout>
+
+        <Button
+            android:id="@+id/grab_it_button"
+            style="@style/graabItButtonStyle"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:drawableLeft="@drawable/ic_rupee"
-            android:gravity="left|center_vertical"
-            android:hint="@string/hint_placeholder"
-            android:textAppearance="?android:attr/textAppearanceLarge"
-            android:textColor="@android:color/black"
-            android:textIsSelectable="false"
-            android:textSize="@dimen/important_font_size"
-            android:textStyle="bold" />
+            android:layout_alignParentBottom="true"
+            android:drawableEnd="@drawable/ic_point"
+            android:drawableStart="@drawable/ic_transaction"
+            android:text="@string/button_grab_it" />
 
-        <TextView
-            android:id="@+id/item_expiry_textView"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="@dimen/global8"
-            android:drawableLeft="@drawable/ic_time"
-            android:gravity="center_vertical"
-            android:textAppearance="?android:attr/textAppearanceMedium"
-            android:textColor="@color/silver" />
-
-        <TextView
-            android:id="@+id/item_generated_textView"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="@dimen/global8"
-            android:textAppearance="?android:attr/textAppearanceSmall"
-            android:textColor="@color/silver"
-            android:visibility="invisible" />
-
-        <TextView
-            android:id="@+id/item_id_textView"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:drawableLeft="@android:drawable/ic_menu_info_details"
-            android:gravity="center_vertical"
-            android:layout_marginTop="@dimen/global8"
-            android:layout_marginLeft="@dimen/global8"
-            android:textAppearance="?android:attr/textAppearanceSmall"
-            android:textColor="@color/silver" />
-
-    </LinearLayout>
-
-    <Button
-        android:id="@+id/grab_it_button"
-        style="@style/graabItButtonStyle"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
-        android:drawableEnd="@drawable/ic_point"
-        android:drawableStart="@drawable/ic_transaction"
-        android:text="@string/button_grab_it" />
-
-</RelativeLayout>
+    </RelativeLayout>
+</android.support.v4.widget.SwipeRefreshLayout>

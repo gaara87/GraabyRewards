@@ -39,8 +39,7 @@
 
     <style name="sendPointsButtonStyle" parent="button">
         <item name="android:background">@drawable/selector_button_press_red</item>
-        <item name="android:textColor">@drawable/selector_button_press_red</item>
-        <item name="android:textAppearance">?android:attr/textAppearanceMedium</item>
+        <item name="android:textAppearance">?android:attr/textAppearanceSmallInverse</item>
     </style>
 
     <style name="LoginFormContainer">

@@ -7,8 +7,6 @@ import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.view.LayoutInflater;
-import android.view.Menu;
-import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -47,13 +45,6 @@ public class ProfileFragment extends Fragment implements OnClickListener,
         mActivity = activity;
         ((MainActivity) activity).onSectionAttached(
                 getArguments().getInt(Helper.ARG_SECTION_NUMBER));
-    }
-
-    @Override
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        this.setHasOptionsMenu(Boolean.TRUE);
-
     }
 
     @Override
@@ -140,11 +131,6 @@ public class ProfileFragment extends Fragment implements OnClickListener,
         }
     }
 
-    @Override
-    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
-        inflater.inflate(R.menu.menu_fragment_profile, menu);
-        super.onCreateOptionsMenu(menu, inflater);
-    }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {

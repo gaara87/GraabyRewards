@@ -19,9 +19,9 @@
             android:drawableLeft="@drawable/coupon_nopadding"
             android:gravity="center_vertical|right"
             android:hint="@string/market_value_hint"
-            android:paddingTop="@dimen/globalPadding8"
             android:paddingLeft="@dimen/globalPadding8"
             android:paddingRight="@dimen/globalPadding8"
+            android:paddingTop="@dimen/globalPadding8"
             android:textAppearance="?android:attr/textAppearanceLarge"
             android:textStyle="bold" />
 
@@ -31,6 +31,7 @@
             android:layout_height="wrap_content"
             android:gravity="center"
             android:hint="Business Name"
+            android:paddingBottom="@dimen/globalPadding8"
             android:textAppearance="?android:attr/textAppearanceSmall" />
 
         <TextView
@@ -43,6 +44,6 @@
             android:gravity="center"
             android:hint="Points"
             android:textAppearance="?android:attr/textAppearanceMedium"
-            android:textColor="@android:color/primary_text_light" />
+            android:textColor="@android:color/primary_text_dark" />
     </LinearLayout>
 </android.support.v7.widget.CardView>

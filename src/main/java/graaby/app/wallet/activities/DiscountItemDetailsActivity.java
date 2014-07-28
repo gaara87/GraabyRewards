@@ -5,6 +5,7 @@ import android.content.res.Resources.NotFoundException;
 import android.nfc.NfcAdapter;
 import android.os.Build;
 import android.os.Bundle;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.ActionBarActivity;
 import android.view.MenuItem;
 import android.view.View;
@@ -35,18 +36,24 @@ import graaby.app.wallet.Helper.DiscountItemType;
 import graaby.app.wallet.R;
 
 public class DiscountItemDetailsActivity extends ActionBarActivity implements OnClickListener,
-        ErrorListener, Listener<JSONObject> {
+        ErrorListener, Listener<JSONObject>, SwipeRefreshLayout.OnRefreshListener {
 
     private Button graabItButton;
     private Boolean isItemGraabed = Boolean.FALSE;
     private DiscountItemType type = DiscountItemType.Coupons;
     private JSONObject discountItemNode;
     private HashMap<String, Object> params;
+    private SwipeRefreshLayout mPullToRefreshLayout;
+    private String customURL;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_discount_item_details);
+
+        mPullToRefreshLayout = (SwipeRefreshLayout) findViewById(R.id.swiperefresh);
+        mPullToRefreshLayout.setOnRefreshListener(this);
+        mPullToRefreshLayout.setColorSchemeResources(R.color.sunflower, R.color.nephritis, R.color.peterriver, R.color.pumpkin);
 
         String info = getIntent().getExtras().getString(
                 Helper.INTENT_CONTAINER_INFO);
@@ -66,7 +73,8 @@ public class DiscountItemDetailsActivity extends ActionBarActivity implements On
         }
         {
             int logoResId = R.drawable.coupon_nopadding;
-            String titleString = getString(R.string.title_activity_discount_item_details), customURL = "";
+            String titleString = getString(R.string.title_activity_discount_item_details);
+            customURL = "";
             switch (type) {
                 case Coupons:
                     logoResId = R.drawable.coupon_withpadding;
@@ -88,23 +96,9 @@ public class DiscountItemDetailsActivity extends ActionBarActivity implements On
             getSupportActionBar().setTitle(titleString);
             getSupportActionBar().setLogo(logoResId);
             getSupportActionBar().setDisplayHomeAsUpEnabled(Boolean.TRUE);
-
             graabItButton = (Button) findViewById(R.id.grab_it_button);
-
             params = new HashMap<String, Object>();
-
-            try {
-                params.put(
-                        getResources().getString(R.string.market_id),
-                        discountItemNode.getString(getResources().getString(
-                                R.string.market_id))
-                );
-                Helper.getRQ().add(
-                        new CustomRequest("market/" + customURL, params, this, this));
-            } catch (NotFoundException e1) {
-            } catch (JSONException e1) {
-            }
-
+            sendRequest();
         }
 
         setDetails();
@@ -114,6 +108,21 @@ public class DiscountItemDetailsActivity extends ActionBarActivity implements On
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.ICE_CREAM_SANDWICH) {
                 mNfcAdapter.setNdefPushMessage(Helper.createNdefMessage(this), this);
             }
+        }
+    }
+
+    private void sendRequest() {
+        try {
+            params.put(
+                    getResources().getString(R.string.market_id),
+                    discountItemNode.getString(getResources().getString(
+                            R.string.market_id))
+            );
+            Helper.getRQ().add(
+                    new CustomRequest("market/" + customURL, params, this, this));
+            mPullToRefreshLayout.setRefreshing(Boolean.TRUE);
+        } catch (NotFoundException e1) {
+        } catch (JSONException e1) {
         }
     }
 
@@ -208,6 +217,7 @@ public class DiscountItemDetailsActivity extends ActionBarActivity implements On
                                 }
                             })
                     );
+                    mPullToRefreshLayout.setRefreshing(Boolean.TRUE);
                     if (graabItButton != null) {
                         graabItButton.setEnabled(Boolean.FALSE);
                         graabItButton.setText(getString(R.string.button_grab_it_process));
@@ -235,6 +245,7 @@ public class DiscountItemDetailsActivity extends ActionBarActivity implements On
 
     @Override
     public void onResponse(JSONObject response) {
+        mPullToRefreshLayout.setRefreshing(Boolean.FALSE);
         if (response.has(getString(R.string.response_success))) {
             try {
                 Integer responseSuccess = response.getInt(getString(
@@ -295,6 +306,8 @@ public class DiscountItemDetailsActivity extends ActionBarActivity implements On
 
     @Override
     public void onErrorResponse(VolleyError error) {
+        Helper.handleVolleyError(error, this);
+        mPullToRefreshLayout.setRefreshing(Boolean.TRUE);
         changeButtonState();
     }
 
@@ -317,4 +330,8 @@ public class DiscountItemDetailsActivity extends ActionBarActivity implements On
         }
     }
 
+    @Override
+    public void onRefresh() {
+        sendRequest();
+    }
 }
