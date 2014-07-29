@@ -17,10 +17,12 @@
 package graaby.app.wallet.gcm;
 
 import android.app.IntentService;
+import android.app.Notification;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.support.v4.app.NotificationCompat;
 
@@ -40,15 +42,13 @@ import graaby.app.wallet.R;
  * wake lock.
  */
 public class GcmIntentService extends IntentService {
-    public static final int NOTIFICATION_ID = 1;
-    private NotificationManager mNotificationManager;
-    NotificationCompat.Builder builder;
+    private static final int NOTIFICATION_ID_POINTS = 1;
+    private static final int NOTIFICATION_ID_TX = 2;
+    private static int NOTIFICATION_ID_NEW_MARKET;
 
     public GcmIntentService() {
         super("GcmIntentService");
     }
-
-    public static final String TAG = "GCM Demo";
 
     @Override
     protected void onHandleIntent(Intent intent) {
@@ -76,37 +76,61 @@ public class GcmIntentService extends IntentService {
     private void sendNotification(String msg) {
         try {
             JSONObject object = new JSONObject(msg);
-            String notificationTitle, smallContentText;
-            int notificationImageResource = R.drawable.ic_gcm_point;
+            String notificationTitle, smallContentText, smallContentInfo;
+            int notificationImageResource = R.drawable.ic_gcm_point, notificationID;
             switch (object.getInt(getString(R.string.field_gcm_msg_type))) {
                 case 5:
                     String sender = object.getString(getString(R.string.contact_send_from));
                     int amount = object.getInt(getString(R.string.contact_send_amount));
                     notificationTitle = getString(R.string.gcm_message_recieved_points);
                     smallContentText = String.format(getString(R.string.gcm_message_recieved_points_content), sender, amount);
+                    smallContentInfo = String.valueOf(amount);
                     notificationImageResource = R.drawable.ic_gcm_point;
+                    notificationID = NOTIFICATION_ID_POINTS;
+                    break;
+                case 6:
+                    amount = object.getInt(getString(R.string.contact_send_amount));
+                    String outlet = object.getString(getString(R.string.field_business_name));
+                    notificationTitle = getString(R.string.gcm_message_transaction);
+                    smallContentText = String.format(getString(R.string.gcm_message_transaction_content), amount, outlet);
+                    smallContentInfo = String.valueOf(amount);
+                    notificationImageResource = R.drawable.ic_gcm_point;
+                    notificationID = NOTIFICATION_ID_TX;
+                    break;
+                case 7:
+                    outlet = object.getString(getString(R.string.field_business_name));
+                    notificationTitle = getString(R.string.gcm_message_market);
+                    smallContentText = String.format(getString(R.string.gcm_message_market_content), outlet);
+                    smallContentInfo = "";
+                    notificationImageResource = R.drawable.ic_gcm_discount;
+                    notificationID = NOTIFICATION_ID_NEW_MARKET;
                     break;
                 default:
                     notificationTitle = "";
                     smallContentText = "";
+                    smallContentInfo = "";
+                    notificationID = 0;
             }
 
-            mNotificationManager = (NotificationManager)
+            NotificationManager mNotificationManager = (NotificationManager)
                     this.getSystemService(Context.NOTIFICATION_SERVICE);
 
             PendingIntent contentIntent = PendingIntent.getActivity(this, 0,
                     new Intent(this, MainActivity.class), 0);
 
+
             NotificationCompat.Builder mBuilder =
                     new NotificationCompat.Builder(this)
+                            .setLargeIcon(BitmapFactory.decodeResource(getResources(), notificationImageResource))
                             .setSmallIcon(notificationImageResource)
                             .setContentTitle(notificationTitle)
-//                            .setStyle(new NotificationCompat.BigTextStyle()
-//                                    .bigText(msg))
-                            .setContentText(smallContentText);
+                            .setContentText(smallContentText)
+                            .setContentInfo(smallContentInfo)
+                            .setDefaults(Notification.DEFAULT_ALL)
+                            .setAutoCancel(Boolean.TRUE)
+                            .setContentIntent(contentIntent);
 
-            mBuilder.setContentIntent(contentIntent);
-            mNotificationManager.notify(NOTIFICATION_ID, mBuilder.build());
+            mNotificationManager.notify(notificationID, mBuilder.build());
         } catch (JSONException e) {
             e.printStackTrace();
         }
