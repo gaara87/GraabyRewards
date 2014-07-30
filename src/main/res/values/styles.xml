@@ -17,14 +17,6 @@
         <item name="android:padding">@dimen/globalPadding8</item>
     </style>
 
-    <!--
-    <style name="graabyActionBarStyle" parent="@style/Theme.AppCompat.Light.DarkActionBar">
-        <item name="background">@color/actionBarColor</item>
-        <item name="backgroundStacked">@color/actionBarColor</item>
-        <item name="backgroundSplit">@color/actionBarColor</item>
-    </style>
-    -->
-
     <style name="gingerbreadCustomTextStyle" parent="@style/customTextStyle">
         <item name="android:textColor">@android:color/black</item>
     </style>
@@ -64,5 +56,4 @@
     </style>
 
     <style name="LoginTheme" parent="@android:style/Theme" />
-
 </resources>

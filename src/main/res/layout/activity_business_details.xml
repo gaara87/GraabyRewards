@@ -15,7 +15,7 @@
         <ImageView
             android:id="@+id/item_businessPicImageView"
             android:layout_width="match_parent"
-            android:layout_height="@dimen/business_picture_height"
+            android:layout_height="@dimen/hero_picture_height"
             android:layout_gravity="center"
             android:layout_marginBottom="@dimen/globalPadding8"
             android:contentDescription="business picture"

@@ -14,7 +14,7 @@
     <dimen name="border_radius">6dp</dimen>
     <dimen name="feed_item_row_padding">32dp</dimen>
     <dimen name="feed_list_item_content_card_padding">@dimen/global8</dimen>
-    <dimen name="business_picture_height">200dp</dimen>
+    <dimen name="hero_picture_height">200dp</dimen>
     <dimen name="important_font_size">40sp</dimen>
     <dimen name="profile_pic_frame_size">122dp</dimen>
 </resources>

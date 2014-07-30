@@ -34,6 +34,7 @@ public class Helper {
     public final static int connectionTimeout = 5000;
     public final static int socketTimeout = 8000;
     public final static int LOADER_ID = 0;
+    public static final String NOTIFICATIONID = "noty_id";
     public static String INTENT_CONTAINER_INFO = "jsonnode_key";
     public static String KEY_TYPE = "type";
     public static String MY_DISCOUNT_ITEMS_FLAG = "market";

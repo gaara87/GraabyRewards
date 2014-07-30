@@ -80,4 +80,5 @@
     <string name="field_gcm_data">data</string>
     <string name="field_search_query">query</string>
     <string name="field_collapse">collapse</string>
+    <string name="field_activity_id">actid</string>
 </resources>

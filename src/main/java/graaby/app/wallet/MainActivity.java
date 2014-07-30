@@ -91,7 +91,6 @@ public class MainActivity extends ActionBarActivity
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        getWindow().requestFeature(Window.FEATURE_INDETERMINATE_PROGRESS);
         acm = AccountManager.get(this);
         Account[] accounts = acm
                 .getAccountsByType(UserLoginActivity.ACCOUNT_TYPE);
@@ -441,12 +440,14 @@ public class MainActivity extends ActionBarActivity
                         gcm = GoogleCloudMessaging.getInstance(context);
                     }
                     regid = gcm.register(SENDER_ID);
-                    msg = "Device registered, registration ID=" + regid;
 
                     // You should send the registration ID to your server over HTTP, so it
                     // can use GCM/HTTP or CCS to send messages to your app.
                     if (sendRegistrationIdToBackend(regid)) {
+                        msg = "Your app has been registered successfully:" + regid;
                         storeRegistrationId(context, regid);
+                    } else {
+                        msg = "Your app was unable to register:" + regid;
                     }
                 } catch (IOException ex) {
                     msg = "Error :" + ex.getMessage();
@@ -459,6 +460,7 @@ public class MainActivity extends ActionBarActivity
 
             @Override
             protected void onPostExecute(String msg) {
+                Log.d("GCM_REG", msg);
             }
         }.execute(null, null, null);
     }
@@ -503,7 +505,6 @@ public class MainActivity extends ActionBarActivity
             Helper.getRQ().add(gcmRequest);
             JSONObject response = future.get();
             if (response.getInt(getString(R.string.response_success)) == 1) {
-                Toast.makeText(this, "Your app has been registered successfully", Toast.LENGTH_SHORT).show();
                 return true;
             } else if (response.getInt(getString(R.string.response_success)) == 0) {
                 return false;

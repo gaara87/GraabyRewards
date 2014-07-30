@@ -2,7 +2,7 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     package="graaby.app.wallet">
-
+    <!--xmlns:tools="http://schemas.android.com/tools"-->
     <uses-sdk tools:node="replace" />
 
     <uses-permission android:name="android.permission.INTERNET" />
@@ -21,6 +21,7 @@
     <uses-permission android:name="com.google.android.c2dm.permission.RECEIVE" />
     <uses-permission android:name="graaby.app.wallet.permission.C2D_MESSAGE" />
     <uses-permission android:name="android.permission.SEND_SMS" />
+    <uses-permission android:name="android.permission.VIBRATE" />
 
     <permission
         android:name="graaby.app.wallet.permission.C2D_MESSAGE"
@@ -141,7 +142,7 @@
                 <!-- Receives the actual messages. -->
                 <action android:name="com.google.android.c2dm.intent.RECEIVE" />
 
-                <category android:name="com.google.android.gcm.demo.app" />
+                <category android:name="graaby.app.wallet" />
             </intent-filter>
         </receiver>
 
@@ -171,6 +172,12 @@
             android:name=".model.GraabySearchSuggestionsProvider"
             android:authorities="graaby.app.wallet.model.GraabySearchSuggestionsProvider" />
 
+        <activity android:name=".activities.PointReceivedActivity" />
+
+        <receiver
+            android:name=".GraabyBroadcastReceiver"
+            android:enabled="true"
+            android:exported="true"></receiver>
     </application>
 
 </manifest>

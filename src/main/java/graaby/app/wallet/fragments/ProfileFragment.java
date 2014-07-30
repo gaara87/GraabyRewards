@@ -7,7 +7,6 @@ import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.view.LayoutInflater;
-import android.view.MenuItem;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
@@ -131,20 +130,6 @@ public class ProfileFragment extends Fragment implements OnClickListener,
         }
     }
 
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        switch (item.getItemId()) {
-            case R.id.action_menu_item_refresh:
-                sendRequest();
-                break;
-            default:
-                break;
-        }
-
-        return super.onOptionsItemSelected(item);
-    }
-
     private void refreshDetails(JSONObject bioNode, JSONObject pointsNode,
                                 JSONArray recentsArray) throws NullPointerException,
             NotFoundException {
@@ -192,7 +177,7 @@ public class ProfileFragment extends Fragment implements OnClickListener,
             TextView tv = null;
             try {
                 tv = (TextView) mActivity
-                        .findViewById(R.id.profile_points_textView);
+                        .findViewById(R.id.points_textView);
                 tv.setText(Helper.getRepString(pointsNode.getString(mActivity.getResources().getString(
                         R.string.profile_balance))));
             } catch (JSONException e) {
