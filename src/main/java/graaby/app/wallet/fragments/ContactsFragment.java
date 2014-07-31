@@ -104,11 +104,11 @@ public class ContactsFragment extends ListFragment implements Response.Listener<
 
     @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
-        super.onCreateOptionsMenu(menu, inflater);
         inflater.inflate(R.menu.menu_fragment_contacts, menu);
         mShareActionProvider = (ShareActionProvider) MenuItemCompat.getActionProvider(menu.findItem(R.id.menu_item_share));
         Intent sendIntent = getIntent();
         mShareActionProvider.setShareIntent(sendIntent);
+        super.onCreateOptionsMenu(menu, inflater);
     }
 
     private Intent getIntent() {

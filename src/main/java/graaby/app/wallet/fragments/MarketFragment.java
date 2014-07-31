@@ -70,7 +70,6 @@ public class MarketFragment extends Fragment implements OnItemClickListener,
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        this.setHasOptionsMenu(Boolean.TRUE);
         if (getArguments() != null) {
             whatType = DiscountItemType.getType(getArguments().getInt(
                     Helper.KEY_TYPE));
@@ -79,6 +78,8 @@ public class MarketFragment extends Fragment implements OnItemClickListener,
         }
 
         adapter = new MarketAdapter(mActivity, discountItemList, areTheseMyDiscountItems);
+
+        this.setHasOptionsMenu(Boolean.TRUE);
     }
 
     @Override
@@ -92,22 +93,27 @@ public class MarketFragment extends Fragment implements OnItemClickListener,
         marketGrid.setOnItemClickListener(this);
         marketGrid.setAdapter(adapter);
         sendRequest();
+
         return v;
     }
 
     @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
-        super.onCreateOptionsMenu(menu, inflater);
-        if (areTheseMyDiscountItems.equals(Boolean.FALSE)) {
-            inflater.inflate(R.menu.menu_search, menu);
-            if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.HONEYCOMB) {
-                SearchManager searchManager = (SearchManager) mActivity.getSystemService(Context.SEARCH_SERVICE);
-                SearchView searchView = (SearchView) menu.findItem(R.id.action_search)
-                        .getActionView();
-                searchView.setSearchableInfo(searchManager
-                        .getSearchableInfo(mActivity.getComponentName()));
+        try {
+            if (areTheseMyDiscountItems.equals(Boolean.FALSE)) {
+                inflater.inflate(R.menu.menu_search, menu);
+                if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.HONEYCOMB) {
+                    SearchManager searchManager = (SearchManager) mActivity.getSystemService(Context.SEARCH_SERVICE);
+                    SearchView searchView = (SearchView) menu.findItem(R.id.action_search)
+                            .getActionView();
+                    searchView.setSearchableInfo(searchManager
+                            .getSearchableInfo(mActivity.getComponentName()));
+                }
             }
+        } catch (NullPointerException e) {
+            e.printStackTrace();
         }
+        super.onCreateOptionsMenu(menu, inflater);
     }
 
     private void sendRequest() {
