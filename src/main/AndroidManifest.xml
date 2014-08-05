@@ -43,10 +43,6 @@
             android:name=".MainActivity"
             android:label="@string/app_name"
             android:launchMode="singleTop">
-            <meta-data
-                android:name="android.app.default_searchable"
-                android:value="graaby.app.wallet.activities.SearchResultsActivity" />
-
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -80,7 +76,7 @@
                 android:value=".MainActivity" />
         </activity>
         <activity
-            android:name=".activities.BusinessDetailsctivity"
+            android:name=".activities.BusinessDetailsActivity"
             android:icon="@drawable/nav_business"
             android:label="@string/title_activity_business_outlet_detail" />
         <activity
@@ -155,6 +151,7 @@
             android:parentActivityName=".MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.SEARCH" />
+                <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
 
             <meta-data

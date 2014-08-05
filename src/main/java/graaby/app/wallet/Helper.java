@@ -26,7 +26,7 @@ import java.io.DataInputStream;
 import java.io.FileInputStream;
 import java.nio.charset.Charset;
 
-import graaby.app.wallet.activities.BusinessDetailsctivity;
+import graaby.app.wallet.activities.BusinessDetailsActivity;
 
 public class Helper {
 
@@ -61,8 +61,9 @@ public class Helper {
                     return Vouchers;
                 case 3:
                     return Punch;
+                default:
+                    return null;
             }
-            return null;
         }
 
         public static DiscountItemType getType(String type, Context context) {
@@ -138,7 +139,7 @@ public class Helper {
     }
 
     public static void openBusiness(Activity activity, JSONObject node) {
-        Intent intent = new Intent(activity, BusinessDetailsctivity.class);
+        Intent intent = new Intent(activity, BusinessDetailsActivity.class);
         intent.putExtra(Helper.INTENT_CONTAINER_INFO, node.toString());
         activity.startActivity(intent);
     }

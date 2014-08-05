@@ -1,7 +1,6 @@
 package graaby.app.wallet.fragments;
 
 import android.app.Activity;
-import android.app.SearchManager;
 import android.content.Context;
 import android.content.Intent;
 import android.location.Location;
@@ -11,7 +10,6 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.widget.SwipeRefreshLayout;
-import android.support.v7.widget.SearchView;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -48,6 +46,7 @@ import graaby.app.wallet.CustomRequest;
 import graaby.app.wallet.Helper;
 import graaby.app.wallet.MainActivity;
 import graaby.app.wallet.R;
+import graaby.app.wallet.activities.SearchResultsActivity;
 import graaby.app.wallet.adapter.BusinessesAdapter;
 import graaby.app.wallet.model.BusinessMarker;
 import graaby.app.wallet.model.BusinessMarkerRenderer;
@@ -58,7 +57,6 @@ public class BusinessesFragment extends Fragment implements
     MapView mapView;
     GoogleMap mMap;
 
-    private Bundle mBundle;
     private String fieldNameLongitude, fieldNameLatitude, fieldNameBrandID;
 
     private ListView listView;
@@ -110,7 +108,7 @@ public class BusinessesFragment extends Fragment implements
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        mBundle = savedInstanceState;
+        Bundle mBundle = savedInstanceState;
         fieldNameLongitude = getString(
                 R.string.field_business_longitude);
         fieldNameLatitude = getString(
@@ -239,15 +237,6 @@ public class BusinessesFragment extends Fragment implements
     @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
         inflater.inflate(R.menu.menu_fragment_business, menu);
-        inflater.inflate(R.menu.menu_search, menu);
-        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.HONEYCOMB) {
-            SearchManager searchManager = (SearchManager) mActivity.getSystemService(Context.SEARCH_SERVICE);
-            SearchView searchView = (SearchView) menu.findItem(R.id.action_search)
-                    .getActionView();
-            searchView.setSearchableInfo(searchManager
-                    .getSearchableInfo(mActivity.getComponentName()));
-        }
-
         super.onCreateOptionsMenu(menu, inflater);
     }
 
@@ -273,6 +262,11 @@ public class BusinessesFragment extends Fragment implements
                     item.setIcon(R.drawable.ic_action_view_as_list);
                     listView.setVisibility(View.GONE);
                 }
+                return true;
+            case R.id.action_search:
+                Intent intent = new Intent(mActivity, SearchResultsActivity.class);
+                startActivity(intent);
+                return true;
             default:
                 break;
         }

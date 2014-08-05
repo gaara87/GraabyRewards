@@ -26,7 +26,6 @@ import android.support.v7.app.ActionBarActivity;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.Window;
 import android.widget.Toast;
 
 import com.android.volley.Response;
@@ -84,9 +83,6 @@ public class MainActivity extends ActionBarActivity
     private LocationManager locationManager;
 
     private NfcAdapter mNfcAdapter;
-
-    Class currentFrag;
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -170,8 +166,6 @@ public class MainActivity extends ActionBarActivity
                 R.id.navigation_drawer,
                 (DrawerLayout) findViewById(R.id.drawer_layout));
 
-        mNavigationDrawerFragment.openDrawer();
-
         mNfcAdapter = NfcAdapter.getDefaultAdapter(this);
         if (mNfcAdapter != null) {
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.ICE_CREAM_SANDWICH) {
@@ -190,7 +184,6 @@ public class MainActivity extends ActionBarActivity
                 break;
             case 1:
                 placeHolderFragment = new MarketFragment();
-                args.putBoolean(Helper.MY_DISCOUNT_ITEMS_FLAG, Boolean.FALSE);
                 break;
             case 2:
                 placeHolderFragment = new BusinessesFragment();
@@ -220,23 +213,18 @@ public class MainActivity extends ActionBarActivity
         switch (number) {
             case 0:
                 mTitle = getString(R.string.title_profile);
-                currentFrag = ProfileFragment.class;
                 break;
             case 1:
                 mTitle = getString(R.string.title_marketplace);
-                currentFrag = MarketFragment.class;
                 break;
             case 2:
                 mTitle = getString(R.string.title_businesses);
-                currentFrag = BusinessesFragment.class;
                 break;
             case 3:
                 mTitle = getString(R.string.title_feed);
-                currentFrag = FeedFragment.class;
                 break;
             case 4:
                 mTitle = getString(R.string.title_contacts);
-                currentFrag = ContactsFragment.class;
                 break;
         }
 
@@ -324,16 +312,6 @@ public class MainActivity extends ActionBarActivity
             suggestions.clearHistory();
         }
         return super.onOptionsItemSelected(item);
-    }
-
-    @Override
-    public void startActivity(Intent intent) {
-        if (Intent.ACTION_SEARCH.equals(intent.getAction())) {
-            intent.putExtra(Helper.KEY_TYPE, currentFrag.toString());
-        }
-
-        super.startActivity(intent);
-
     }
 
     @Override

@@ -1,16 +1,15 @@
 package graaby.app.wallet.fragments;
 
 import android.app.Activity;
-import android.app.SearchManager;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.widget.SwipeRefreshLayout;
-import android.support.v7.widget.SearchView;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
@@ -38,9 +37,12 @@ import graaby.app.wallet.Helper.DiscountItemType;
 import graaby.app.wallet.MainActivity;
 import graaby.app.wallet.R;
 import graaby.app.wallet.activities.DiscountItemDetailsActivity;
+import graaby.app.wallet.activities.SearchResultsActivity;
 
 public class MarketFragment extends Fragment implements OnItemClickListener,
         Response.Listener<JSONObject>, ErrorListener, SwipeRefreshLayout.OnRefreshListener {
+
+    public final static String SEARCHABLE_PARAMETER = "searchable";
 
     private GridView marketGrid;
 
@@ -55,6 +57,16 @@ public class MarketFragment extends Fragment implements OnItemClickListener,
     private SwipeRefreshLayout mPullToRefreshLayout;
 
     private Integer mBrandID = -1;
+
+    public static MarketFragment newInstance(Boolean myFlag, int brandIDNum, Boolean searchable) {
+        MarketFragment fragment = new MarketFragment();
+        Bundle args = new Bundle();
+        args.putInt(Helper.BRAND_ID_BUNDLE_KEY, brandIDNum);
+        args.putBoolean(Helper.MY_DISCOUNT_ITEMS_FLAG, myFlag);
+        args.putBoolean(SEARCHABLE_PARAMETER, searchable);
+        fragment.setArguments(args);
+        return fragment;
+    }
 
     @Override
     public void onAttach(Activity activity) {
@@ -78,8 +90,9 @@ public class MarketFragment extends Fragment implements OnItemClickListener,
         }
 
         adapter = new MarketAdapter(mActivity, discountItemList, areTheseMyDiscountItems);
-
-        this.setHasOptionsMenu(Boolean.TRUE);
+        if (getArguments().getBoolean(SEARCHABLE_PARAMETER, Boolean.FALSE)) {
+            this.setHasOptionsMenu(Boolean.TRUE);
+        }
     }
 
     @Override
@@ -99,21 +112,24 @@ public class MarketFragment extends Fragment implements OnItemClickListener,
 
     @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
-        try {
-            if (areTheseMyDiscountItems.equals(Boolean.FALSE)) {
-                inflater.inflate(R.menu.menu_search, menu);
-                if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.HONEYCOMB) {
-                    SearchManager searchManager = (SearchManager) mActivity.getSystemService(Context.SEARCH_SERVICE);
-                    SearchView searchView = (SearchView) menu.findItem(R.id.action_search)
-                            .getActionView();
-                    searchView.setSearchableInfo(searchManager
-                            .getSearchableInfo(mActivity.getComponentName()));
-                }
-            }
-        } catch (NullPointerException e) {
-            e.printStackTrace();
+        if (areTheseMyDiscountItems.equals(Boolean.FALSE)) {
+            inflater.inflate(R.menu.menu_fragment_market, menu);
         }
         super.onCreateOptionsMenu(menu, inflater);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.action_search:
+                Intent intent = new Intent(mActivity, SearchResultsActivity.class);
+                intent.putExtra(Helper.KEY_TYPE, SearchResultsActivity.SEARCH_COLLAPSE);
+                startActivity(intent);
+                return true;
+            default:
+                break;
+        }
+        return super.onOptionsItemSelected(item);
     }
 
     private void sendRequest() {

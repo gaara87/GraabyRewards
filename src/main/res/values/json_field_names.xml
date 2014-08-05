@@ -81,4 +81,12 @@
     <string name="field_search_query">query</string>
     <string name="field_collapse">collapse</string>
     <string name="field_activity_id">actid</string>
+    <string name="field_business_stats">stats</string>
+    <string name="field_business_given">given</string>
+    <string name="profile_my_checkins">my_checkins</string>
+    <string name="title_punch_card">Punchcard</string>
+    <string name="field_punch_reward">reward</string>
+    <string name="field_punch_rewards">rewards</string>
+    <string name="field_punch_reward_visit">reward_visit</string>
+    <string name="field_business_punchcard">punchcard</string>
 </resources>

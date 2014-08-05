@@ -139,37 +139,32 @@
             </LinearLayout>
         </ScrollView>
 
-        <RelativeLayout
+        <LinearLayout
             android:id="@+id/page_three"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_weight="1">
 
-            <AutoCompleteTextView
-                android:id="@+id/onboarding_email"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_alignParentTop="true"
-                android:layout_centerHorizontal="true"
-                android:layout_marginTop="100dp"
-                android:ems="15"
-                android:hint="Enter your e-mail"
-                android:imeActionLabel="Register"
-                android:inputType="textEmailAddress"
-                android:selectAllOnFocus="true" />
-
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_alignParentTop="true"
-                android:layout_centerHorizontal="true"
-                android:layout_marginTop="39dp"
-                android:gravity="center"
-                android:text="Check your e-mail after registration for the verification e-mail"
+                android:layout_gravity="center"
+                android:layout_marginTop="32dp"
+                android:text="Register with the following email"
                 android:textAppearance="?android:attr/textAppearanceMedium" />
-        </RelativeLayout>
 
+            <Spinner
+                android:id="@+id/onboarding_spinner"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/global16"
+                android:gravity="center" />
 
+            <Button
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:gravity="center" />
+        </LinearLayout>
     </android.support.v4.view.ViewPager>
 
     <LinearLayout

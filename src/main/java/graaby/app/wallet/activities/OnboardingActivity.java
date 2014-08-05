@@ -6,30 +6,18 @@ import android.os.Bundle;
 import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.ActionBarActivity;
-import android.util.Patterns;
-import android.view.KeyEvent;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.inputmethod.EditorInfo;
 import android.widget.ArrayAdapter;
-import android.widget.AutoCompleteTextView;
-import android.widget.TextView;
+import android.widget.Spinner;
 import android.widget.Toast;
 
-import com.android.volley.Request;
-import com.android.volley.RequestQueue;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
-import com.android.volley.toolbox.JsonObjectRequest;
-import com.android.volley.toolbox.Volley;
+import com.google.android.gms.auth.GoogleAuthUtil;
 
 import org.json.JSONException;
 import org.json.JSONObject;
-
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
 
 import graaby.app.wallet.Helper;
 import graaby.app.wallet.R;
@@ -101,40 +89,35 @@ public class OnboardingActivity extends ActionBarActivity implements Response.Er
             }
         });
 
-        final Account[] accounts = AccountManager.get(this).getAccounts();
-        final Set<String> emailSet = new HashSet<String>();
-        for (Account account : accounts) {
-            if (Patterns.EMAIL_ADDRESS.matcher(account.name).matches()) {
-                emailSet.add(account.name);
-            }
+        Spinner spinner = (Spinner) findViewById(R.id.onboarding_spinner);
+        ArrayAdapter<CharSequence> adapter = new ArrayAdapter<CharSequence>(this, android.R.layout.simple_spinner_item, getAccountNames());
+        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        spinner.setAdapter(adapter);
+
+        /*RequestQueue queue = Volley.newRequestQueue(OnboardingActivity.this);
+
+        JSONObject params = new JSONObject();
+        try {
+            params.put("email", textView.getText().toString());
+            JsonObjectRequest registerRequest = new JsonObjectRequest(Request.Method.POST, "http://www.graaby.com/landing", params, OnboardingActivity.this, OnboardingActivity.this);
+            registerRequest.setShouldCache(false);
+            queue.add(registerRequest);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }*/
+    }
+
+    private String[] getAccountNames() {
+        AccountManager mAccountManager = AccountManager.get(this);
+        Account[] accounts = mAccountManager.getAccountsByType(
+                GoogleAuthUtil.GOOGLE_ACCOUNT_TYPE);
+        String[] names = new String[accounts.length];
+        for (int i = 0; i < names.length; i++) {
+            names[i] = accounts[i].name;
         }
-        List<String> emails = new ArrayList<String>(emailSet);
-
-        AutoCompleteTextView mEmailAutoCompleteView = (AutoCompleteTextView) findViewById(R.id.onboarding_email);
-        mEmailAutoCompleteView.setAdapter(new ArrayAdapter<String>(this, android.R.layout.simple_dropdown_item_1line, emails));
-        mEmailAutoCompleteView.setOnEditorActionListener(new TextView.OnEditorActionListener() {
-            @Override
-            public boolean onEditorAction(TextView textView, int i, KeyEvent keyEvent) {
-                if (i == EditorInfo.IME_ACTION_UNSPECIFIED) {
-                    RequestQueue queue = Volley.newRequestQueue(OnboardingActivity.this);
-
-                    JSONObject params = new JSONObject();
-                    try {
-                        params.put("email", textView.getText().toString());
-                        JsonObjectRequest registerRequest = new JsonObjectRequest(Request.Method.POST, "http://www.graaby.com/landing", params, OnboardingActivity.this, OnboardingActivity.this);
-                        registerRequest.setShouldCache(false);
-                        queue.add(registerRequest);
-                    } catch (JSONException e) {
-                        e.printStackTrace();
-                    } catch (Exception e) {
-                        e.printStackTrace();
-                    }
-
-                    return true;
-                }
-                return false;
-            }
-        });
+        return names;
     }
 
     @Override
