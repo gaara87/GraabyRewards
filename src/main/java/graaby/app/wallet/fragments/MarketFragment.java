@@ -17,7 +17,6 @@ import android.widget.AdapterView.OnItemClickListener;
 import android.widget.ArrayAdapter;
 import android.widget.GridView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.android.volley.Response;
 import com.android.volley.Response.ErrorListener;
@@ -182,7 +181,9 @@ public class MarketFragment extends Fragment implements OnItemClickListener,
             discountItemList.add(discountItemsArray.optJSONObject(i));
         }
         if (discountItemList.size() == 0) {
-            Toast.makeText(mActivity, "There are no items available", Toast.LENGTH_SHORT).show();
+            TextView tv = new TextView(mActivity);
+            tv.setText("There are no coupons or vouchers available right now");
+            marketGrid.setEmptyView(tv);
         }
         adapter.notifyDataSetChanged();
         try {

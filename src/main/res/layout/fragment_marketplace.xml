@@ -16,7 +16,6 @@
         android:numColumns="2"
         android:paddingLeft="4dp"
         android:paddingRight="4dp"
-        android:verticalSpacing="@dimen/global8">
+        android:verticalSpacing="@dimen/global8" />
 
-    </GridView>
 </android.support.v4.widget.SwipeRefreshLayout>

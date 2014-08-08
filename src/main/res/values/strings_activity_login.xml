@@ -5,6 +5,7 @@
     <!-- Strings related to login -->
     <string name="prompt_email">Email (email_id@domain.com)</string>
     <string name="prompt_password">Password</string>
+    <string name="register_prompt_password">Set a password</string>
     <!--<string name="action_sign_in_register">Login</string>-->
     <string name="action_login_short">Login</string>
     <string name="menu_forgot_password">Recover lost password</string>
@@ -13,6 +14,7 @@
     <string name="error_invalid_password">This password is too short</string>
     <string name="error_incorrect_password">This password is incorrect</string>
     <string name="error_field_required">This field is required</string>
+    <string name="error_field_lastname">Lastname not found</string>
     <string name="login_welcome">Don\'t have an account yet? <a href='http://www.graaby.com/signup'>Sign up here</a> \n\n Didn\'t get an activation mail? <a href='http://www.graaby.com/signup'>Re-send it</a></string>
     <string name="login_register_here">New to Graaby? <a href="http://register.graaby.com/">Register here</a></string>
 

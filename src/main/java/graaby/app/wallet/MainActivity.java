@@ -184,6 +184,7 @@ public class MainActivity extends ActionBarActivity
                 break;
             case 1:
                 placeHolderFragment = new MarketFragment();
+                args.putBoolean(MarketFragment.SEARCHABLE_PARAMETER, true);
                 break;
             case 2:
                 placeHolderFragment = new BusinessesFragment();

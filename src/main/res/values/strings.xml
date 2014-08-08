@@ -73,4 +73,5 @@
     <string name="gcm_message_market_content">%1$s has released a new discount! View and Graab it now!</string>
 
     <string name="punchcard_visit_value">On Visit: %1$s</string>
+    <string name="outlet_discount_percentage">%1$d %</string>
 </resources>

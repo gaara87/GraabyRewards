@@ -134,7 +134,7 @@ public class UserLoginActivity extends AccountAuthenticatorActivity implements
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         Intent intent = new Intent(this, OnboardingActivity.class);
-        startActivity(intent);
+        startActivityForResult(intent, 22);
 
         socialLoginInitialization(savedInstanceState);
 
@@ -480,6 +480,11 @@ public class UserLoginActivity extends AccountAuthenticatorActivity implements
 
     @Override
     protected void onActivityResult(int requestCode, int responseCode, Intent intent) {
+        if (requestCode == 22 && (responseCode == RESULT_OK)) {
+            mEmailView.setText(intent.getStringExtra("uname"));
+            mPasswordView.setText(intent.getStringExtra("pwd"));
+            attemptLogin();
+        }
         if (requestCode == REQUEST_CODE_RESOLVE_ERR && responseCode == RESULT_OK) {
             mConnectionResult = null;
             mPlusClient.connect();

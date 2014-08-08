@@ -100,8 +100,8 @@ public class BusinessDetailsActivity extends ActionBarActivity implements Action
     }
 
     @Override
-    public void onPunchesLoaded(JSONArray punches) {
-        mPagerAdapter.onPunchesLoaded(punches);
+    public void onRewardDetailsLoaded(Float discounts, JSONArray punches) {
+        mPagerAdapter.onRewardDetailsLoaded(discounts, punches);
     }
 
 
@@ -109,7 +109,7 @@ public class BusinessDetailsActivity extends ActionBarActivity implements Action
 
         private int brandID = -1;
         String jsonData;
-        private BusinessDetailFragment.PunchCardsListFragment frag;
+        private BusinessDetailFragment.RewardDetailsFragment frag;
 
         public BusinessDetailsPagerAdapter(FragmentManager fm, String jsonStringContainingData) {
             super(fm);
@@ -127,7 +127,7 @@ public class BusinessDetailsActivity extends ActionBarActivity implements Action
                 case 0:
                     return BusinessDetailFragment.newInstance(jsonData);
                 case 1:
-                    frag = BusinessDetailFragment.PunchCardsListFragment.newInstance();
+                    frag = BusinessDetailFragment.RewardDetailsFragment.newInstance();
                     return frag;
                 case 2:
                     return MarketFragment.newInstance(Boolean.FALSE, brandID, false);
@@ -154,13 +154,13 @@ public class BusinessDetailsActivity extends ActionBarActivity implements Action
         }
 
         @Override
-        public void onPunchesLoaded(JSONArray punches) {
+        public void onRewardDetailsLoaded(Float discount, JSONArray punches) {
             if (frag != null) {
                 ArrayList<JSONObject> arrayList = new ArrayList<JSONObject>();
                 for (int i = 0; i < punches.length(); i++) {
                     arrayList.add(punches.optJSONObject(i));
                 }
-                frag.setPunchCards(BusinessDetailsActivity.this, arrayList);
+                frag.setPunchCards(BusinessDetailsActivity.this, discount, arrayList);
             }
         }
     }

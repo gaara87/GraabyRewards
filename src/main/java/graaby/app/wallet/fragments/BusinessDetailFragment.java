@@ -9,7 +9,6 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
-import android.support.v4.app.ListFragment;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.ActionBarActivity;
 import android.view.LayoutInflater;
@@ -20,6 +19,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.ImageView;
+import android.widget.ListView;
 import android.widget.TextView;
 
 import com.android.volley.Response;
@@ -150,7 +150,7 @@ public class BusinessDetailFragment extends Fragment implements
         mPullToRefreshLayout.setRefreshing(Boolean.FALSE);
         ImageView iv = (ImageView) mActivity.findViewById(R.id.item_businessPicImageView);
         try {
-            Helper.getImageLoader().get(response.getString(getString(
+            Helper.getImageLoader().get(response.getString(mActivity.getString(
                     R.string.pic_url)), ImageLoader.getImageListener(iv, R.drawable.default_business_profile_image, R.drawable.default_business_profile_image));
         } catch (Resources.NotFoundException e) {
             iv.setImageResource(R.drawable.default_business_profile_image);
@@ -216,7 +216,9 @@ public class BusinessDetailFragment extends Fragment implements
 
         try {
             JSONObject punchcards = response.getJSONObject(mActivity.getString(R.string.field_business_punchcard));
-            mCallback.onPunchesLoaded(punchcards.getJSONArray(mActivity.getString(R.string.field_punch_rewards)));
+//            JSONObject discountObject = response.getFloat(mActivity.getString(R.string.field_business_discount_value));
+            Float discountObject = null;
+            mCallback.onRewardDetailsLoaded(discountObject, punchcards.getJSONArray(mActivity.getString(R.string.field_punch_rewards)));
         } catch (JSONException e) {
         }
     }
@@ -236,28 +238,39 @@ public class BusinessDetailFragment extends Fragment implements
         /**
          * Called when fragment has loaded all the punchcards.
          */
-        void onPunchesLoaded(JSONArray punches);
+        void onRewardDetailsLoaded(Float discount, JSONArray punches);
     }
 
-    public static class PunchCardsListFragment extends ListFragment {
+    public static class RewardDetailsFragment extends Fragment {
 
-        public static PunchCardsListFragment newInstance() {
-            PunchCardsListFragment fragment = new PunchCardsListFragment();
+        private ListView mListView;
+        private TextView mDiscountTextView;
+
+        public static RewardDetailsFragment newInstance() {
+            RewardDetailsFragment fragment = new RewardDetailsFragment();
             return fragment;
         }
 
-        public PunchCardsListFragment() {
+        public RewardDetailsFragment() {
 
         }
 
         @Override
         public void onCreate(Bundle savedInstanceState) {
             super.onCreate(savedInstanceState);
-
         }
 
-        public void setPunchCards(Context context, List<JSONObject> punches) {
-            setListAdapter(new PunchAdapter(context, punches));
+        @Override
+        public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+            View v = inflater.inflate(R.layout.fragment_reward_info, null);
+            mListView = (ListView) v.findViewById(android.R.id.list);
+            mDiscountTextView = (TextView) v.findViewById(R.id.business_reward_discount_value);
+            return v;
+        }
+
+        public void setPunchCards(Context context, Float discount, List<JSONObject> punches) {
+            mDiscountTextView.setText(String.format(context.getString(R.string.outlet_discount_percentage), discount));
+            mListView.setAdapter(new PunchAdapter(context, punches));
         }
 
         private class PunchAdapter extends ArrayAdapter<JSONObject> {
