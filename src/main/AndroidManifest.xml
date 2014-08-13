@@ -1,8 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    package="graaby.app.wallet">
-    <!--xmlns:tools="http://schemas.android.com/tools"-->
+    package="graaby.app.wallet"
+    android:installLocation="auto">
+
+    <!-- xmlns:tools="http://schemas.android.com/tools" -->
     <uses-sdk tools:node="replace" />
 
     <uses-permission android:name="android.permission.INTERNET" />
@@ -55,7 +57,7 @@
                 <category android:name="android.intent.category.BROWSABLE" />
 
                 <data
-                    android:host="www.graaby.com"
+                    android:host="www.graaby.com/#/"
                     android:scheme="http" />
             </intent-filter>
         </activity>
@@ -121,14 +123,6 @@
             android:value="@string/fb_app_id" />
 
         <activity android:name="com.facebook.LoginActivity" />
-        <activity
-            android:name=".SettingsActivity"
-            android:label="@string/title_activity_settings"
-            android:parentActivityName=".MainActivity">
-            <meta-data
-                android:name="android.support.PARENT_ACTIVITY"
-                android:value=".MainActivity" />
-        </activity>
 
         <receiver
             android:name=".gcm.GcmBroadcastReceiver"
@@ -151,6 +145,7 @@
             android:parentActivityName=".MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.SEARCH" />
+
                 <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
 
@@ -174,7 +169,16 @@
         <receiver
             android:name=".GraabyBroadcastReceiver"
             android:enabled="true"
-            android:exported="true"></receiver>
+            android:exported="true" />
+
+        <activity
+            android:name=".dev.SettingsActivity"
+            android:label="@string/title_activity_settings"
+            android:parentActivityName=".MainActivity">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="graaby.app.wallet.MainActivity" />
+        </activity>
     </application>
 
 </manifest>

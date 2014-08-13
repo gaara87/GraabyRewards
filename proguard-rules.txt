@@ -91,7 +91,8 @@
 ######### PROJECT SPECIFIC LIBRARY SETTINGS ############
 
 
--keep class com.facebook** { *; }
+-keep class com.facebook.** { *; }
+-keepattributes Signature
 -dontwarn com.facebook**
 
 -keep class okio.** { *; }

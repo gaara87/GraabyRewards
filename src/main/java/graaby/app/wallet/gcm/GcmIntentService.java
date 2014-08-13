@@ -16,13 +16,16 @@
 
 package graaby.app.wallet.gcm;
 
+import android.app.Activity;
 import android.app.IntentService;
 import android.app.Notification;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.BitmapFactory;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.NotificationCompat;
 
@@ -47,7 +50,7 @@ import graaby.app.wallet.activities.PointReceivedActivity;
 public class GcmIntentService extends IntentService {
     public static final int NOTIFICATION_ID_POINTS = 1;
     private static final int NOTIFICATION_ID_TX = 2;
-    private static int NOTIFICATION_ID_NEW_MARKET;
+    private static int NOTIFICATION_ID_NEW_MARKET = 3;
 
     public GcmIntentService() {
         super("GcmIntentService");
@@ -82,10 +85,16 @@ public class GcmIntentService extends IntentService {
             String notificationTitle, smallContentText, smallContentInfo;
             int notificationImageResource = R.drawable.ic_gcm_point, notificationID;
 
+            SharedPreferences pref = getSharedPreferences("pref_notification", Activity.MODE_PRIVATE);
+
             NotificationCompat.Builder mBuilder =
                     new NotificationCompat.Builder(this)
-                            .setDefaults(Notification.DEFAULT_ALL)
+                            .setSound(Uri.parse(pref.getString("notifications_new_message_ringtone", "")))
                             .setAutoCancel(Boolean.TRUE);
+
+            if (pref.getBoolean("notifications_new_message_vibrate", true)) {
+                mBuilder.setDefaults(Notification.DEFAULT_VIBRATE);
+            }
 
             Intent intent = new Intent(this, MainActivity.class);
 

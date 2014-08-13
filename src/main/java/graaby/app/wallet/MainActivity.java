@@ -28,8 +28,6 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.Toast;
 
-import com.android.volley.Response;
-import com.android.volley.VolleyError;
 import com.android.volley.toolbox.RequestFuture;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GooglePlayServicesUtil;
@@ -48,6 +46,7 @@ import java.util.concurrent.ExecutionException;
 import java.util.concurrent.atomic.AtomicInteger;
 
 import graaby.app.wallet.auth.UserLoginActivity;
+import graaby.app.wallet.dev.SettingsActivity;
 import graaby.app.wallet.fragments.BusinessesFragment;
 import graaby.app.wallet.fragments.ContactsFragment;
 import graaby.app.wallet.fragments.FeedFragment;
@@ -195,6 +194,10 @@ public class MainActivity extends ActionBarActivity
             case 4:
                 placeHolderFragment = new ContactsFragment();
                 break;
+            case 5:
+                Intent intent = new Intent(this, SettingsActivity.class);
+                startActivityForResult(intent, 10);
+                return;
             default:
                 break;
         }
@@ -275,38 +278,6 @@ public class MainActivity extends ActionBarActivity
         int id = item.getItemId();
         if (id == R.id.action_menu_item_nfc_toggle) {
             startActivity(new Intent(android.provider.Settings.ACTION_WIRELESS_SETTINGS));
-        } else if (id == R.id.action_menu_item_settings) {
-            Intent intent = new Intent(this, SettingsActivity.class);
-            startActivityForResult(intent, 10);
-        } else if (id == R.id.action_menu_item_logout) {
-            final AccountManager acm = AccountManager.get(this);
-            final Account[] accounts = acm
-                    .getAccountsByType(UserLoginActivity.ACCOUNT_TYPE);
-            if (accounts.length != 0) {
-                HashMap<String, Object> params = new HashMap<String, Object>();
-
-                try {
-                    CustomRequest logoutRequest = new CustomRequest("logout", params, new Response.Listener<JSONObject>() {
-                        @Override
-                        public void onResponse(JSONObject jsonObject) {
-                            acm.removeAccount(accounts[0], null, null);
-                            Toast.makeText(MainActivity.this, "Logged out successfully", Toast.LENGTH_SHORT).show();
-                            Helper.getRQ().getCache().clear();
-                            MainActivity.this.finish();
-                        }
-                    }, new Response.ErrorListener() {
-                        @Override
-                        public void onErrorResponse(VolleyError volleyError) {
-                            Toast.makeText(MainActivity.this, "Unable to log you out with the server", Toast.LENGTH_SHORT).show();
-                        }
-                    }
-                    );
-                    Helper.getRQ().add(logoutRequest);
-                } catch (JSONException e) {
-                } catch (NullPointerException npe) {
-                }
-
-            }
         } else if (id == R.id.action_menu_item_clear_search) {
             SearchRecentSuggestions suggestions = new SearchRecentSuggestions(this,
                     GraabySearchSuggestionsProvider.AUTHORITY, GraabySearchSuggestionsProvider.MODE);

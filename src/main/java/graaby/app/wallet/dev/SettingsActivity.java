@@ -1,7 +1,13 @@
-package graaby.app.wallet;
+package graaby.app.wallet.dev;
 
+import android.accounts.Account;
+import android.accounts.AccountManager;
 import android.annotation.TargetApi;
+import android.app.AlertDialog;
+import android.content.ActivityNotFoundException;
 import android.content.Context;
+import android.content.DialogInterface;
+import android.content.Intent;
 import android.content.res.Configuration;
 import android.media.Ringtone;
 import android.media.RingtoneManager;
@@ -15,11 +21,24 @@ import android.preference.PreferenceCategory;
 import android.preference.PreferenceFragment;
 import android.preference.PreferenceManager;
 import android.preference.RingtonePreference;
+import android.support.v4.app.NavUtils;
 import android.text.TextUtils;
 import android.view.MenuItem;
-import android.support.v4.app.NavUtils;
+import android.widget.Toast;
 
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.util.HashMap;
 import java.util.List;
+
+import graaby.app.wallet.CustomRequest;
+import graaby.app.wallet.Helper;
+import graaby.app.wallet.R;
+import graaby.app.wallet.auth.UserLoginActivity;
 
 /**
  * A {@link PreferenceActivity} that presents a set of application settings. On
@@ -106,19 +125,94 @@ public class SettingsActivity extends PreferenceActivity {
         getPreferenceScreen().addPreference(fakeHeader);
         addPreferencesFromResource(R.xml.pref_notification);
 
-        // Add 'data and sync' preferences, and a corresponding header.
+        // Add 'account' preferences, and a corresponding header.
         fakeHeader = new PreferenceCategory(this);
-        fakeHeader.setTitle(R.string.pref_header_data_sync);
+        fakeHeader.setTitle(R.string.pref_header_account);
         getPreferenceScreen().addPreference(fakeHeader);
-        addPreferencesFromResource(R.xml.pref_data_sync);
+        addPreferencesFromResource(R.xml.pref_account);
+
+        // Add 'legal' preferences, and a corresponding header.
+        fakeHeader = new PreferenceCategory(this);
+        fakeHeader.setTitle(R.string.pref_header_legal);
+        getPreferenceScreen().addPreference(fakeHeader);
+        addPreferencesFromResource(R.xml.pref_legal);
 
         // Bind the summaries of EditText/List/Dialog/Ringtone preferences to
         // their values. When their values change, their summaries are updated
         // to reflect the new value, per the Android Design guidelines.
-        bindPreferenceSummaryToValue(findPreference("example_text"));
-        bindPreferenceSummaryToValue(findPreference("example_list"));
+        bindPreferenceSummaryToValue(findPreference("name_text"));
+        bindPreferenceSummaryToValue(findPreference("businesss_check_list"));
         bindPreferenceSummaryToValue(findPreference("notifications_new_message_ringtone"));
-        bindPreferenceSummaryToValue(findPreference("sync_frequency"));
+
+        findPreference("logout_button").setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
+            @Override
+            public boolean onPreferenceClick(Preference preference) {
+                AlertDialog.Builder builder = new AlertDialog.Builder(SettingsActivity.this);
+                builder.setMessage(R.string.logout_dialog_message)
+                        .setTitle(R.string.logout_dialog_title)
+                        .setPositiveButton("Logout", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialogInterface, int i) {
+                                final AccountManager acm = AccountManager.get(SettingsActivity.this);
+                                final Account[] accounts = acm
+                                        .getAccountsByType(UserLoginActivity.ACCOUNT_TYPE);
+                                if (accounts.length != 0) {
+                                    HashMap<String, Object> params = new HashMap<String, Object>();
+
+                                    try {
+                                        CustomRequest logoutRequest = new CustomRequest("logout", params, new Response.Listener<JSONObject>() {
+                                            @Override
+                                            public void onResponse(JSONObject jsonObject) {
+                                                acm.removeAccount(accounts[0], null, null);
+                                                Toast.makeText(SettingsActivity.this, "Logged out successfully", Toast.LENGTH_SHORT).show();
+                                                Helper.getRQ().getCache().clear();
+                                                setResult(RESULT_OK);
+                                                SettingsActivity.this.finish();
+                                            }
+                                        }, new Response.ErrorListener() {
+                                            @Override
+                                            public void onErrorResponse(VolleyError volleyError) {
+                                                Toast.makeText(SettingsActivity.this, "Unable to log you out with the server", Toast.LENGTH_SHORT).show();
+                                            }
+                                        }
+                                        );
+                                        Helper.getRQ().add(logoutRequest);
+                                    } catch (JSONException e) {
+                                    } catch (NullPointerException npe) {
+                                    }
+
+                                }
+                            }
+                        }).setNegativeButton("Cancel", null);
+                AlertDialog dialog = builder.create();
+                dialog.show();
+                return true;
+            }
+        });
+
+        findPreference("social_btn_fb").setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
+            @Override
+            public boolean onPreferenceClick(Preference preference) {
+                return true;
+            }
+        });
+
+        findPreference("send_feedback").setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
+            @Override
+            public boolean onPreferenceClick(Preference preference) {
+                Intent i = new Intent(Intent.ACTION_SEND);
+                i.setType("message/rfc822");
+                i.putExtra(Intent.EXTRA_EMAIL, new String[]{"contact@graaby.com"});
+                i.putExtra(Intent.EXTRA_SUBJECT, "[Graaby app feedback]");
+                i.putExtra(Intent.EXTRA_TEXT, "");
+                try {
+                    startActivity(Intent.createChooser(i, "E-mail Graaby through..."));
+                } catch (ActivityNotFoundException ex) {
+                    Toast.makeText(SettingsActivity.this, "There are no email clients installed.", Toast.LENGTH_SHORT).show();
+                }
+                return true;
+            }
+        });
     }
 
     /**
@@ -252,8 +346,8 @@ public class SettingsActivity extends PreferenceActivity {
             // to their values. When their values change, their summaries are
             // updated to reflect the new value, per the Android Design
             // guidelines.
-            bindPreferenceSummaryToValue(findPreference("example_text"));
-            bindPreferenceSummaryToValue(findPreference("example_list"));
+            bindPreferenceSummaryToValue(findPreference("name_text"));
+            bindPreferenceSummaryToValue(findPreference("businesss_check_list"));
         }
     }
 
@@ -277,21 +371,28 @@ public class SettingsActivity extends PreferenceActivity {
     }
 
     /**
-     * This fragment shows data and sync preferences only. It is used when the
+     * This fragment shows notification preferences only. It is used when the
      * activity is showing a two-pane settings UI.
      */
     @TargetApi(Build.VERSION_CODES.HONEYCOMB)
-    public static class DataSyncPreferenceFragment extends PreferenceFragment {
+    public static class AccountPreferenceFragment extends PreferenceFragment {
         @Override
         public void onCreate(Bundle savedInstanceState) {
             super.onCreate(savedInstanceState);
-            addPreferencesFromResource(R.xml.pref_data_sync);
+            addPreferencesFromResource(R.xml.pref_account);
+        }
+    }
 
-            // Bind the summaries of EditText/List/Dialog/Ringtone preferences
-            // to their values. When their values change, their summaries are
-            // updated to reflect the new value, per the Android Design
-            // guidelines.
-            bindPreferenceSummaryToValue(findPreference("sync_frequency"));
+    /**
+     * This fragment shows notification preferences only. It is used when the
+     * activity is showing a two-pane settings UI.
+     */
+    @TargetApi(Build.VERSION_CODES.HONEYCOMB)
+    public static class LegalPreferenceFragment extends PreferenceFragment {
+        @Override
+        public void onCreate(Bundle savedInstanceState) {
+            super.onCreate(savedInstanceState);
+            addPreferencesFromResource(R.xml.pref_account);
         }
     }
 }

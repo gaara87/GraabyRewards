@@ -2,8 +2,10 @@ package graaby.app.wallet.fragments;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.res.Resources.NotFoundException;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.support.v4.app.Fragment;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.view.LayoutInflater;
@@ -38,12 +40,19 @@ public class ProfileFragment extends Fragment implements OnClickListener,
     private Activity mActivity;
     private CustomRequest profileRequest;
     private SwipeRefreshLayout mPullToRefreshLayout;
+    private String profileName;
 
     public void onAttach(Activity activity) {
         super.onAttach(activity);
         mActivity = activity;
         ((MainActivity) activity).onSectionAttached(
                 getArguments().getInt(Helper.ARG_SECTION_NUMBER));
+    }
+
+    @Override
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        profileName = PreferenceManager.getDefaultSharedPreferences(mActivity).getString("name_text", "");
     }
 
     @Override
@@ -136,10 +145,17 @@ public class ProfileFragment extends Fragment implements OnClickListener,
         if (bioNode != null) {
             TextView tv = null;
             try {
+                String name = bioNode.getString(mActivity.getResources().getString(
+                        R.string.profile_name));
                 tv = (TextView) mActivity
                         .findViewById(R.id.profile_name_textView);
-                tv.setText(bioNode.getString(mActivity.getResources().getString(
-                        R.string.profile_name)));
+                tv.setText(name);
+
+                if (!profileName.equals(name)) {
+                    SharedPreferences.Editor editor = PreferenceManager.getDefaultSharedPreferences(mActivity).edit();
+                    editor.putString("name_text", name);
+                    editor.apply();
+                }
             } catch (JSONException e) {
             } catch (NotFoundException e) {
             }

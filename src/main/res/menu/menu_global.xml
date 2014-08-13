@@ -1,26 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
-<menu xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto">
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
     <item
         android:id="@+id/action_menu_item_clear_search"
         android:title="Clear Search History"
         android:orderInCategory="1" />
-    <item
-        android:id="@+id/action_menu_item_settings"
-        android:icon="@drawable/nav_settings"
-        android:menuCategory="container"
-        android:title="Settings"
-        android:visible="false"
-        app:showAsAction="never" />
-
-    <item
-        android:id="@+id/action_menu_item_logout"
-        android:menuCategory="container"
-        android:title="Logout"
-        android:orderInCategory="1"
-        app:showAsAction="never" />
-
-
     <item
         android:id="@+id/action_menu_item_nfc_toggle"
         android:title="Enable NFC"
