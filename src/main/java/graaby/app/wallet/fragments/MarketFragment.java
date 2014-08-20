@@ -104,6 +104,7 @@ public class MarketFragment extends Fragment implements OnItemClickListener,
         marketGrid = (GridView) v.findViewById(R.id.discountItemsGridView);
         marketGrid.setOnItemClickListener(this);
         marketGrid.setAdapter(adapter);
+        marketGrid.setEmptyView(v.findViewById(android.R.id.empty));
         sendRequest();
 
         return v;
@@ -179,11 +180,6 @@ public class MarketFragment extends Fragment implements OnItemClickListener,
         discountItemList.clear();
         for (int i = 0; i < discountItemsArray.length(); i++) {
             discountItemList.add(discountItemsArray.optJSONObject(i));
-        }
-        if (discountItemList.size() == 0) {
-            TextView tv = new TextView(mActivity);
-            tv.setText("There are no coupons or vouchers available right now");
-            marketGrid.setEmptyView(tv);
         }
         adapter.notifyDataSetChanged();
         try {

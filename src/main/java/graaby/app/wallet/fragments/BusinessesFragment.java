@@ -74,6 +74,7 @@ public class BusinessesFragment extends Fragment implements
     private Integer mBrandId = -1;
     private LatLng mLatLng = new LatLng(0, 0);
     private LatLngBounds mLatLngBounds;
+    private JSONObject mResponse;
     ;
 
     private boolean isLocationEnabled() {
@@ -188,6 +189,7 @@ public class BusinessesFragment extends Fragment implements
     @Override
     public void onResponse(JSONObject response) {
         try {
+            this.mResponse = response;
             JSONArray placesArray = response.getJSONArray(getString(R.string.field_business_places));
             if (placesArray.length() != 0) {
                 mAdapter.clear();
@@ -271,6 +273,12 @@ public class BusinessesFragment extends Fragment implements
                 break;
         }
         return super.onOptionsItemSelected(item);
+    }
+
+    @Override
+    public void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+        outState.putString("res", mResponse.toString());
     }
 
     private void setUpMapIfNeeded() {

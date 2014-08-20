@@ -216,8 +216,10 @@ public class BusinessDetailFragment extends Fragment implements
 
         try {
             JSONObject punchcards = response.getJSONObject(mActivity.getString(R.string.field_business_punchcard));
-//            JSONObject discountObject = response.getFloat(mActivity.getString(R.string.field_business_discount_value));
-            Float discountObject = null;
+            Integer discountObject = 0;
+            String field = mActivity.getString(R.string.field_business_discount_value);
+            if (response.has(field))
+                discountObject = response.getInt(field);
             mCallback.onRewardDetailsLoaded(discountObject, punchcards.getJSONArray(mActivity.getString(R.string.field_punch_rewards)));
         } catch (JSONException e) {
         }
@@ -238,7 +240,7 @@ public class BusinessDetailFragment extends Fragment implements
         /**
          * Called when fragment has loaded all the punchcards.
          */
-        void onRewardDetailsLoaded(Float discount, JSONArray punches);
+        void onRewardDetailsLoaded(Integer discount, JSONArray punches);
     }
 
     public static class RewardDetailsFragment extends Fragment {
@@ -264,12 +266,13 @@ public class BusinessDetailFragment extends Fragment implements
         public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
             View v = inflater.inflate(R.layout.fragment_reward_info, null);
             mListView = (ListView) v.findViewById(android.R.id.list);
+            mListView.setEmptyView(v.findViewById(android.R.id.empty));
             mDiscountTextView = (TextView) v.findViewById(R.id.business_reward_discount_value);
             return v;
         }
 
-        public void setPunchCards(Context context, Float discount, List<JSONObject> punches) {
-            mDiscountTextView.setText(String.format(context.getString(R.string.outlet_discount_percentage), discount));
+        public void setPunchCards(Context context, Integer discount, List<JSONObject> punches) {
+            mDiscountTextView.setText(String.valueOf(discount) + "%");
             mListView.setAdapter(new PunchAdapter(context, punches));
         }
 

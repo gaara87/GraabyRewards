@@ -19,15 +19,32 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center_horizontal"
-        android:text="discount"
+        android:text="Graaby discount"
         android:textAppearance="?android:attr/textAppearanceSmall" />
 
-    <ListView
-        android:id="@id/android:list"
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:divider="@null"
-        android:dividerHeight="0dp"
-        android:drawSelectorOnTop="false" />
+        android:orientation="vertical">
+
+        <ListView
+            android:id="@id/android:list"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:divider="@null"
+            android:dividerHeight="0dp"
+            android:drawSelectorOnTop="false" />
+
+        <TextView
+            android:id="@android:id/empty"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:drawableBottom="@drawable/ic_punch_card_empty"
+            android:text="There are no punch cards at this place"
+            android:textColor="@color/midnightblue"
+            android:layout_gravity="center"
+            android:gravity="center" />
+
+    </LinearLayout>
 
 </LinearLayout>

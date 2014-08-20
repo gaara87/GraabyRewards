@@ -8,10 +8,9 @@
         android:id="@+id/profile_recent_transactions_item_text_view"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:gravity="center_vertical|left"
         android:layout_marginBottom="@dimen/globalPadding8"
-        android:text="text"
+        android:gravity="center_vertical|start"
         android:textAppearance="?android:attr/textAppearanceMedium"
-        android:textColor="@color/asbestos"></TextView>
+        android:textColor="@color/asbestos" />
 
 </LinearLayout>

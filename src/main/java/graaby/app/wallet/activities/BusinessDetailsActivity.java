@@ -100,7 +100,7 @@ public class BusinessDetailsActivity extends ActionBarActivity implements Action
     }
 
     @Override
-    public void onRewardDetailsLoaded(Float discounts, JSONArray punches) {
+    public void onRewardDetailsLoaded(Integer discounts, JSONArray punches) {
         mPagerAdapter.onRewardDetailsLoaded(discounts, punches);
     }
 
@@ -154,7 +154,7 @@ public class BusinessDetailsActivity extends ActionBarActivity implements Action
         }
 
         @Override
-        public void onRewardDetailsLoaded(Float discount, JSONArray punches) {
+        public void onRewardDetailsLoaded(Integer discount, JSONArray punches) {
             if (frag != null) {
                 ArrayList<JSONObject> arrayList = new ArrayList<JSONObject>();
                 for (int i = 0; i < punches.length(); i++) {

@@ -80,10 +80,10 @@
                 android:id="@+id/item_id_textView"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_marginLeft="@dimen/global8"
+                android:layout_marginTop="@dimen/global8"
                 android:drawableLeft="@android:drawable/ic_menu_info_details"
                 android:gravity="center_vertical"
-                android:layout_marginTop="@dimen/global8"
-                android:layout_marginLeft="@dimen/global8"
                 android:textAppearance="?android:attr/textAppearanceSmall"
                 android:textColor="@color/silver" />
 
@@ -96,6 +96,8 @@
             android:layout_height="wrap_content"
             android:layout_alignParentBottom="true"
             android:drawableEnd="@drawable/ic_point"
+            android:drawableLeft="@drawable/ic_transaction"
+            android:drawableRight="@drawable/ic_point"
             android:drawableStart="@drawable/ic_transaction"
             android:text="@string/button_grab_it" />
 
