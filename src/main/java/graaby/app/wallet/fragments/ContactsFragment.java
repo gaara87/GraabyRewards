@@ -192,7 +192,14 @@ public class ContactsFragment extends ListFragment implements Response.Listener<
     @Override
     public void onClick(DialogInterface dialog, int which) {
         EditText text = (EditText) sendPointsDialog.findViewById(R.id.editText_send_points);
-        pointsToSend = Integer.parseInt(text.getText().toString());
+        try {
+            pointsToSend = Integer.parseInt(text.getText().toString());
+        } catch (Exception e) {
+            pointsToSend = 0;
+        }
+        if (pointsToSend == 0)
+            return;
+        
         HashMap<String, Object> params = new HashMap<String, Object>();
 
         try {
