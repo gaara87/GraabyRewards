@@ -151,7 +151,7 @@ public class GcmIntentService extends IntentService {
                     this.getSystemService(Context.NOTIFICATION_SERVICE);
 
             PendingIntent contentIntent = PendingIntent.getActivity(this, 0,
-                    intent, 0);
+                    intent, PendingIntent.FLAG_CANCEL_CURRENT);
 
 
             mBuilder.setLargeIcon(BitmapFactory.decodeResource(getResources(), notificationImageResource))
