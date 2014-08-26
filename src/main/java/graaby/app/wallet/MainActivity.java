@@ -46,7 +46,7 @@ import java.util.concurrent.ExecutionException;
 import java.util.concurrent.atomic.AtomicInteger;
 
 import graaby.app.wallet.auth.UserLoginActivity;
-import graaby.app.wallet.dev.SettingsActivity;
+import graaby.app.wallet.activities.SettingsActivity;
 import graaby.app.wallet.fragments.BusinessesFragment;
 import graaby.app.wallet.fragments.ContactsFragment;
 import graaby.app.wallet.fragments.FeedFragment;

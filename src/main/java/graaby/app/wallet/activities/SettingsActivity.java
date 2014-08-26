@@ -1,4 +1,4 @@
-package graaby.app.wallet.dev;
+package graaby.app.wallet.activities;
 
 import android.accounts.Account;
 import android.accounts.AccountManager;

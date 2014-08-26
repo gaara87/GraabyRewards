@@ -172,13 +172,14 @@
             android:exported="true" />
 
         <activity
-            android:name=".dev.SettingsActivity"
+            android:name=".activities.SettingsActivity"
             android:label="@string/title_activity_settings"
             android:parentActivityName=".MainActivity">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="graaby.app.wallet.MainActivity" />
         </activity>
+
     </application>
 
 </manifest>
