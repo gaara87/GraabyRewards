@@ -75,4 +75,10 @@
     <string name="punchcard_visit_value">On Visit: %1$s</string>
     <string name="logout_dialog_message">You will need to login again to use Graaby app</string>
     <string name="logout_dialog_title">Logout confirmation</string>
+    <string name="timestamp">time</string>
+    <string name="title_activity_point_received">Points Received</string>
+    <string name="gcm_message_thanked">Thank You</string>
+    <string name="gcm_message_thanked_small_content">%1$s thanks you for sharing points</string>
+    <string name="gcm_message_checkin_title">Check-in successful</string>
+    <string name="gcm_message_checkin_small_content">You just checked-in into %1$s successfully</string>
 </resources>

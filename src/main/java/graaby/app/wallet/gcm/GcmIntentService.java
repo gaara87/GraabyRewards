@@ -49,8 +49,10 @@ import graaby.app.wallet.activities.PointReceivedActivity;
  */
 public class GcmIntentService extends IntentService {
     public static final int NOTIFICATION_ID_POINTS = 1;
-    private static final int NOTIFICATION_ID_TX = 2;
-    private static int NOTIFICATION_ID_NEW_MARKET = 3;
+    public static final int NOTIFICATION_ID_TX = 2;
+    public static int NOTIFICATION_ID_NEW_MARKET = 3;
+    public static int NOTIFICATION_ID_THANKED = 4;
+    public static int NOTIFICATION_ID_CHECKIN = 5;
 
     public GcmIntentService() {
         super("GcmIntentService");
@@ -82,7 +84,7 @@ public class GcmIntentService extends IntentService {
     private void sendNotification(final String msg) {
         try {
             JSONObject object = new JSONObject(msg);
-            String notificationTitle, smallContentText, smallContentInfo;
+            String notificationTitle, smallContentText, smallContentInfo = "";
             int notificationImageResource = R.drawable.ic_gcm_point, notificationID;
 
             SharedPreferences pref = getSharedPreferences("pref_notification", Activity.MODE_PRIVATE);
@@ -100,7 +102,8 @@ public class GcmIntentService extends IntentService {
 
             switch (object.getInt(getString(R.string.field_gcm_msg_type))) {
                 case 5:
-                    String sender = object.getString(getString(R.string.contact_send_from));
+                    //user received points from contact
+                    String sender = object.getString(getString(R.string.field_gcm_name));
                     int amount = object.getInt(getString(R.string.contact_send_amount));
                     notificationTitle = getString(R.string.gcm_message_recieved_points);
                     smallContentText = String.format(getString(R.string.gcm_message_recieved_points_content), sender, amount);
@@ -121,6 +124,7 @@ public class GcmIntentService extends IntentService {
                     mBuilder.addAction(R.drawable.ic_action_accept, "Say thanks", pendingBroadcastIntent);
                     break;
                 case 6:
+                    //user made a transaction
                     amount = object.getInt(getString(R.string.contact_send_amount));
                     String outlet = object.getString(getString(R.string.field_business_name));
                     notificationTitle = getString(R.string.gcm_message_transaction);
@@ -130,6 +134,7 @@ public class GcmIntentService extends IntentService {
                     notificationID = NOTIFICATION_ID_TX;
                     break;
                 case 7:
+                    //new marketplace voucher has appeared
                     outlet = object.getString(getString(R.string.field_business_name));
                     notificationTitle = getString(R.string.gcm_message_market);
                     smallContentText = String.format(getString(R.string.gcm_message_market_content), outlet);
@@ -140,6 +145,22 @@ public class GcmIntentService extends IntentService {
 //                case 8:
 //                    //contact added
 //                    break;
+                case 10:
+                    //contact thanks you for sending points
+                    String thanksString = object.getString(getString(R.string.field_gcm_name));
+                    notificationTitle = getString(R.string.gcm_message_thanked);
+                    smallContentText = String.format(getString(R.string.gcm_message_thanked_small_content), thanksString);
+                    notificationImageResource = R.drawable.ic_gcm_point;
+                    notificationID = NOTIFICATION_ID_THANKED;
+                    break;
+                case 11:
+                    //checkin notification
+                    outlet = object.getString(getString(R.string.field_gcm_name));
+                    notificationTitle = getString(R.string.gcm_message_checkin_title);
+                    smallContentText = String.format(getString(R.string.gcm_message_checkin_small_content), outlet);
+                    notificationImageResource = R.drawable.ic_gcm_checkin;
+                    notificationID = NOTIFICATION_ID_CHECKIN;
+                    break;
                 default:
                     notificationTitle = "";
                     smallContentText = "";

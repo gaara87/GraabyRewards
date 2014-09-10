@@ -78,6 +78,7 @@
     <string name="field_gcm_reg_id">reg_id</string>
     <string name="field_gcm_msg_type">type</string>
     <string name="field_gcm_data">data</string>
+    <string name="field_gcm_name">name</string>
     <string name="field_search_query">query</string>
     <string name="field_collapse">collapse</string>
     <string name="field_activity_id">actid</string>

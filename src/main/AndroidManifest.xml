@@ -164,7 +164,9 @@
             android:name=".model.GraabySearchSuggestionsProvider"
             android:authorities="graaby.app.wallet.model.GraabySearchSuggestionsProvider" />
 
-        <activity android:name=".activities.PointReceivedActivity" />
+        <activity
+            android:name=".activities.PointReceivedActivity"
+            android:label="@string/title_activity_point_received" />
 
         <receiver
             android:name=".GraabyBroadcastReceiver"

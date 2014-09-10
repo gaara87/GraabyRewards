@@ -28,13 +28,13 @@ import graaby.app.wallet.R;
 /**
  * A placeholder fragment containing a simple view.
  */
-public class PointReceivedFragment extends Fragment {
+public class PointReceivedFromContactFragment extends Fragment {
 
     private JSONObject pointNode;
     private ActionBarActivity mActivity;
     private int mActivityID, mAmount;
 
-    public PointReceivedFragment() {
+    public PointReceivedFromContactFragment() {
     }
 
     @Override

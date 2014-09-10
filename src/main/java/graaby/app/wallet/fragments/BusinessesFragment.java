@@ -275,11 +275,6 @@ public class BusinessesFragment extends Fragment implements
         return super.onOptionsItemSelected(item);
     }
 
-    @Override
-    public void onSaveInstanceState(Bundle outState) {
-        super.onSaveInstanceState(outState);
-        outState.putString("res", mResponse.toString());
-    }
 
     private void setUpMapIfNeeded() {
         if (mMap == null) {
