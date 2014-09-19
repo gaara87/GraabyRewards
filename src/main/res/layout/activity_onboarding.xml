@@ -182,21 +182,24 @@
 
             <Button
                 android:id="@+id/register"
+                style="@android:style/Widget.Button"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
                 android:layout_marginTop="@dimen/globalPadding8"
-                android:text="Register" />
+                android:text="Register"/>
         </LinearLayout>
     </android.support.v4.view.ViewPager>
 
     <LinearLayout
+        style="?android:attr/buttonBarStyle"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal">
 
         <Button
             android:id="@+id/onboarding_skip"
+            style="?android:attr/buttonBarButtonStyle"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
@@ -204,6 +207,7 @@
 
         <Button
             android:id="@+id/onboarding_next"
+            style="?android:attr/buttonBarButtonStyle"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"

@@ -44,6 +44,7 @@ import graaby.app.wallet.R;
 
 /**
  * Created by gaara on 5/22/14.
+ * Make some impeccable shyte
  */
 public class OnboardingActivity extends ActionBarActivity implements Response.ErrorListener, Response.Listener<JSONObject> {
     /**
@@ -174,6 +175,8 @@ public class OnboardingActivity extends ActionBarActivity implements Response.Er
 
                             CustomRequest registerRequest = new CustomRequest("register", params, OnboardingActivity.this, OnboardingActivity.this);
                             registerRequest.setShouldCache(false);
+                            Toast.makeText(OnboardingActivity.this, "Attempting to register", Toast.LENGTH_SHORT).show();
+                            view.setEnabled(false);
                             queue.add(registerRequest);
                             toggleViews(false);
                         } catch (JSONException e) {
@@ -207,6 +210,66 @@ public class OnboardingActivity extends ActionBarActivity implements Response.Er
                 mNameView.setVisibility(View.VISIBLE);
             }
         }
+    }
+
+    private void toggleViews(boolean show) {
+        mSpinner.setEnabled(show);
+        mNameView.setEnabled(show);
+        mPasswordView.setEnabled(show);
+        if (show)
+            mRegisterButton.setVisibility(View.VISIBLE);
+        else
+            mRegisterButton.setVisibility(View.GONE);
+    }
+
+    private String[] getAccountNames() {
+        AccountManager mAccountManager = AccountManager.get(this);
+        Account[] accounts = mAccountManager.getAccountsByType(
+                GoogleAuthUtil.GOOGLE_ACCOUNT_TYPE);
+        String[] names = new String[accounts.length];
+        for (int i = 0; i < names.length; i++) {
+            names[i] = accounts[i].name;
+        }
+        return names;
+    }
+
+    @Override
+    public void onBackPressed() {
+        if (mPager.getCurrentItem() == 0) {
+            // If the user is currently looking at the first step, allow the system to handle the
+            // Back button. This calls finish() on this activity and pops the back stack.
+            super.onBackPressed();
+        } else {
+            // Otherwise, select the previous step.
+            mPager.setCurrentItem(mPager.getCurrentItem() - 1);
+        }
+    }
+
+    @Override
+    public void onResponse(JSONObject response) {
+
+        Toast.makeText(this, "Registered. Logging in now", Toast.LENGTH_SHORT).show();
+        try {
+            if (response.getInt(getString(R.string.response_success)) == 1) {
+                Intent intent = new Intent();
+                intent.putExtra("uname", mSpinner.getSelectedItem().toString());
+                intent.putExtra("pwd", mPasswordView.getText().toString());
+                setResult(RESULT_OK, intent);
+                finish();
+            } else if (response.getInt(getString(R.string.response_success)) == 0) {
+                String msg = response.getString(getString(R.string.response_msg));
+                Toast.makeText(OnboardingActivity.this, msg, Toast.LENGTH_SHORT).show();
+                toggleViews(true);
+            }
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+    }
+
+    @Override
+    public void onErrorResponse(VolleyError error) {
+        Helper.handleVolleyError(error, OnboardingActivity.this);
+        mRegisterButton.setEnabled(true);
     }
 
     private class GetNameTask extends AsyncTask<String, Void, String> {
@@ -259,63 +322,6 @@ public class OnboardingActivity extends ActionBarActivity implements Response.Er
             toggleViews(true);
             super.onPostExecute(s);
         }
-    }
-
-    private void toggleViews(boolean show) {
-        mSpinner.setEnabled(show);
-        mNameView.setEnabled(show);
-        mPasswordView.setEnabled(show);
-        if (show)
-            mRegisterButton.setVisibility(View.VISIBLE);
-        else
-            mRegisterButton.setVisibility(View.GONE);
-    }
-
-    private String[] getAccountNames() {
-        AccountManager mAccountManager = AccountManager.get(this);
-        Account[] accounts = mAccountManager.getAccountsByType(
-                GoogleAuthUtil.GOOGLE_ACCOUNT_TYPE);
-        String[] names = new String[accounts.length];
-        for (int i = 0; i < names.length; i++) {
-            names[i] = accounts[i].name;
-        }
-        return names;
-    }
-
-    @Override
-    public void onBackPressed() {
-        if (mPager.getCurrentItem() == 0) {
-            // If the user is currently looking at the first step, allow the system to handle the
-            // Back button. This calls finish() on this activity and pops the back stack.
-            super.onBackPressed();
-        } else {
-            // Otherwise, select the previous step.
-            mPager.setCurrentItem(mPager.getCurrentItem() - 1);
-        }
-    }
-
-    @Override
-    public void onResponse(JSONObject response) {
-        try {
-            if (response.getInt(getString(R.string.response_success)) == 1) {
-                Intent intent = new Intent();
-                intent.putExtra("uname", mSpinner.getSelectedItem().toString());
-                intent.putExtra("pwd", mPasswordView.getText().toString());
-                setResult(RESULT_OK, intent);
-                finish();
-            } else if (response.getInt(getString(R.string.response_success)) == 0) {
-                String msg = response.getString(getString(R.string.response_msg));
-                Toast.makeText(OnboardingActivity.this, msg, Toast.LENGTH_SHORT).show();
-                toggleViews(true);
-            }
-        } catch (JSONException e) {
-            e.printStackTrace();
-        }
-    }
-
-    @Override
-    public void onErrorResponse(VolleyError error) {
-        Helper.handleVolleyError(error, OnboardingActivity.this);
     }
 
     /**
