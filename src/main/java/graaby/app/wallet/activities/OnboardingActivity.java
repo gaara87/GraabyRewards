@@ -332,7 +332,7 @@ public class OnboardingActivity extends ActionBarActivity implements Response.Er
 
         public Object instantiateItem(View collection, int position) {
 
-            int resId = 0;
+            int resId;
             switch (position) {
                 case 0:
                     resId = R.id.page_one;
