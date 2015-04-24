@@ -58,7 +58,7 @@ android {
         dev {
             applicationId "graaby.app.wallet.dev"
             versionName "2-dev"
-            versionCode 33
+            versionCode 34
         }
     }
     applicationVariants.all { variant ->

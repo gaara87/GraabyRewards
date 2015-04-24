@@ -191,7 +191,7 @@
 #Lambda
 
 #OkHttpGlideModuleIntegration
--keepnames class * com.bumptech.glide.integration.okhttp.OkHttpGlideModule
+-keep public class * implements com.bumptech.glide.module.GlideModule
 #OkHttpGlideModuleIntegration
 
 #crashlytics
