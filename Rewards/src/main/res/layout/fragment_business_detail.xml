@@ -1,0 +1,206 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.v4.widget.SwipeRefreshLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/swiperefresh"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:padding="@dimen/activity_horizontal_margin"
+            android:paddingBottom="@dimen/activity_vertical_margin"
+            android:paddingTop="@dimen/activity_vertical_margin">
+
+            <de.hdodenhof.circleimageview.CircleImageView
+                android:id="@+id/item_businessPicImageView"
+                android:layout_width="128dp"
+                android:layout_height="128dp"
+                android:layout_gravity="center"
+                android:contentDescription="business picture"
+                android:scaleType="centerCrop"
+                android:src="@color/amethyst"
+                app:border_color="@color/wisteria"
+                app:border_width="1dp" />
+
+            <TextView
+                android:id="@+id/item_businessNameTextView"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/globalPadding8"
+                android:gravity="center"
+                android:textAppearance="@style/TextAppearance.AppCompat.Headline"
+                android:textColor="@color/wisteria" />
+
+            <TextView
+                android:id="@+id/item_businessAddressTextView"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/globalPadding8"
+                android:gravity="center"
+                android:textAppearance="@style/TextAppearance.AppCompat.Body1" />
+
+            <TableLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/global16"
+                android:background="?primaryBackgroundLight"
+                android:paddingBottom="@dimen/globalPadding8"
+                android:paddingTop="@dimen/globalPadding8"
+                android:stretchColumns="*">
+
+                <TableRow
+                    android:layout_width="fill_parent"
+                    android:layout_height="fill_parent">
+
+                    <TextView
+                        style="@style/TextAppearance.AppCompat.Subhead"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_column="1"
+                        android:gravity="center"
+                        android:text="Outlet statistics" />
+                </TableRow>
+
+                <TableRow
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+
+                    <TextView
+                        android:id="@+id/business_points"
+                        style="@style/Graaby.Theme.TextAppearance.Stat.Number"
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:layout_gravity="center_horizontal|bottom"
+                        android:drawableEnd="@drawable/ic_point"
+                        android:drawableRight="@drawable/ic_point"
+                        android:hint="@string/hint_placeholder" />
+
+                    <TextView
+                        android:id="@+id/business_followers"
+                        style="@style/Graaby.Theme.TextAppearance.Stat.Number"
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:layout_gravity="center_horizontal|bottom"
+                        android:drawableEnd="@drawable/ic_following"
+                        android:drawableRight="@drawable/ic_following"
+                        android:hint="@string/hint_placeholder" />
+
+
+                    <TextView
+                        android:id="@+id/business_checkins"
+                        style="@style/Graaby.Theme.TextAppearance.Stat.Number"
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:layout_gravity="center_horizontal|bottom"
+                        android:drawableEnd="@drawable/ic_checkin"
+                        android:drawableRight="@drawable/ic_checkin"
+                        android:hint="@string/hint_placeholder" />
+                </TableRow>
+
+                <TableRow
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+
+                    <TextView
+                        style="@style/Graaby.Theme.TextAppearance.Stat.Caption"
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:text="Points Given" />
+
+                    <TextView
+                        style="@style/Graaby.Theme.TextAppearance.Stat.Caption"
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:text="Followers" />
+
+                    <TextView
+                        style="@style/Graaby.Theme.TextAppearance.Stat.Caption"
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:text="Check-ins" />
+                </TableRow>
+
+                <TableRow
+                    android:layout_width="fill_parent"
+                    android:layout_height="fill_parent"
+                    android:layout_marginTop="@dimen/global16">
+
+                    <TextView
+                        style="@style/TextAppearance.AppCompat.Subhead"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_column="1"
+                        android:gravity="center"
+                        android:text="Your statistics" />
+                </TableRow>
+
+                <TableRow
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+
+
+                    <TextView
+                        android:id="@+id/points_earned_textView"
+                        style="@style/Graaby.Theme.TextAppearance.Stat.Number"
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:layout_gravity="center_horizontal|bottom"
+                        android:drawableEnd="@drawable/ic_point"
+                        android:drawableRight="@drawable/ic_point"
+                        android:hint="@string/hint_placeholder" />
+
+
+                    <TextView
+                        android:id="@+id/profile_total_savings_textView"
+                        style="@style/Graaby.Theme.TextAppearance.Stat.Number"
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:layout_gravity="center_horizontal|bottom"
+                        android:drawableEnd="@drawable/ic_savings"
+                        android:drawableRight="@drawable/ic_savings"
+                        android:hint="@string/hint_placeholder" />
+
+                    <TextView
+                        android:id="@+id/profile_checkins_textview"
+                        style="@style/Graaby.Theme.TextAppearance.Stat.Number"
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:layout_gravity="center_horizontal|bottom"
+                        android:drawableEnd="@drawable/ic_checkin"
+                        android:drawableRight="@drawable/ic_checkin"
+                        android:hint="@string/hint_placeholder" />
+                </TableRow>
+
+                <TableRow
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+
+                    <TextView
+                        style="@style/Graaby.Theme.TextAppearance.Stat.Caption"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Earned" />
+
+                    <TextView
+                        style="@style/Graaby.Theme.TextAppearance.Stat.Caption"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Savings" />
+
+                    <TextView
+                        style="@style/Graaby.Theme.TextAppearance.Stat.Caption"
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:text="Check-ins" />
+                </TableRow>
+            </TableLayout>
+
+        </LinearLayout>
+    </ScrollView>
+</android.support.v4.widget.SwipeRefreshLayout>

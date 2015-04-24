@@ -1,0 +1,166 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:weightSum="2">
+
+    <android.support.v4.view.ViewPager
+        android:id="@+id/pager"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="2"
+        android:padding="@dimen/globalPadding8">
+
+        <ScrollView
+            android:id="@+id/page_one"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+
+                <ImageView
+                    android:id="@+id/imageView"
+                    android:layout_width="wrap_content"
+                    android:layout_height="100dp"
+                    android:layout_gravity="center_horizontal"
+                    android:layout_marginBottom="@dimen/global16"
+                    android:layout_marginLeft="-15dp"
+                    android:layout_marginTop="@dimen/globalPadding8"
+                    android:src="@drawable/login_logo" />
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="@dimen/globalPadding8"
+                    android:gravity="center_horizontal"
+                    android:text="A Universal Rewards Program"
+                    android:textAppearance="?android:attr/textAppearanceLarge" />
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:layout_marginBottom="@dimen/globalPadding8"
+                    android:drawableLeft="@drawable/ic_discount"
+                    android:gravity="center_vertical"
+                    android:text="Get instant and flat discounts whenever you visit our partnered businesses"
+                    android:textAppearance="?android:attr/textAppearanceMedium" />
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:layout_marginBottom="@dimen/globalPadding8"
+                    android:drawableLeft="@drawable/ic_buyvoucher"
+                    android:gravity="center_vertical"
+                    android:text="Discover &amp; obtain amazing rewards from the businesses you love and visit often"
+                    android:textAppearance="?android:attr/textAppearanceMedium" />
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="@dimen/globalPadding8"
+                    android:drawableLeft="@drawable/nav_business"
+                    android:gravity="center_vertical"
+                    android:text="Find &amp; follow Graaby Businesses"
+                    android:textAppearance="?android:attr/textAppearanceMedium" />
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_vertical"
+                    android:drawableLeft="@drawable/ic_sendpoint"
+                    android:text="Send rewards to your friends and family"
+                    android:textAppearance="?android:attr/textAppearanceMedium" />
+
+            </LinearLayout>
+        </ScrollView>
+
+        <ScrollView
+            android:id="@+id/page_two"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+
+                <TextView
+                    style="@style/OnboardingItem"
+                    android:drawableLeft="@drawable/onboard_1"
+                    android:text="Swipe the left edge to access the navigation drawer" />
+
+                <TextView
+                    style="@style/OnboardingItem"
+                    android:drawableLeft="@drawable/onboard_2"
+                    android:text="Use the profile screen to get a quick snapshot of the discounts you own and track your activities" />
+
+                <TextView
+                    style="@style/OnboardingItem"
+                    android:drawableLeft="@drawable/onboard_3"
+                    android:text="Select the voucher or coupon from the marketplace and easily buy it with one click" />
+            </LinearLayout>
+        </ScrollView>
+
+        <ScrollView
+            android:id="@+id/page_three"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+
+                <TextView
+                    style="@style/OnboardingItem"
+                    android:drawableLeft="@drawable/onboard_4"
+                    android:text="Find Graaby businesses around your current location or search for a specific one" />
+
+                <TextView
+                    style="@style/OnboardingItem"
+                    android:drawableLeft="@drawable/onboard_5"
+                    android:text="Connect your social accounts and share points with your contacts quickly" />
+
+                <TextView
+                    style="@style/OnboardingItem"
+                    android:gravity="center"
+                    android:paddingTop="@dimen/global16"
+                    android:text="Awesome! You are ready to join Graaby!"
+                    android:textColor="@color/belizehole" />
+            </LinearLayout>
+
+        </ScrollView>
+
+    </android.support.v4.view.ViewPager>
+
+    <LinearLayout
+        style="?android:attr/buttonBarStyle"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
+        <Button
+            android:id="@+id/onboarding_skip"
+            style="?android:attr/buttonBarButtonStyle"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="Register" />
+
+        <Button
+            android:id="@+id/onboarding_next"
+            style="?android:attr/buttonBarButtonStyle"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="Next" />
+    </LinearLayout>
+
+</LinearLayout>

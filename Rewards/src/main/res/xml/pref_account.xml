@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
+
+
+    <PreferenceScreen
+        android:enabled="false"
+        android:key="btn_social_connections"
+        android:persistent="false"
+        android:summary="Coming soon"
+        android:title="Social connections">
+        <Preference
+            android:key="social_btn_fb"
+            android:title="@string/pref_social_f" />
+
+        <Preference
+            android:key="social_btn_tw"
+            android:title="@string/pref_social_t" />
+
+        <Preference
+            android:key="social_btn_go"
+            android:title="@string/pref_social_g" />
+    </PreferenceScreen>
+
+    <Preference
+        android:key="send_feedback"
+        android:title="Send feedback or any queries" />
+
+    <Preference
+        android:key="logout_button"
+        android:title="@string/pref_title_logout" />
+</PreferenceScreen>

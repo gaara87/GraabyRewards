@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="utf-8"?>
+<graaby.app.wallet.widgets.MultiSwipeRefreshLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/swiperefresh"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".fragments.MarketFragment">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_margin="@dimen/activity_horizontal_margin"
+        android:layout_marginBottom="@dimen/activity_vertical_margin"
+        android:layout_marginTop="@dimen/activity_vertical_margin"
+        android:orientation="vertical">
+
+        <GridView
+            android:id="@+id/grid"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:horizontalSpacing="4dp"
+            android:numColumns="@integer/grid_columns"
+            android:paddingLeft="4dp"
+            android:paddingRight="4dp"
+            android:paddingTop="4dp"
+            android:verticalSpacing="@dimen/global8"
+            tools:listitem="@layout/item_grid_market" />
+
+        <TextView
+            android:id="@android:id/empty"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:drawableTop="@drawable/ic_marketplace_empty"
+            android:gravity="center"
+            android:text="Marketplace is empty \nat the moment"
+            android:textColor="@color/carrot" />
+
+
+    </LinearLayout>
+
+</graaby.app.wallet.widgets.MultiSwipeRefreshLayout>

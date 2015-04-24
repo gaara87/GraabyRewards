@@ -1,0 +1,193 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="fill_parent"
+    android:layout_height="wrap_content"
+    android:background="@color/wetasphalt"
+    android:orientation="vertical"
+    android:paddingRight="@dimen/globalPadding8">
+    <!--android:elevation="2dp"-->
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
+        <RelativeLayout
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="3"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/points_textView"
+                style="@style/Graaby.Theme.TextAppearance.Display3.Inverse"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentTop="true"
+                android:layout_centerHorizontal="true"
+                android:layout_gravity="center"
+                android:drawableEnd="@drawable/ic_point"
+                android:drawableRight="@drawable/ic_point"
+                android:hint="@string/hint_placeholder"
+                android:textColor="@android:color/white"
+                tools:text="8264" />
+
+            <TextView
+                android:id="@+id/textView2"
+                style="@style/Graaby.Theme.TextAppearance.Stat.Caption.Inverse"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignEnd="@+id/points_textView"
+                android:layout_alignRight="@+id/points_textView"
+                android:layout_below="@+id/points_textView"
+                android:text="@string/profile_stat_balance" />
+        </RelativeLayout>
+
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_gravity="bottom|center_horizontal"
+            android:layout_weight="1"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/profile_checkins_textview"
+                style="@style/Graaby.Theme.TextAppearance.Stat.Number.Invserse"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:drawableEnd="@drawable/ic_checkin"
+                android:drawableRight="@drawable/ic_checkin"
+                android:hint="@string/hint_placeholder"
+                tools:text="400" />
+
+            <TextView
+                android:id="@+id/textView5"
+                style="@style/Graaby.Theme.TextAppearance.Stat.Caption.Inverse"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:text="@string/profile_stat_checkin" />
+        </LinearLayout>
+    </LinearLayout>
+
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/textView2"
+        android:layout_marginBottom="@dimen/globalPadding8"
+        android:layout_marginTop="@dimen/globalPadding8"
+        android:orientation="horizontal"
+        android:weightSum="4">
+
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/profile_connections_textview"
+                style="@style/Graaby.Theme.TextAppearance.Stat.Number.Invserse"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:drawableEnd="@drawable/ic_connections"
+                android:drawableRight="@drawable/ic_connections"
+                android:hint="@string/hint_placeholder"
+                tools:text="54" />
+
+
+            <TextView
+                style="@style/Graaby.Theme.TextAppearance.Stat.Caption.Inverse"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:text="@string/profile_stat_contacts" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:orientation="vertical">
+
+
+            <TextView
+                android:id="@+id/profile_total_savings_textView"
+                style="@style/Graaby.Theme.TextAppearance.Stat.Number.Invserse"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:drawableEnd="@drawable/ic_savings"
+                android:drawableRight="@drawable/ic_savings"
+                android:hint="@string/hint_placeholder"
+                tools:text="40174" />
+
+            <TextView
+                style="@style/Graaby.Theme.TextAppearance.Stat.Caption.Inverse"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:text="@string/profile_stat_name_savings" />
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/profile_total_points_textView"
+                style="@style/Graaby.Theme.TextAppearance.Stat.Number.Invserse"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:drawableEnd="@drawable/ic_earnings"
+                android:drawableRight="@drawable/ic_earnings"
+                android:hint="@string/hint_placeholder"
+                tools:text="82640" />
+
+
+            <TextView
+                style="@style/Graaby.Theme.TextAppearance.Stat.Caption.Inverse"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:text="@string/profile_stat_earnings" />
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/profile_following_textview"
+                style="@style/Graaby.Theme.TextAppearance.Stat.Number.Invserse"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:drawableEnd="@drawable/ic_following"
+                android:drawableRight="@drawable/ic_following"
+                android:hint="@string/hint_placeholder"
+                tools:text="25" />
+
+
+            <TextView
+                style="@style/Graaby.Theme.TextAppearance.Stat.Caption.Inverse"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:text="@string/profile_stat_business" />
+        </LinearLayout>
+
+    </LinearLayout>
+</LinearLayout>
