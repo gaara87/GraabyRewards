@@ -42,6 +42,7 @@ import java.util.Random;
 import graaby.app.wallet.GraabyBroadcastReceiver;
 import graaby.app.wallet.R;
 import graaby.app.wallet.activities.DiscountItemDetailsActivity;
+import graaby.app.wallet.activities.ExtraInfoActivity;
 import graaby.app.wallet.activities.PointReceivedActivity;
 import graaby.app.wallet.receivers.GcmBroadcastReceiver;
 import graaby.app.wallet.util.Helper;
@@ -57,10 +58,13 @@ import graaby.app.wallet.util.NotificationType;
 public class GcmIntentService extends IntentService {
     public static final String NOTIFICATION_ACTION_POINTS = "action_points_transfer";
     public static final String NOTIFICATION_ACTION_TX = "action_points_reward";
+    public static final String NOTIFICATION_ACTION_INFO = "action_info";
+
     public static int NOTIFICATION_ID_NEW_MARKET = 3;
     public static int NOTIFICATION_ID_THANKED = 4;
     public static int NOTIFICATION_ID_CHECKIN = 5;
     public static int NOTIFICATION_ID_FEED = 6;
+    public static int NOTIFICATION_ID_INFO = 7;
 
     private static Random random = new Random();
 
@@ -221,6 +225,20 @@ public class GcmIntentService extends IntentService {
                     notificationID = NOTIFICATION_ID_CHECKIN;
                     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP)
                         mBuilder.setCategory(Notification.CATEGORY_STATUS);
+                    break;
+                case INFO_NEEDED:
+                    notificationTitle = getString(R.string.gcm_message_meta_info_title);
+                    smallContentText = getString(R.string.gcm_message_meta_info_title);
+                    notificationImageResource = R.drawable.ic_gcm_point;
+                    notificationID = NOTIFICATION_ID_INFO;
+
+                    activityIntent.setClass(this, ExtraInfoActivity.class);
+                    activityIntent.setAction(NOTIFICATION_ACTION_INFO);
+                    activityIntent.putExtra(Helper.INTENT_CONTAINER_INFO, msg);
+                    activityIntent.putExtra(Helper.NOTIFICATIONID, notificationID);
+
+                    pendingIntent = PendingIntent.getActivity(this, 0, activityIntent,
+                            PendingIntent.FLAG_UPDATE_CURRENT);
                     break;
                 case NONE:
                 default:

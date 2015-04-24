@@ -46,10 +46,7 @@
         <item name="windowActionBarOverlay">true</item>
     </style>
 
-    <style name="LoginTheme" parent="@style/Theme.AppCompat.Light.NoActionBar">
-        <item name="android:editTextStyle">@style/Graaby.Theme.Widget.EditTextStyle</item>
-        <item name="android:autoCompleteTextViewStyle">
-            @style/Graaby.Theme.Widget.AutoCompleteTextView
-        </item>
-    </style>
+    <style name="LoginTheme" parent="@style/Theme.AppCompat.Light.NoActionBar"/>
+
+    <style name="InfoTheme" parent="@style/Theme.AppCompat.NoActionBar"/>
 </resources>

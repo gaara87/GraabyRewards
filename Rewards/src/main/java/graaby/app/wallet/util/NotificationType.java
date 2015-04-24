@@ -4,7 +4,7 @@ package graaby.app.wallet.util;
  * Created by Akash.
  */
 public enum NotificationType {
-    NONE(0), SHARE_POINTS(5), TRANSACTION(6), NEW_VOUCHER(7), NEW_FEED(8), THANK_CONTACT(10), CHECKIN(11);
+    NONE(0), SHARE_POINTS(5), TRANSACTION(6), NEW_VOUCHER(7), NEW_FEED(8), THANK_CONTACT(10), CHECKIN(11), INFO_NEEDED(12);
     private final int value;
 
     NotificationType(int value) {

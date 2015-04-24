@@ -51,14 +51,10 @@
         <item name="android:textColor">@android:color/black</item>
     </style>
 
-    <style name="Graaby.Theme.Widget.EditTextStyle" parent="android:Widget.EditText">
-        <item name="android:paddingTop">16dp</item>
-        <item name="android:paddingBottom">16dp</item>
-    </style>
+    <style name="Graaby.Theme.TextAppearance.Title" parent="@style/TextAppearance.AppCompat.Title"/>
 
-    <style name="Graaby.Theme.Widget.AutoCompleteTextView" parent="android:Widget.AutoCompleteTextView">
-        <item name="android:paddingTop">16dp</item>
-        <item name="android:paddingBottom">16dp</item>
+    <style name="Graaby.Theme.TextAppearance.Title.Inverse" parent="@style/TextAppearance.AppCompat.Title">
+        <item name="android:textColor">?android:textColorSecondaryInverse</item>
     </style>
 
     <style name="Graaby.Theme.Navigation.ListItem" parent="@style/Graaby.Theme.TextAppearance.Body2"></style>
