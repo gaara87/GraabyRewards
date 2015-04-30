@@ -32,6 +32,7 @@ import javax.inject.Inject;
 
 import butterknife.ButterKnife;
 import butterknife.InjectView;
+import graaby.app.wallet.GraabyApplication;
 import graaby.app.wallet.MainActivity;
 import graaby.app.wallet.R;
 import graaby.app.wallet.models.retrofit.AddContactRequest;
@@ -123,16 +124,9 @@ public class ContactsFragment extends BaseFragment implements DialogInterface.On
         mCompositeSubscriptions.add(mContactService.getUserContacts()
                 .subscribeOn(Schedulers.newThread())
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(new CacheSubscriber<ContactsResponse>(getActivity()) {
-                    @Override
-                    public void onFail(Throwable e) {
-                        mSwipeRefresh.setRefreshing(false);
-
-                    }
-
+                .subscribe(new CacheSubscriber<ContactsResponse>(getActivity(), mSwipeRefresh) {
                     @Override
                     public void onSuccess(ContactsResponse result) {
-                        mSwipeRefresh.setRefreshing(false);
                         mAdapter.clear();
                         mAdapter.addAll(result.userContacts);
                         mAdapter.notifyDataSetChanged();
@@ -156,14 +150,10 @@ public class ContactsFragment extends BaseFragment implements DialogInterface.On
                 mContactService.sendPointsToUser(new SendPointsRequest(contactIDToSendPointsTo, pointsToSend))
                         .subscribeOn(Schedulers.newThread())
                         .observeOn(AndroidSchedulers.mainThread())
-                        .subscribe(new CacheSubscriber<BaseResponse>(getActivity()) {
-                            @Override
-                            public void onFail(Throwable e) {
-                            }
-
+                        .subscribe(new CacheSubscriber<BaseResponse>(getActivity(), mSwipeRefresh) {
                             @Override
                             public void onSuccess(BaseResponse result) {
-                                if (result.responseSuccessCode == getResources().getInteger(R.integer.response_success)) {
+                                if (result.responseSuccessCode == GraabyApplication.getContainerHolder().getContainer().getLong(getString(R.string.gtm_response_success))) {
                                     Toast.makeText(getActivity(), "Your points were successfully shared", Toast.LENGTH_SHORT).show();
                                 } else {
                                     Toast.makeText(getActivity(), result.message, Toast.LENGTH_LONG).show();
@@ -222,15 +212,10 @@ public class ContactsFragment extends BaseFragment implements DialogInterface.On
                         mContactService.addContact(new AddContactRequest(formattedPhone))
                                 .subscribeOn(Schedulers.newThread())
                                 .observeOn(AndroidSchedulers.mainThread())
-                                .subscribe(new CacheSubscriber<BaseResponse>(getActivity()) {
-                                    @Override
-                                    public void onFail(Throwable e) {
-
-                                    }
-
+                                .subscribe(new CacheSubscriber<BaseResponse>(getActivity(), mSwipeRefresh) {
                                     @Override
                                     public void onSuccess(BaseResponse result) {
-                                        if (result.responseSuccessCode == getResources().getInteger(R.integer.response_success)) {
+                                        if (result.responseSuccessCode == GraabyApplication.getContainerHolder().getContainer().getLong(getString(R.string.gtm_response_success))) {
                                             Toast.makeText(getActivity(), result.message, Toast.LENGTH_SHORT).show();
                                             sendRequest();
                                         } else {

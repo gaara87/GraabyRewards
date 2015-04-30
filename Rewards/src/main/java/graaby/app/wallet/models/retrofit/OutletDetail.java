@@ -66,7 +66,7 @@ public class OutletDetail {
         public String totalCheckins;
         @JsonField(name = "sum_points")
         public String totalPointsEarnedInOutlet;
-        @JsonField(name = "total_checkins")
+        @JsonField(name = "my_checkins")
         public String totalCheckinsInOutlet;
         @JsonField(name = "sum_savings")
         public String totalSavingsInOutlet;

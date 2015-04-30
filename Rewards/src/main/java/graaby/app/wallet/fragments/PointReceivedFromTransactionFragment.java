@@ -19,6 +19,7 @@ import javax.inject.Inject;
 
 import butterknife.ButterKnife;
 import butterknife.InjectView;
+import graaby.app.wallet.GraabyApplication;
 import graaby.app.wallet.R;
 import graaby.app.wallet.models.retrofit.BaseResponse;
 import graaby.app.wallet.models.retrofit.RatingRequest;
@@ -106,15 +107,10 @@ public class PointReceivedFromTransactionFragment extends BaseFragment implement
         mCompositeSubscriptions.add(
                 mBusinessService.rateUserTransactionForBusiness(new RatingRequest(mActivityID, ratingBar.getRating()))
                         .subscribeOn(Schedulers.newThread()).observeOn(AndroidSchedulers.mainThread())
-                        .subscribe(new CacheSubscriber<BaseResponse>(getActivity()) {
-                            @Override
-                            public void onFail(Throwable e) {
-
-                            }
-
+                        .subscribe(new CacheSubscriber<BaseResponse>(getActivity(), mSwipeRefresh) {
                             @Override
                             public void onSuccess(BaseResponse result) {
-                                if (result.responseSuccessCode == 1) {
+                                if (result.responseSuccessCode == GraabyApplication.getContainerHolder().getContainer().getLong(getString(R.string.gtm_response_success))) {
                                     Toast.makeText(getActivity(), "Rating saved", Toast.LENGTH_SHORT).show();
                                 }
                             }

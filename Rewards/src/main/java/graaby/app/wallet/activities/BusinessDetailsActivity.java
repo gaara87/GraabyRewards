@@ -21,7 +21,6 @@ import graaby.app.wallet.widgets.SlidingTabLayout;
 
 public class BusinessDetailsActivity extends BaseAppCompatActivity implements BusinessDetailFragment.BusinessDetailFragmentCallback {
 
-    private ViewPager mViewPager;
     private BusinessDetailsPagerAdapter mPagerAdapter;
 
     @Override
@@ -37,15 +36,20 @@ public class BusinessDetailsActivity extends BaseAppCompatActivity implements Bu
             finish();
         }
 
-        mViewPager = (ViewPager) findViewById(R.id.pager);
+        ViewPager mViewPager = (ViewPager) findViewById(R.id.pager);
         mViewPager.setAdapter(mPagerAdapter);
         mViewPager.setOffscreenPageLimit(3);
 
         SlidingTabLayout tabs = (SlidingTabLayout) findViewById(R.id.tabs);
-        tabs.setDistributeEvenly(true);
+        tabs.setDistributeEvenly(false);
 
         tabs.setViewPager(mViewPager);
-        tabs.setSelectedIndicatorColors(getResources().getColor(R.color.emarald));
+        tabs.setCustomTabColorizer(new SlidingTabLayout.TabColorizer() {
+            @Override
+            public int getIndicatorColor(int position) {
+                return getResources().getColor(android.R.color.white);
+            }
+        });
 
         getSupportActionBar().setDisplayHomeAsUpEnabled(Boolean.TRUE);
     }
@@ -104,7 +108,7 @@ public class BusinessDetailsActivity extends BaseAppCompatActivity implements Bu
         public CharSequence getPageTitle(int position) {
             switch (position) {
                 case 0:
-                    return getString(R.string.title_outlet_detail);
+                    return getString(R.string.tab_title_outlet_detail);
                 case 1:
                     return getString(R.string.title_punch_card);
                 case 2:

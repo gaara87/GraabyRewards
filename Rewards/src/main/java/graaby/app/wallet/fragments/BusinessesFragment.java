@@ -134,6 +134,8 @@ public class BusinessesFragment extends BaseFragment
     @Override
     public void onMapLoaded() {
         loadMarkersFromDB(mBrandId);
+        if (mBrandId != Helper.DEFAULT_NON_BRAND_RELATED)
+            sendRequest();
     }
 
     private void loadMarkersFromDB(int brandID) {
@@ -157,29 +159,26 @@ public class BusinessesFragment extends BaseFragment
         OutletsRequest request;
         if (mBrandId != Helper.DEFAULT_NON_BRAND_RELATED)
             request = new OutletsForBusinessRequest(mBrandId);
-        else
+        else {
             request = new OutletsRequest();
-
-        if (mLatLng == null)
-            return;
-
-        request.latitude = mLatLng.latitude;
-        request.longitude = mLatLng.longitude;
-
+            if (mLatLng == null)
+                return;
+            request.latitude = mLatLng.latitude;
+            request.longitude = mLatLng.longitude;
+        }
         mCompositeSubscriptions.add(mBusinessService.getOutletsAroundLocation(request)
                 .subscribeOn(Schedulers.newThread())
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(new CacheSubscriber<OutletsResponse>(getActivity()) {
-                    @Override
-                    public void onFail(Throwable e) {
-
-                    }
-
+                .subscribe(new CacheSubscriber<OutletsResponse>(getActivity(), mSwipeRefresh, false) {
                     @Override
                     public void onSuccess(OutletsResponse result) {
                         GraabyApplication.getORMDbService().addOutletsCollection(result.outlets);
 
                         addOutletCollection(result.outlets);
+                        if (result.count == 0 && mBrandId != Helper.DEFAULT_NON_BRAND_RELATED) {
+                            mapView.setVisibility(View.GONE);
+                            Toast.makeText(getActivity(), "There are no outlets for this discount item", Toast.LENGTH_LONG).show();
+                        }
                     }
                 }));
     }

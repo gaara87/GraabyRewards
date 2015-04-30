@@ -130,11 +130,6 @@ public class SearchResultsActivity extends BaseAppCompatActivity
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(new CacheSubscriber<SearchResponse>(this) {
                     @Override
-                    public void onFail(Throwable e) {
-
-                    }
-
-                    @Override
                     public void onSuccess(SearchResponse result) {
                         mAdapter.clear();
                         SearchRecentSuggestions suggestions = new SearchRecentSuggestions(SearchResultsActivity.this,

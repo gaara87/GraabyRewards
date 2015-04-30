@@ -57,7 +57,7 @@ public class GraabyBroadcastReceiver extends BroadcastReceiver {
                     mContactService.thankContact(new ThankContactRequest(mActivityID), new Callback<BaseResponse>() {
                         @Override
                         public void success(BaseResponse baseResponse, Response response) {
-                            if (baseResponse.responseSuccessCode == 1) {
+                            if (baseResponse.responseSuccessCode == GraabyApplication.getContainerHolder().getContainer().getLong(context.getString(R.string.gtm_response_success))) {
                                 Toast.makeText(context, "Sent", Toast.LENGTH_SHORT).show();
                             }
                         }

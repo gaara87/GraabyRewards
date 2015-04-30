@@ -1,6 +1,7 @@
 package graaby.app.wallet.util;
 
 import android.content.Context;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.util.Log;
 
 import com.crashlytics.android.Crashlytics;
@@ -16,14 +17,29 @@ import rx.Subscriber;
  */
 public abstract class CacheSubscriber<T> extends Subscriber<T> {
     private WeakReference<Context> mContext;
+    private SwipeRefreshLayout mSwipeRefreshLayout;
 
     public CacheSubscriber(@NotNull final Context context) {
         this.mContext = new WeakReference<>(context);
     }
 
+    public CacheSubscriber(@NotNull final Context context, SwipeRefreshLayout swipeRefreshLayout) {
+        this(context, swipeRefreshLayout, false);
+    }
+
+    public CacheSubscriber(@NotNull final Context context, SwipeRefreshLayout swipeRefreshLayout, boolean startRefreshingImmediatelyFlag) {
+        this.mContext = new WeakReference<>(context);
+        mSwipeRefreshLayout = swipeRefreshLayout;
+        if (startRefreshingImmediatelyFlag)
+            mSwipeRefreshLayout.setRefreshing(true);
+    }
+
+
     @Override
     final public void onCompleted() {
         Log.d(CacheSubscriber.class.toString(), "Completed");
+        if (mSwipeRefreshLayout != null)
+            mSwipeRefreshLayout.setRefreshing(false);
     }
 
     @Override
@@ -32,6 +48,9 @@ public abstract class CacheSubscriber<T> extends Subscriber<T> {
         if (mContext.get() != null) {
             onFail(e);
         }
+        if (mSwipeRefreshLayout != null)
+            mSwipeRefreshLayout.setRefreshing(false);
+
     }
 
     @Override
@@ -42,11 +61,13 @@ public abstract class CacheSubscriber<T> extends Subscriber<T> {
     }
 
     /**
-     * Implement an on error handler.
+     * Override an on error handler.
      *
      * @param e an exception that was thrown
      */
-    public abstract void onFail(Throwable e);
+    public void onFail(Throwable e) {
+
+    }
 
     /**
      * Implement a success handler.

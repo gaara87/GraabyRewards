@@ -115,10 +115,9 @@ public class DiscountItemDetailsActivity extends BaseAppCompatActivity implement
         }
         Subscription sub = observable.subscribeOn(Schedulers.newThread())
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(new CacheSubscriber<DiscountItemDetailsResponse>(this) {
+                .subscribe(new CacheSubscriber<DiscountItemDetailsResponse>(this, mSwiperefresh, true) {
                     @Override
                     public void onFail(Throwable e) {
-                        mSwiperefresh.setRefreshing(Boolean.TRUE);
                         resetButtonState();
                     }
 
@@ -129,8 +128,6 @@ public class DiscountItemDetailsActivity extends BaseAppCompatActivity implement
                 });
 
         mCompositeSubscriptions.add(sub);
-
-        mSwiperefresh.setRefreshing(Boolean.TRUE);
     }
 
     private void resetButtonState() {
@@ -143,9 +140,9 @@ public class DiscountItemDetailsActivity extends BaseAppCompatActivity implement
         } else {
             mGrabItButton.setOnClickListener(null);
             mGrabItButton.setColorNormalResId(android.R.color.white);
-            mGrabItButton.setColorPressedResId(android.R.color.white);
+            mGrabItButton.setColorPressedResId(R.color.graaby_grey);
             mGrabItButton.setColorRippleResId(R.color.graaby_light_blue);
-            mGrabItButton.setImageDrawable(getResources().getDrawable(R.drawable.ic_tick));
+            mGrabItButton.setImageDrawable(getResources().getDrawable(R.drawable.ic_check));
         }
     }
 
@@ -193,18 +190,16 @@ public class DiscountItemDetailsActivity extends BaseAppCompatActivity implement
         marketService.buyDiscountItem(mDiscountItem)
                 .subscribeOn(Schedulers.newThread())
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(new CacheSubscriber<BaseResponse>(this) {
+                .subscribe(new CacheSubscriber<BaseResponse>(this, mSwiperefresh, true) {
                                @Override
                                public void onFail(Throwable e) {
-                                   mSwiperefresh.setRefreshing(Boolean.FALSE);
                                    Toast.makeText(DiscountItemDetailsActivity.this, "Unable to acquire the item", Toast.LENGTH_SHORT).show();
                                    resetButtonState();
                                }
 
                                @Override
                                public void onSuccess(BaseResponse result) {
-                                   mSwiperefresh.setRefreshing(Boolean.FALSE);
-                                   isItemGraabed = ((result.responseSuccessCode == getResources().getInteger(R.integer.response_success)) ? Boolean.TRUE : Boolean.FALSE);
+                                   isItemGraabed = ((result.responseSuccessCode == GraabyApplication.getContainerHolder().getContainer().getLong(getString(R.string.gtm_response_success))) ? Boolean.TRUE : Boolean.FALSE);
                                    String msg = "";
                                    if (isItemGraabed) {
                                        msg = GraabyApplication.getContainerHolder().getContainer().getString(getString(R.string.gtm_purchase_success));
@@ -218,8 +213,6 @@ public class DiscountItemDetailsActivity extends BaseAppCompatActivity implement
                                }
                            }
                 );
-
-        mSwiperefresh.setRefreshing(Boolean.TRUE);
     }
 
     @OnClick(R.id.view_outlets)
@@ -244,7 +237,6 @@ public class DiscountItemDetailsActivity extends BaseAppCompatActivity implement
     }
 
     public void setDiscountItemDetailsFromResponse(DiscountItemDetailsResponse response) {
-        mSwiperefresh.setRefreshing(Boolean.FALSE);
         if (!TextUtils.isEmpty(response.expiryDate)) {
             try {
                 String unformattedString = response.expiryDate;

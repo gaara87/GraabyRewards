@@ -130,7 +130,6 @@ public class MarketFragment extends BaseFragment implements OnItemClickListener 
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         ((MultiSwipeRefreshLayout) mSwipeRefresh).setSwipeableChildren(R.id.grid, android.R.id.empty);
         mGrid.setAdapter(adapter);
-        mGrid.setEmptyView(mEmpty);
         mGrid.setOnScrollListener(new EndlessScrollListener(0, -1) {
             @Override
             public void onLoadMore(int page, int totalItemsCount) {
@@ -195,20 +194,16 @@ public class MarketFragment extends BaseFragment implements OnItemClickListener 
         }
         Subscription subscriber = tempObs.subscribeOn(Schedulers.newThread())
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(new CacheSubscriber<MarketResponse>(getActivity()) {
-                    @Override
-                    public void onFail(Throwable e) {
-
-                    }
-
+                .subscribe(new CacheSubscriber<MarketResponse>(getActivity(), mSwipeRefresh) {
                     @Override
                     public void onSuccess(MarketResponse result) {
-                        mSwipeRefresh.setRefreshing(false);
                         if (result.items.size() > 0) {
                             if (mCurrentPage++ == 0) {
                                 adapter.clear();
                             }
                             adapter.addAll(result.items);
+                        } else if (mCurrentPage == 0) {
+                            mGrid.setEmptyView(mEmpty);
                         }
                         adapter.notifyDataSetChanged();
                     }

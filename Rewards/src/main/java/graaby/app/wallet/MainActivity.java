@@ -439,10 +439,10 @@ public class MainActivity extends BaseAppCompatActivity
 
             @Override
             public void onNext(BaseResponse baseResponse) {
-                if (baseResponse.responseSuccessCode == 1) {
+                if (baseResponse.responseSuccessCode == GraabyApplication.getContainerHolder().getContainer().getLong(getString(R.string.gtm_response_success))) {
                     msg = "Your app has been registered successfully:" + regIDBuilder.toString();
                     storeRegistrationId(getApplicationContext(), regIDBuilder.toString());
-                } else if (baseResponse.responseSuccessCode == 0) {
+                } else if (baseResponse.responseSuccessCode == GraabyApplication.getContainerHolder().getContainer().getLong(getString(R.string.gtm_response_failure))) {
                     msg = "Your app was unable to register:" + regIDBuilder.toString();
                 }
             }

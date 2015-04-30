@@ -21,6 +21,7 @@ import java.util.TimerTask;
 import butterknife.ButterKnife;
 import butterknife.InjectView;
 import butterknife.OnClick;
+import graaby.app.wallet.GraabyApplication;
 import graaby.app.wallet.R;
 import graaby.app.wallet.models.retrofit.BaseResponse;
 import graaby.app.wallet.models.retrofit.ThankContactRequest;
@@ -105,7 +106,7 @@ public class PointReceivedFromContactFragment extends BaseFragment {
             mContactService.thankContact(new ThankContactRequest(mActivityID), new Callback<BaseResponse>() {
                 @Override
                 public void success(BaseResponse baseResponse, Response response) {
-                    if (baseResponse.responseSuccessCode == 1) {
+                    if (baseResponse.responseSuccessCode == GraabyApplication.getContainerHolder().getContainer().getLong(getString(R.string.gtm_response_success))) {
                         ((Button) buttonView).setText("Sent");
                         Timer timer = new Timer();
                         timer.schedule(

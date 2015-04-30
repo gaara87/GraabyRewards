@@ -46,6 +46,8 @@
     <string name="social_login">social</string>
     <string name="access_token">access_token</string>
     <string name="button_grab_it_process">Redeeming…</string>
+
+    //Error messages in retrofit
     <string name="error_data_parsing">Data processing error</string>
     <string name="error_network">Network error</string>
     <string name="error_server">Server error, please try again in a while</string>
@@ -53,11 +55,10 @@
     <string name="error_timeout">Server took too long to respond</string>
     <string name="error_connection">No connection available</string>
     <string name="error_404">404? The server ran away!</string>
+    <string name="error_unexpected">Something unexpected happened, please try again</string>
+
     <string name="market_item_punch_value">Surprise</string>
     <string name="market_items_left">%1$s left</string>
-
-    <integer name="response_success">1</integer>
-    <integer name="response_failure">0</integer>
 
     <string name="action_settings">Settings</string>
     <string name="title_activity_brand_details">Brand Details</string>
@@ -95,13 +96,19 @@
     <string name="about_graaby_button">WHAT IS GRAABY REWARDS?</string>
     <string name="agreement">Usage of this app implies\nacknowledgement and agreement to the \n<b><a href="http://www.graaby.com/privacy.html">Privacy Policy</a></b> and <b><a href="http://www.graaby.com/terms.html">Terms &amp; Conditions</a></b></string>
     <string name="menu_action_search_business">Search Businesses</string>
-    <string name="title_outlet_detail">INFO</string>
+    <string name="tab_title_outlet_detail">INFO</string>
+    <string name="tab_title_punch">PUNCHCARD</string>
+    <string name="tab_title_marketplace">MARKETPLACE</string>
     <string name="contact_invite_using">Invite using...</string>
     <string name="contact_info_na">Contact info not available. Please invite them!</string>
 
 
     <string name="title_activity_extra_info">Profile information</string>
 
+    <string name="gtm_response_success">response_success</string>
+    <string name="gtm_response_failure">response_failure</string>
+    <string name="gtm_connection_timeout">connectiontimeout</string>
+    <string name="gtm_read_timeout">readtimeout</string>
     <string name="gtm_purchase_success">purchase_success</string>
     <string name="gtm_fastest_interval">location_update_fastest_interval</string>
     <string name="gtm_smallest_displacement">location_update_smallest_displacement</string>

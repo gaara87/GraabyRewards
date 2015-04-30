@@ -195,7 +195,7 @@ public class RegistrationFragment extends Fragment implements Validator.Validati
         mAuthService.attemptRegister(request, new Callback<BaseResponse>() {
             @Override
             public void success(BaseResponse baseResponse, Response response) {
-                if (baseResponse.responseSuccessCode == 1) {
+                if (baseResponse.responseSuccessCode == GraabyApplication.getContainerHolder().getContainer().getLong(getString(R.string.gtm_response_success))) {
                     show("Registered successfully!");
                     showProgress(false);
                     mCallback.onRegistrationComplete(mSpinner.getSelectedItem().toString(), mPasswordView.getText().toString());

@@ -57,6 +57,7 @@ public class RetrofitErrorHandler implements ErrorHandler {
                     errorResourceString = R.string.error_network;
                 break;
             case UNEXPECTED:
+                errorResourceString = R.string.error_unexpected;
                 break;
         }
         if (errorResourceString != -1) {

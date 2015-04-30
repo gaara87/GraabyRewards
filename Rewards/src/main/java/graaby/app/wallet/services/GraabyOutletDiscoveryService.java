@@ -130,7 +130,7 @@ public class GraabyOutletDiscoveryService extends Service implements GoogleApiCl
 
                     @Override
                     public void onSuccess(BaseResponse result) {
-                        if (result.responseSuccessCode == 1)
+                        if (result.responseSuccessCode == GraabyApplication.getContainerHolder().getContainer().getLong(getString(R.string.gtm_response_success)))
                             Log.d(TAG, "Location updated");
                         else
                             Log.e(TAG, "Location update failed");

@@ -85,13 +85,7 @@ public class ProfileFragment extends BaseFragment {
         Subscription subscriber = mProfileService.getProfileInfo()
                 .subscribeOn(Schedulers.newThread())
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(new CacheSubscriber<ProfileResponse>(getActivity()) {
-                    @Override
-                    public void onFail(Throwable e) {
-                        mSwipeRefresh.setRefreshing(false);
-                        e.printStackTrace();
-                    }
-
+                .subscribe(new CacheSubscriber<ProfileResponse>(getActivity(), mSwipeRefresh) {
                     @Override
                     public void onSuccess(ProfileResponse result) {
                         refreshDetails(result);

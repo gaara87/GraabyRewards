@@ -124,15 +124,9 @@ public class BusinessDetailFragment extends BaseFragment {
                 mBusinessService.getOutletDetails(new OutletDetailsRequest(originalOutletDetail.outletID))
                         .subscribeOn(Schedulers.newThread())
                         .observeOn(AndroidSchedulers.mainThread())
-                        .subscribe(new CacheSubscriber<OutletDetail>(getActivity()) {
-                                       @Override
-                                       public void onFail(Throwable e) {
-                                           mSwipeRefresh.setRefreshing(false);
-                                       }
-
+                        .subscribe(new CacheSubscriber<OutletDetail>(getActivity(), mSwipeRefresh) {
                                        @Override
                                        public void onSuccess(OutletDetail result) {
-                                           mSwipeRefresh.setRefreshing(false);
 
                                            Glide.with(getActivity())
                                                    .load(result.pictureURL)
@@ -159,6 +153,10 @@ public class BusinessDetailFragment extends BaseFragment {
 
                                            itemBusinessAddressTextView.setText(result.outletAddress);
 
+                                           originalOutletDetail.phoneNumber = result.phoneNumber;
+                                           originalOutletDetail.websiteURL = result.websiteURL;
+                                           BusinessDetailFragment.this.getActivity().invalidateOptionsMenu();
+
                                            mCallback.onRewardDetailsLoaded(result.flatGraabyDiscountPercentage, result.punchards.punchCardRewards);
                                        }
                                    }
@@ -175,9 +173,9 @@ public class BusinessDetailFragment extends BaseFragment {
     public void onPrepareOptionsMenu(Menu menu) {
         super.onPrepareOptionsMenu(menu);
         if (originalOutletDetail != null) {
-            menu.findItem(R.id.action_menu_item_directions).setEnabled(originalOutletDetail.latitude != 0);
-            menu.findItem(R.id.action_menu_item_call).setEnabled(!TextUtils.isEmpty(originalOutletDetail.phoneNumber));
-            menu.findItem(R.id.action_menu_item_open_browser).setEnabled(!TextUtils.isEmpty(originalOutletDetail.websiteURL));
+            menu.findItem(R.id.action_menu_item_directions).setVisible(originalOutletDetail.latitude != 0);
+            menu.findItem(R.id.action_menu_item_call).setVisible(!TextUtils.isEmpty(originalOutletDetail.phoneNumber));
+            menu.findItem(R.id.action_menu_item_open_browser).setVisible(!TextUtils.isEmpty(originalOutletDetail.websiteURL));
         }
     }
 

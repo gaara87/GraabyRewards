@@ -16,7 +16,9 @@ import javax.inject.Singleton;
 import dagger.Module;
 import dagger.Provides;
 import graaby.app.wallet.BuildConfig;
+import graaby.app.wallet.GraabyApplication;
 import graaby.app.wallet.MainActivity;
+import graaby.app.wallet.R;
 import graaby.app.wallet.auth.UserAuthenticationHandler;
 import graaby.app.wallet.network.RetrofitErrorHandler;
 import graaby.app.wallet.util.LoganSquareConverter;
@@ -46,8 +48,8 @@ public class RetrofitModule {
     @Singleton
     public OkHttpClient provideHttpClient(@ForApplication Context application) {
         OkHttpClient httpClient = new OkHttpClient();
-        httpClient.setConnectTimeout(10, TimeUnit.SECONDS);
-        httpClient.setReadTimeout(10, TimeUnit.SECONDS);
+        httpClient.setConnectTimeout(GraabyApplication.getContainerHolder().getContainer().getLong(application.getString(R.string.gtm_connection_timeout)), TimeUnit.SECONDS);
+        httpClient.setReadTimeout(GraabyApplication.getContainerHolder().getContainer().getLong(application.getString(R.string.gtm_read_timeout)), TimeUnit.SECONDS);
 
         long maxSize = 250 * 1024 * 1024;
 

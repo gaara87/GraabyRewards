@@ -88,15 +88,9 @@ public class FeedFragment extends BaseFragment implements SwipeRefreshLayout.OnR
         mFeedService.getUserFeeds(mCurrentPage, Helper.PAGE_SIZE)
                 .subscribeOn(Schedulers.newThread())
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(new CacheSubscriber<FeedsResponse>(getActivity()) {
-                    @Override
-                    public void onFail(Throwable e) {
-                        mSwipeRefresh.setRefreshing(false);
-                    }
-
+                .subscribe(new CacheSubscriber<FeedsResponse>(getActivity(), mSwipeRefresh) {
                     @Override
                     public void onSuccess(FeedsResponse result) {
-                        mSwipeRefresh.setRefreshing(false);
                         if (mCurrentPage == 0)
                             mAdapter.clear();
 
@@ -105,7 +99,6 @@ public class FeedFragment extends BaseFragment implements SwipeRefreshLayout.OnR
                             mAdapter.addAll(result.feedsList);
                             mAdapter.notifyDataSetChanged();
                         }
-
                     }
                 });
     }

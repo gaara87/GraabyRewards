@@ -13,4 +13,7 @@ public class OutletsResponse {
     @JsonField(name = "places")
     public List<OutletDetail> outlets;
 
+    @JsonField(name = "count")
+    public int count;
+
 }
