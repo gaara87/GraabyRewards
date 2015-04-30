@@ -6,6 +6,8 @@ import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 
+import com.google.android.gms.analytics.Tracker;
+
 import javax.inject.Inject;
 
 import de.greenrobot.event.EventBus;
@@ -23,6 +25,8 @@ public class BaseAppCompatActivity extends AppCompatActivity {
     protected CompositeSubscription mCompositeSubscriptions;
     @Inject
     protected NfcAdapter mNfcAdapter;
+    @Inject
+    Tracker mTracker;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -81,4 +85,9 @@ public class BaseAppCompatActivity extends AppCompatActivity {
         }
     }
 
+    public void onEvent(ToolbarEvents.SetTitle event) {
+        if (mToolbar != null) {
+            mToolbar.setTitle(event.getName());
+        }
+    }
 }

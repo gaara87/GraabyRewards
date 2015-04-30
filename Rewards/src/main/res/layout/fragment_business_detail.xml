@@ -29,15 +29,6 @@
                 app:border_width="1dp" />
 
             <TextView
-                android:id="@+id/item_businessNameTextView"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/globalPadding8"
-                android:gravity="center"
-                android:textAppearance="@style/TextAppearance.AppCompat.Headline"
-                android:textColor="@color/wisteria" />
-
-            <TextView
                 android:id="@+id/item_businessAddressTextView"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"

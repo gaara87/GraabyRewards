@@ -15,6 +15,7 @@ import java.util.List;
 import graaby.app.wallet.R;
 import graaby.app.wallet.fragments.BusinessDetailFragment;
 import graaby.app.wallet.fragments.MarketFragment;
+import graaby.app.wallet.fragments.RewardDetailsFragment;
 import graaby.app.wallet.models.retrofit.OutletDetail;
 import graaby.app.wallet.util.Helper;
 import graaby.app.wallet.widgets.SlidingTabLayout;
@@ -73,7 +74,7 @@ public class BusinessDetailsActivity extends BaseAppCompatActivity implements Bu
     private class BusinessDetailsPagerAdapter extends FragmentPagerAdapter implements BusinessDetailFragment.BusinessDetailFragmentCallback {
 
         private final OutletDetail outlet;
-        private BusinessDetailFragment.RewardDetailsFragment frag;
+        private RewardDetailsFragment frag;
 
         public BusinessDetailsPagerAdapter(FragmentManager fm, String jsonStringContainingData) throws IOException {
             super(fm);
@@ -91,7 +92,7 @@ public class BusinessDetailsActivity extends BaseAppCompatActivity implements Bu
                         finish();
                     }
                 case 1:
-                    frag = BusinessDetailFragment.RewardDetailsFragment.newInstance();
+                    frag = RewardDetailsFragment.newInstance();
                     return frag;
                 case 2:
                     return MarketFragment.newInstance(Boolean.FALSE, outlet.outletID, false);

@@ -47,9 +47,15 @@ public class RetrofitModule {
     @Provides
     @Singleton
     public OkHttpClient provideHttpClient(@ForApplication Context application) {
+        long connectiontimeout = 10, readtimeout = 10;
+        try {
+            connectiontimeout = GraabyApplication.getContainerHolder().getContainer().getLong(application.getString(R.string.gtm_connection_timeout));
+            readtimeout = GraabyApplication.getContainerHolder().getContainer().getLong(application.getString(R.string.gtm_read_timeout));
+        } catch (NullPointerException ignored) {
+        }
         OkHttpClient httpClient = new OkHttpClient();
-        httpClient.setConnectTimeout(GraabyApplication.getContainerHolder().getContainer().getLong(application.getString(R.string.gtm_connection_timeout)), TimeUnit.SECONDS);
-        httpClient.setReadTimeout(GraabyApplication.getContainerHolder().getContainer().getLong(application.getString(R.string.gtm_read_timeout)), TimeUnit.SECONDS);
+        httpClient.setConnectTimeout(connectiontimeout, TimeUnit.SECONDS);
+        httpClient.setReadTimeout(readtimeout, TimeUnit.SECONDS);
 
         long maxSize = 250 * 1024 * 1024;
 

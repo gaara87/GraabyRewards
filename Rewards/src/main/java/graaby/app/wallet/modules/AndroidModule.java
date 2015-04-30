@@ -6,11 +6,16 @@ import android.location.LocationManager;
 import android.nfc.NfcAdapter;
 import android.nfc.NfcManager;
 
+import com.google.android.gms.analytics.GoogleAnalytics;
+import com.google.android.gms.analytics.Tracker;
+
 import javax.inject.Singleton;
 
 import dagger.Module;
 import dagger.Provides;
+import graaby.app.wallet.BuildConfig;
 import graaby.app.wallet.GraabyApplication;
+import graaby.app.wallet.R;
 import graaby.app.wallet.auth.UserAuthenticationHandler;
 import graaby.app.wallet.database.ORMService;
 
@@ -68,5 +73,15 @@ public class AndroidModule {
     @Singleton
     public UserAuthenticationHandler provideUserAuthenticationHandler() {
         return new UserAuthenticationHandler();
+    }
+
+    @Provides
+    @Singleton
+    public synchronized Tracker provideTracker() {
+        GoogleAnalytics analytics = GoogleAnalytics.getInstance(application);
+        analytics.setDryRun(BuildConfig.DEBUG);
+        Tracker t = analytics.newTracker(R.xml.analytics);
+        t.enableAdvertisingIdCollection(true);
+        return t;
     }
 }

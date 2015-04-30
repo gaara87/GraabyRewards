@@ -16,11 +16,11 @@
     <string name="title_activity_business_details">Business Details</string>
 
     <string-array name="nav_drawer_items">
-        <item>Profile|nav_profile_man</item>
+        <item>Profile|nav_profile</item>
         <item>Marketplace|nav_market</item>
         <item>Businesses|nav_business</item>
         <item>Feeds|nav_feeds</item>
-        <item>Contacts|nav_connections</item>
+        <item>Contacts|nav_contacts</item>
         <item>Settings|nav_settings</item>
     </string-array>
 

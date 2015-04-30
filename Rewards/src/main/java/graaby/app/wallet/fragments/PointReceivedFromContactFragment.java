@@ -18,6 +18,8 @@ import org.json.JSONObject;
 import java.util.Timer;
 import java.util.TimerTask;
 
+import javax.inject.Inject;
+
 import butterknife.ButterKnife;
 import butterknife.InjectView;
 import butterknife.OnClick;
@@ -42,8 +44,9 @@ public class PointReceivedFromContactFragment extends BaseFragment {
     TextView pointsTextView;
     @InjectView(R.id.btn_thanks)
     Button btnThanks;
+    @Inject
+    ContactService mContactService;
     private int mActivityID, mAmount;
-    private ContactService mContactService;
     private String pictureURL;
 
     public PointReceivedFromContactFragment() {

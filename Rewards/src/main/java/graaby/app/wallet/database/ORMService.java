@@ -65,8 +65,10 @@ public class ORMService {
     public void updateProfileInfo(String name, String profilePicURL) {
         realmer.beginTransaction();
         ProfileDAO profile = realmer.where(ProfileDAO.class).findFirst();
-        profile.setFullName(name);
-        profile.setPictureURL(profilePicURL);
+        if (profile != null) {
+            profile.setFullName(name);
+            profile.setPictureURL(profilePicURL);
+        }
         realmer.commitTransaction();
     }
 

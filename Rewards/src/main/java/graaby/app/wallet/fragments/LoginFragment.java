@@ -244,8 +244,11 @@ public class LoginFragment extends Fragment implements Callback<UserCredentialsR
         if (!TextUtils.isEmpty(userCredentialsResponse.message)) {
             Toast.makeText(getActivity(), userCredentialsResponse.message, Toast.LENGTH_SHORT).show();
         } else {
-            Crashlytics.setUserEmail(mEmail);
+            try {
+                Crashlytics.setUserEmail(mEmail.split("@")[0]);
+            } catch (Exception ignored) {
 
+            }
             Account acc = new Account(mEmail, UserLoginActivity.ACCOUNT_TYPE);
             Bundle b = new Bundle();
             b.putString("url", userCredentialsResponse.url);

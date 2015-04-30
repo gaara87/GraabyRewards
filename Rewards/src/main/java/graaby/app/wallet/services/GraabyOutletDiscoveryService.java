@@ -166,10 +166,10 @@ public class GraabyOutletDiscoveryService extends Service implements GoogleApiCl
     }
 
     public void onEvent(ProfileEvents.LoggedOutEvent event) {
-        stopSelf();
         AlarmManager alarmManager = (AlarmManager) getSystemService(Context.ALARM_SERVICE);
         PendingIntent pendingIntent = PendingIntent.getBroadcast(this, UpdateLocationBroadcastReceiver.REQUEST_CODE, new Intent(this, UpdateLocationBroadcastReceiver.class), 0);
         alarmManager.cancel(pendingIntent);
+        stopSelf();
     }
 
     @Override
@@ -211,10 +211,18 @@ public class GraabyOutletDiscoveryService extends Service implements GoogleApiCl
     }
 
     private LocationRequest getLocationRequest() {
+        long fastestinterval = 5000, smallestdisplacement = 50;
+        try {
+            fastestinterval = GraabyApplication.getContainerHolder().getContainer().getLong(getString(R.string.gtm_fastest_interval));
+            smallestdisplacement = GraabyApplication.getContainerHolder().getContainer().getLong(getString(R.string.gtm_smallest_displacement));
+        } catch (NullPointerException npe) {
+            Crashlytics.log("Unable to get fastest interval");
+
+        }
         return new LocationRequest()
                 .setPriority(LocationRequest.PRIORITY_BALANCED_POWER_ACCURACY)
-                .setFastestInterval(GraabyApplication.getContainerHolder().getContainer().getLong(getString(R.string.gtm_fastest_interval)))
-                .setSmallestDisplacement(GraabyApplication.getContainerHolder().getContainer().getLong(getString(R.string.gtm_smallest_displacement)));
+                .setFastestInterval(fastestinterval)
+                .setSmallestDisplacement(smallestdisplacement);
     }
 
 }

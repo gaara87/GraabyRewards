@@ -20,4 +20,16 @@ public class ToolbarEvents {
         return sbBgColor;
     }
 
+    public static class SetTitle {
+        private final String name;
+
+        public SetTitle(String name) {
+            this.name = name;
+        }
+
+        public String getName() {
+            return name;
+        }
+    }
+
 }

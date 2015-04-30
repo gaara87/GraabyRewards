@@ -87,6 +87,17 @@ public class UserAuthenticationHandler {
         }
     }
 
+    public void logout(Activity activity) {
+        this.oAuth = "";
+        this.uid = "";
+        final AccountManager acm = AccountManager.get(activity);
+        Account[] accounts = acm
+                .getAccountsByType(UserLoginActivity.ACCOUNT_TYPE);
+        if (accounts.length != 0) {
+            acm.removeAccount(accounts[0], null, null);
+        }
+    }
+
     private void initFromFuture(AccountManagerFuture<Bundle> future) throws AuthenticatorException, OperationCanceledException, IOException {
         this.oAuth = future.getResult().getString(AccountManager.KEY_AUTHTOKEN);
         this.uid = future.getResult().getString(AccountManager.KEY_ACCOUNT_NAME);

@@ -7,7 +7,6 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
-import android.view.Menu;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Toast;
@@ -16,9 +15,11 @@ import com.google.android.gms.auth.GoogleAuthUtil;
 
 import butterknife.ButterKnife;
 import butterknife.InjectView;
+import de.greenrobot.event.EventBus;
 import graaby.app.wallet.BuildConfig;
 import graaby.app.wallet.R;
 import graaby.app.wallet.activities.AccountAuthenticatorActivity;
+import graaby.app.wallet.events.ProfileEvents;
 import graaby.app.wallet.fragments.LoginFragment;
 import graaby.app.wallet.fragments.RegistrationFragment;
 
@@ -77,14 +78,8 @@ public class UserLoginActivity extends AccountAuthenticatorActivity implements
     }
 
     @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        super.onCreateOptionsMenu(menu);
-        /*getMenuInflater().inflate(R.menu.activity_login, menu);*/
-        return true;
-    }
-
-    @Override
     public void onLoginSuccessful(Intent intent) {
+        EventBus.getDefault().postSticky(new ProfileEvents.LoginSuccessfulEvent());
         setAccountAuthenticatorResult(intent.getExtras());
         setResult(RESULT_OK, intent);
         finish();

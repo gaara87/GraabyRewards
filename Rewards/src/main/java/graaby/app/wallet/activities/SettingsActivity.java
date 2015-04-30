@@ -2,6 +2,10 @@ package graaby.app.wallet.activities;
 
 import android.accounts.Account;
 import android.accounts.AccountManager;
+import android.accounts.AccountManagerCallback;
+import android.accounts.AccountManagerFuture;
+import android.accounts.AuthenticatorException;
+import android.accounts.OperationCanceledException;
 import android.annotation.TargetApi;
 import android.app.AlertDialog;
 import android.content.ActivityNotFoundException;
@@ -26,6 +30,7 @@ import android.text.TextUtils;
 import android.view.MenuItem;
 import android.widget.Toast;
 
+import java.io.IOException;
 import java.util.List;
 
 import javax.inject.Inject;
@@ -269,11 +274,28 @@ public class SettingsActivity extends PreferenceActivity {
 
                                                 @Override
                                                 public void onSuccess(BaseResponse result) {
-                                                    acm.removeAccount(accounts[0], null, null);
-                                                    EventBus.getDefault().post(new ProfileEvents.LoggedOutEvent());
-                                                    Toast.makeText(SettingsActivity.this, "Logged out successfully", Toast.LENGTH_SHORT).show();
-                                                    setResult(RESULT_OK);
-                                                    SettingsActivity.this.finish();
+                                                    acm.removeAccount(accounts[0], new AccountManagerCallback<Boolean>() {
+                                                        @Override
+                                                        public void run(AccountManagerFuture<Boolean> future) {
+                                                            if (future.isDone()) {
+                                                                try {
+                                                                    if (future.getResult()) {
+                                                                        EventBus.getDefault().post(new ProfileEvents.LoggedOutEvent());
+                                                                        Toast.makeText(SettingsActivity.this, "Logged out successfully", Toast.LENGTH_SHORT).show();
+                                                                        setResult(RESULT_OK);
+                                                                        SettingsActivity.this.finish();
+                                                                    }
+                                                                } catch (OperationCanceledException e) {
+                                                                    e.printStackTrace();
+                                                                } catch (IOException e) {
+                                                                    e.printStackTrace();
+                                                                } catch (AuthenticatorException e) {
+                                                                    e.printStackTrace();
+                                                                }
+                                                            }
+                                                        }
+                                                    }, null);
+
                                                 }
                                             });
                                 }

@@ -83,7 +83,7 @@ public class BusinessesFragment extends BaseFragment
     private LatLng mLatLng;
     private LatLngBounds mLatLngBounds;
 
-    private Set<Integer> outletsSet;
+    private Set<Integer> outletsSet = new HashSet<>();
     private GoogleApiClient mGoogleAPIClient;
 
 
@@ -139,7 +139,6 @@ public class BusinessesFragment extends BaseFragment
     }
 
     private void loadMarkersFromDB(int brandID) {
-        outletsSet = new HashSet<>();
         ListIterator<OutletDAO> iterator;
         if (brandID == Helper.DEFAULT_NON_BRAND_RELATED)
             iterator = GraabyApplication.getORMDbService().getAllOutlets().listIterator();
@@ -229,7 +228,11 @@ public class BusinessesFragment extends BaseFragment
                 startActivity(intent);
                 return true;
             case R.id.action_menu_item_refresh:
-                prepareLocationRequest();
+                if (mGoogleAPIClient != null) {
+                    prepareLocationRequest();
+                } else {
+                    Toast.makeText(getActivity(), "Preparing map", Toast.LENGTH_SHORT).show();
+                }
                 return true;
             default:
                 break;

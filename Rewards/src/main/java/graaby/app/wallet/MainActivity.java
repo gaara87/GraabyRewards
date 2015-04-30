@@ -6,15 +6,11 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
-import android.location.Location;
-import android.location.LocationListener;
-import android.location.LocationManager;
 import android.os.Bundle;
 import android.provider.SearchRecentSuggestions;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.widget.DrawerLayout;
-import android.support.v7.app.ActionBar;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.Menu;
@@ -22,7 +18,6 @@ import android.view.MenuItem;
 import android.widget.Toast;
 
 import com.google.android.gms.gcm.GoogleCloudMessaging;
-import com.google.android.gms.maps.model.LatLng;
 
 import java.io.IOException;
 
@@ -34,6 +29,7 @@ import graaby.app.wallet.activities.BaseAppCompatActivity;
 import graaby.app.wallet.activities.SettingsActivity;
 import graaby.app.wallet.auth.UserAuthenticationHandler;
 import graaby.app.wallet.events.LocationEvents;
+import graaby.app.wallet.events.ProfileEvents;
 import graaby.app.wallet.fragments.BusinessesFragment;
 import graaby.app.wallet.fragments.ContactsFragment;
 import graaby.app.wallet.fragments.FeedFragment;
@@ -53,11 +49,11 @@ import rx.functions.Func1;
 import rx.schedulers.Schedulers;
 
 public class MainActivity extends BaseAppCompatActivity
-        implements NavigationDrawerFragment.NavigationDrawerCallbacks, LocationListener, ProfileFragment.ViewBusinessesListener, UserAuthenticationHandler.OnUserAuthentication {
+        implements NavigationDrawerFragment.NavigationDrawerCallbacks, ProfileFragment.ViewBusinessesListener, UserAuthenticationHandler.OnUserAuthentication {
 
     public static final String PROPERTY_REG_ID = "registration_id";
     private static final String PROPERTY_APP_VERSION = "appVersion";
-    private static final String TAG = "GCM_Messages";
+    private static final String TAG = MainActivity.class.toString();
 
     String SENDER_ID = "416705827603";
     @Inject
@@ -72,7 +68,6 @@ public class MainActivity extends BaseAppCompatActivity
      * Used to store the last screen title. For use in {@link #restoreActionBar()}.
      */
     private CharSequence mTitle;
-    private LocationManager locationManager;
 
     private boolean authorized = false;
     private boolean initialized = false;
@@ -106,17 +101,6 @@ public class MainActivity extends BaseAppCompatActivity
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main_wallet);
         authHandler.loginOrAddAccount(this, this);
-
-        locationManager = (LocationManager) this
-                .getSystemService(Context.LOCATION_SERVICE);
-        if (locationManager.isProviderEnabled(LocationManager.NETWORK_PROVIDER)) {
-            locationManager.requestLocationUpdates(
-                    LocationManager.NETWORK_PROVIDER, 0, 0, this);
-        } else if (locationManager
-                .isProviderEnabled(LocationManager.GPS_PROVIDER)) {
-            locationManager.requestLocationUpdates(
-                    LocationManager.GPS_PROVIDER, 0, 0, this);
-        }
     }
 
     @Override
@@ -135,8 +119,8 @@ public class MainActivity extends BaseAppCompatActivity
 
     private void initialize() {
 
-        registerGCM();
         GraabyOutletDiscoveryService.setupLocationService(this);
+        registerGCM();
 
         mToolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(mToolbar);
@@ -221,9 +205,8 @@ public class MainActivity extends BaseAppCompatActivity
     }
 
     public void restoreActionBar() {
-        ActionBar actionBar = getSupportActionBar();
-        actionBar.setDisplayShowTitleEnabled(true);
-        actionBar.setTitle(mTitle);
+        getSupportActionBar().setDisplayShowTitleEnabled(true);
+        getSupportActionBar().setTitle(mTitle);
     }
 
     @Override
@@ -231,8 +214,13 @@ public class MainActivity extends BaseAppCompatActivity
         super.onActivityResult(requestCode, resultCode, data);
         switch (requestCode) {
             case 10:
-                if (resultCode == RESULT_OK)
-                    this.finish();
+                if (resultCode == RESULT_OK) {
+                    authHandler.logout(this);
+                    Intent intent = new Intent(getApplicationContext(), MainActivity.class);
+                    intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                    startActivity(intent);
+                    finish();
+                }
                 break;
             case BusinessesFragment.REQUEST_CHECK_SETTINGS:
                 switch (resultCode) {
@@ -289,28 +277,6 @@ public class MainActivity extends BaseAppCompatActivity
     }
 
     @Override
-    public void onLocationChanged(Location location) {
-        LatLng latLng = new LatLng(location.getLatitude(), location.getLongitude());
-
-        locationManager.removeUpdates(this);
-    }
-
-    @Override
-    public void onStatusChanged(String provider, int status, Bundle extras) {
-
-    }
-
-    @Override
-    public void onProviderEnabled(String provider) {
-
-    }
-
-    @Override
-    public void onProviderDisabled(String provider) {
-
-    }
-
-    @Override
     protected void onResume() {
         super.onResume();
         initializeAfterResumeIfAllowed();
@@ -321,19 +287,18 @@ public class MainActivity extends BaseAppCompatActivity
             initialize();
     }
 
-    @Override
-    protected void onDestroy() {
-        super.onDestroy();
-        locationManager.removeUpdates(this);
-    }
-
     private void registerGCM() {
         if (Helper.checkPlayServices(this)) {
             GoogleCloudMessaging gcm = GoogleCloudMessaging.getInstance(getApplicationContext());
-            String regid = getRegistrationId(getApplicationContext());
+            if (EventBus.getDefault().getStickyEvent(ProfileEvents.LoginSuccessfulEvent.class) != null) {
+                EventBus.getDefault().removeAllStickyEvents();
+                registerInBackground(gcm, "");
+            } else {
+                String regid = getRegistrationId(getApplicationContext());
 
-            if (regid.isEmpty()) {
-                registerInBackground(gcm, regid);
+                if (regid.isEmpty()) {
+                    registerInBackground(gcm, regid);
+                }
             }
         } else {
             Log.i(TAG, "No valid Google Play Services APK found.");
@@ -424,7 +389,7 @@ public class MainActivity extends BaseAppCompatActivity
                         .observeOn(Schedulers.newThread())
                         .subscribeOn(Schedulers.newThread())
         ).subscribe(new Subscriber<BaseResponse>() {
-            String msg;
+            String msg = "";
 
             @Override
             public void onCompleted() {
