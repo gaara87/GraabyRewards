@@ -176,6 +176,16 @@
                 android:value=".MainActivity" />
         </activity>
 
+        <activity
+            android:name=".activities.ExtraInfoActivity"
+            android:label="@string/title_activity_extra_info"
+            android:parentActivityName=".MainActivity"
+            android:theme="@style/Graaby.Theme.Base">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".MainActivity" />
+        </activity>
+
         <receiver
             android:name=".GraabyBroadcastReceiver"
             android:enabled="true"

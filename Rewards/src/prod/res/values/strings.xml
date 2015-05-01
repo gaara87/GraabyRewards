@@ -1,4 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="app_name">Graaby Rewards</string>
+    <string name="server_client_id">
+        416705827603-9hid4i25ts3t5dtd1t4lfcu0e1rdpqdp.apps.googleusercontent.com
+    </string>
 </resources>

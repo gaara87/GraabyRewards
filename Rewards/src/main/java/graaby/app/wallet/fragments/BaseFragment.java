@@ -43,7 +43,8 @@ public abstract class BaseFragment extends Fragment implements SwipeRefreshLayou
         super.onCreateView(inflater, container, savedInstanceState);
         View inflatedView = inflater.inflate(layoutResource, null);
         mSwipeRefresh = (SwipeRefreshLayout) inflatedView.findViewById(R.id.swiperefresh);
-        mSwipeRefresh.setOnRefreshListener(this);
+        if (mSwipeRefresh != null)
+            mSwipeRefresh.setOnRefreshListener(this);
         return inflatedView;
     }
 

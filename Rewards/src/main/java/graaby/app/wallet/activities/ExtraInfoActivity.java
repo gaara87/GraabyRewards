@@ -14,6 +14,7 @@ import javax.inject.Inject;
 import butterknife.ButterKnife;
 import butterknife.InjectView;
 import butterknife.OnClick;
+import graaby.app.wallet.GraabyApplication;
 import graaby.app.wallet.R;
 import graaby.app.wallet.models.retrofit.BaseResponse;
 import graaby.app.wallet.models.retrofit.ExtraInfoRequest;
@@ -69,14 +70,16 @@ public class ExtraInfoActivity extends BaseAppCompatActivity implements Calendar
         } else if (TextUtils.isEmpty(selectedDate)) {
             Toast.makeText(this, "Select your birthday", Toast.LENGTH_SHORT).show();
         } else {
-            String gender = radioGenderMale.isChecked() ? "m" : "f";
-            String dob = String.valueOf(birthday.getDayOfMonth()) + "/" + String.valueOf(birthday.getMonth()) + "/" + birthday.getYear();
-            mCompositeSubscriptions.add(mService.updateUserInfo(new ExtraInfoRequest(dob, gender))
+            String gender = radioGenderMale.isChecked() ? "male" : "female";
+            mCompositeSubscriptions.add(mService.updateUserInfo(new ExtraInfoRequest(selectedDate, gender))
                     .observeOn(AndroidSchedulers.mainThread()).subscribeOn(Schedulers.newThread())
                     .subscribe(new CacheSubscriber<BaseResponse>(this) {
                         @Override
                         public void onSuccess(BaseResponse result) {
-                            finishActivityWithSuccess();
+                            if (result.responseSuccessCode == GraabyApplication.getContainerHolder().getContainer().getLong(getString(R.string.gtm_response_success)))
+                                finishActivityWithSuccess();
+                            else
+                                Toast.makeText(ExtraInfoActivity.this, result.message, Toast.LENGTH_SHORT).show();
                         }
                     }));
         }
