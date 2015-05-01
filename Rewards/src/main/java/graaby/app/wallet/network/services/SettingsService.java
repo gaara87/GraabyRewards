@@ -2,6 +2,7 @@ package graaby.app.wallet.network.services;
 
 import graaby.app.wallet.models.retrofit.BaseResponse;
 import graaby.app.wallet.models.retrofit.EmptyJson;
+import graaby.app.wallet.models.retrofit.ExtraInfoRequest;
 import graaby.app.wallet.models.retrofit.LocationUpdateRequest;
 import retrofit.http.Body;
 import retrofit.http.POST;
@@ -13,6 +14,10 @@ import rx.Observable;
 public interface SettingsService {
     @POST("/settings/location")
     Observable<BaseResponse> updateUserLocation(@Body LocationUpdateRequest request);
+
+    @POST("/settings-data")
+    Observable<BaseResponse> updateUserInfo(@Body ExtraInfoRequest request);
+
 
     @POST("/logout")
     Observable<BaseResponse> logoutUser(@Body EmptyJson request);

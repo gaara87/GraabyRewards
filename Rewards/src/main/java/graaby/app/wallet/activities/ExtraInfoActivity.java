@@ -3,19 +3,26 @@ package graaby.app.wallet.activities;
 import android.os.Build;
 import android.os.Bundle;
 import android.text.TextUtils;
-import android.widget.Button;
 import android.widget.CalendarView;
 import android.widget.DatePicker;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.Toast;
 
+import javax.inject.Inject;
+
 import butterknife.ButterKnife;
 import butterknife.InjectView;
 import butterknife.OnClick;
 import graaby.app.wallet.R;
+import graaby.app.wallet.models.retrofit.BaseResponse;
+import graaby.app.wallet.models.retrofit.ExtraInfoRequest;
+import graaby.app.wallet.network.services.SettingsService;
 import graaby.app.wallet.services.GcmIntentService;
+import graaby.app.wallet.util.CacheSubscriber;
 import graaby.app.wallet.util.Helper;
+import rx.android.schedulers.AndroidSchedulers;
+import rx.schedulers.Schedulers;
 
 /**
  * Created by gaara on 4/24/15.
@@ -32,6 +39,9 @@ public class ExtraInfoActivity extends BaseAppCompatActivity implements Calendar
     DatePicker birthday;
 
     String selectedDate = "";
+
+    @Inject
+    SettingsService mService;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -61,7 +71,14 @@ public class ExtraInfoActivity extends BaseAppCompatActivity implements Calendar
         } else {
             String gender = radioGenderMale.isChecked() ? "m" : "f";
             String dob = String.valueOf(birthday.getDayOfMonth()) + "/" + String.valueOf(birthday.getMonth()) + "/" + birthday.getYear();
-            //Send request to server
+            mCompositeSubscriptions.add(mService.updateUserInfo(new ExtraInfoRequest(dob, gender))
+                    .observeOn(AndroidSchedulers.mainThread()).subscribeOn(Schedulers.newThread())
+                    .subscribe(new CacheSubscriber<BaseResponse>(this) {
+                        @Override
+                        public void onSuccess(BaseResponse result) {
+                            finishActivityWithSuccess();
+                        }
+                    }));
         }
     }
 
