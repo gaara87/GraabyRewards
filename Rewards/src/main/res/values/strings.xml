@@ -103,7 +103,7 @@
     <string name="contact_info_na">Contact info not available. Please invite them!</string>
 
 
-    <string name="title_activity_extra_info">Profile information</string>
+    <string name="title_activity_extra_info">Graaby profile info</string>
 
     <string name="gtm_response_success">response_success</string>
     <string name="gtm_response_failure">response_failure</string>

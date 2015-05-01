@@ -1,19 +1,18 @@
 package graaby.app.wallet.activities;
 
-import android.os.Build;
 import android.os.Bundle;
 import android.text.TextUtils;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.widget.CalendarView;
 import android.widget.DatePicker;
 import android.widget.RadioButton;
-import android.widget.RadioGroup;
 import android.widget.Toast;
 
 import javax.inject.Inject;
 
 import butterknife.ButterKnife;
 import butterknife.InjectView;
-import butterknife.OnClick;
 import graaby.app.wallet.GraabyApplication;
 import graaby.app.wallet.R;
 import graaby.app.wallet.models.retrofit.BaseResponse;
@@ -21,7 +20,6 @@ import graaby.app.wallet.models.retrofit.ExtraInfoRequest;
 import graaby.app.wallet.network.services.SettingsService;
 import graaby.app.wallet.services.GcmIntentService;
 import graaby.app.wallet.util.CacheSubscriber;
-import graaby.app.wallet.util.Helper;
 import rx.android.schedulers.AndroidSchedulers;
 import rx.schedulers.Schedulers;
 
@@ -30,19 +28,17 @@ import rx.schedulers.Schedulers;
  */
 public class ExtraInfoActivity extends BaseAppCompatActivity implements CalendarView.OnDateChangeListener, DatePicker.OnDateChangedListener {
 
-    @InjectView(R.id.radio)
-    RadioGroup radioGroup;
+    String selectedDate = "";
+
+    @Inject
+    SettingsService mService;
+
     @InjectView(R.id.radio_gender_male)
     RadioButton radioGenderMale;
     @InjectView(R.id.radio_gender_female)
     RadioButton radioGenderFemale;
     @InjectView(R.id.birthday)
     DatePicker birthday;
-
-    String selectedDate = "";
-
-    @Inject
-    SettingsService mService;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -52,19 +48,29 @@ public class ExtraInfoActivity extends BaseAppCompatActivity implements Calendar
             finish();
         } else {
             setContentView(R.layout.activity_extra_info);
-            String information = getIntent().getStringExtra(Helper.INTENT_CONTAINER_INFO);
             ButterKnife.inject(this);
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB_MR1) {
-                birthday.getCalendarView().setOnDateChangeListener(this);
-            } else {
-                birthday.init(2000, 1, 1, this);
-            }
+            birthday.init(2000, 1, 1, this);
         }
     }
 
-    @OnClick(R.id.submit_info_button)
-    public void onSubmitInfoClicked() {
-        if (radioGroup.getCheckedRadioButtonId() == -1) {
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.menu_save, menu);
+        return super.onCreateOptionsMenu(menu);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.action_menu_item_save:
+                onSubmitInfoClicked();
+                break;
+        }
+        return true;
+    }
+
+    private void onSubmitInfoClicked() {
+        if (!radioGenderMale.isChecked() && !radioGenderFemale.isChecked()) {
             radioGenderMale.setError("Please select your gender");
             radioGenderFemale.setError("Please select your gender");
         } else if (TextUtils.isEmpty(selectedDate)) {
@@ -74,6 +80,12 @@ public class ExtraInfoActivity extends BaseAppCompatActivity implements Calendar
             mCompositeSubscriptions.add(mService.updateUserInfo(new ExtraInfoRequest(selectedDate, gender))
                     .observeOn(AndroidSchedulers.mainThread()).subscribeOn(Schedulers.newThread())
                     .subscribe(new CacheSubscriber<BaseResponse>(this) {
+
+                        @Override
+                        public void onFail(Throwable e) {
+                            Toast.makeText(ExtraInfoActivity.this, "Nevermind, try later!", Toast.LENGTH_SHORT).show();
+                        }
+
                         @Override
                         public void onSuccess(BaseResponse result) {
                             if (result.responseSuccessCode == GraabyApplication.getContainerHolder().getContainer().getLong(getString(R.string.gtm_response_success)))
@@ -82,6 +94,7 @@ public class ExtraInfoActivity extends BaseAppCompatActivity implements Calendar
                                 Toast.makeText(ExtraInfoActivity.this, result.message, Toast.LENGTH_SHORT).show();
                         }
                     }));
+            Toast.makeText(this, "Saving", Toast.LENGTH_SHORT).show();
         }
     }
 
