@@ -22,7 +22,7 @@ public class MarketActivity extends BaseAppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_market);
+        setContentView(R.layout.activity_fragment_container);
 
         Bundle args = new Bundle();
         args.putAll(getIntent().getExtras());

@@ -19,7 +19,7 @@ public class BrandDetailsActivity extends BaseAppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_brand_details);
+        setContentView(R.layout.activity_fragment_container);
 
         DiscountItemDetailsResponse brand = null;
         try {

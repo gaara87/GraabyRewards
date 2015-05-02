@@ -37,6 +37,7 @@ public class FeedFragment extends BaseFragment implements SwipeRefreshLayout.OnR
     @Override
     public void onAttach(Activity activity) {
         super.onAttach(activity);
+        if (activity instanceof MainActivity)
         ((MainActivity) activity).onSectionAttached(
                 getArguments().getInt(Helper.ARG_SECTION_NUMBER));
     }

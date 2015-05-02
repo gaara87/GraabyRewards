@@ -15,6 +15,7 @@ import graaby.app.wallet.activities.BrandDetailsActivity;
 import graaby.app.wallet.activities.BusinessDetailsActivity;
 import graaby.app.wallet.activities.DiscountItemDetailsActivity;
 import graaby.app.wallet.activities.ExtraInfoActivity;
+import graaby.app.wallet.activities.FeedActivity;
 import graaby.app.wallet.activities.MarketActivity;
 import graaby.app.wallet.activities.PointReceivedActivity;
 import graaby.app.wallet.activities.SearchResultsActivity;
@@ -66,7 +67,8 @@ import retrofit.RestAdapter;
                 PointReceivedActivity.class,
                 SearchResultsActivity.class,
                 GraabyOutletDiscoveryService.class,
-                ExtraInfoActivity.class
+                ExtraInfoActivity.class,
+                FeedActivity.class
         })
 public class ApiServicesModule {
     private static final String TAG = ApiServicesModule.class.getSimpleName();

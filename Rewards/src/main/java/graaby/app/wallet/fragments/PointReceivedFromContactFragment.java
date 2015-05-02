@@ -2,7 +2,6 @@ package graaby.app.wallet.fragments;
 
 import android.app.Activity;
 import android.os.Bundle;
-import android.support.v7.app.AppCompatActivity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -23,8 +22,10 @@ import javax.inject.Inject;
 import butterknife.ButterKnife;
 import butterknife.InjectView;
 import butterknife.OnClick;
+import de.greenrobot.event.EventBus;
 import graaby.app.wallet.GraabyApplication;
 import graaby.app.wallet.R;
+import graaby.app.wallet.events.ToolbarEvents;
 import graaby.app.wallet.models.retrofit.BaseResponse;
 import graaby.app.wallet.models.retrofit.ThankContactRequest;
 import graaby.app.wallet.network.services.ContactService;
@@ -64,7 +65,7 @@ public class PointReceivedFromContactFragment extends BaseFragment {
                 Helper.INTENT_CONTAINER_INFO);
         try {
             JSONObject pointNode = new JSONObject(info);
-            ((AppCompatActivity) getActivity()).getSupportActionBar().setTitle(pointNode.getString(getString(R.string.field_gcm_name)));
+            EventBus.getDefault().post(new ToolbarEvents.SetTitle(pointNode.getString(getString(R.string.field_gcm_name))));
             mAmount = pointNode.getInt(getString(R.string.contact_send_amount));
             mActivityID = pointNode.getInt(getString(R.string.field_gcm_thank_id));
             pictureURL = pointNode.getString(getString(

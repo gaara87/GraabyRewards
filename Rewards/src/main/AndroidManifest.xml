@@ -175,7 +175,6 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".MainActivity" />
         </activity>
-
         <activity
             android:name=".activities.ExtraInfoActivity"
             android:label="@string/title_activity_extra_info"
@@ -220,6 +219,16 @@
                 <action android:name="android.intent.action.BOOT_COMPLETED" />
             </intent-filter>
         </receiver>
+
+        <activity
+            android:name=".activities.FeedActivity"
+            android:label="@string/title_activity_feed"
+            android:parentActivityName=".MainActivity"
+            android:theme="@style/Graaby.Theme.Point">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="graaby.app.wallet.MainActivity" />
+        </activity>
     </application>
 
 </manifest>

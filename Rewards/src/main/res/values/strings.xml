@@ -115,4 +115,7 @@
     <string name="gtm_max_distance_from_user">location_update_radius_threshold</string>
     <string name="gtm_accuracy">location_update_accuracy_threshold</string>
     <string name="gtm_update_interval">location_update_to_server_interval_in_mins</string>
+    <string name="title_activity_feed">Feeds</string>
+
+    <string name="hello_world">Hello world!</string>
 </resources>

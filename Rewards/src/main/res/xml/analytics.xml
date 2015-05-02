@@ -39,6 +39,7 @@
     <screenName name="graaby.app.wallet.activities.SearchResultsActivity">Search</screenName>
     <screenName name="graaby.app.wallet.activities.SettingsActivity">Settings</screenName>
     <screenName name="graaby.app.wallet.activities.OnboardingActivity">Onboarding</screenName>
+    <screenName name="graaby.app.wallet.activities.FeedActivity">Feeds activity</screenName>
 
 
 </resources>

@@ -12,7 +12,7 @@ public class PointReceivedActivity extends BaseAppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_point_received);
+        setContentView(R.layout.activity_fragment_container);
         if (savedInstanceState == null) {
             String notyAction = getIntent().getAction();
             switch (notyAction) {

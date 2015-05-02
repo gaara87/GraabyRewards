@@ -43,6 +43,7 @@ import graaby.app.wallet.GraabyBroadcastReceiver;
 import graaby.app.wallet.R;
 import graaby.app.wallet.activities.DiscountItemDetailsActivity;
 import graaby.app.wallet.activities.ExtraInfoActivity;
+import graaby.app.wallet.activities.FeedActivity;
 import graaby.app.wallet.activities.PointReceivedActivity;
 import graaby.app.wallet.receivers.GcmBroadcastReceiver;
 import graaby.app.wallet.util.Helper;
@@ -59,6 +60,7 @@ public class GcmIntentService extends IntentService {
     public static final String NOTIFICATION_ACTION_POINTS = "action_points_transfer";
     public static final String NOTIFICATION_ACTION_TX = "action_points_reward";
     public static final String NOTIFICATION_ACTION_INFO = "action_info";
+    public static final String NOTIFICATION_ACTION_FEED = "action_feed";
 
     public static int NOTIFICATION_ID_NEW_MARKET = 3;
     public static int NOTIFICATION_ID_THANKED = 4;
@@ -102,7 +104,7 @@ public class GcmIntentService extends IntentService {
             JSONObject object = new JSONObject(msg);
             PendingIntent pendingIntent = null;
             String notificationTitle, smallContentText, smallContentInfo = "";
-            int notificationImageResource = R.drawable.ic_gcm_point, notificationID,
+            int notificationImageResource = R.drawable.ic_noty_point, notificationID,
                     uniquePendingId = (int) (System.currentTimeMillis() & 0xfffffff);
 
             SharedPreferences pref = getSharedPreferences("pref_notification", Activity.MODE_PRIVATE);
@@ -136,8 +138,10 @@ public class GcmIntentService extends IntentService {
                     smallContentText = String.format(getString(R.string.gcm_message_recieved_points_content),
                             sender, amount);
                     smallContentInfo = String.valueOf(amount);
-                    notificationImageResource = R.drawable.ic_gcm_point;
+                    notificationImageResource = R.drawable.ic_noty_point;
                     notificationID = getRandomInt(0, 50);
+
+                    mBuilder.setColor(getResources().getColor(R.color.alizarin));
 
                     activityIntent.setClass(this, PointReceivedActivity.class);
                     activityIntent.setAction(NOTIFICATION_ACTION_POINTS);
@@ -169,10 +173,12 @@ public class GcmIntentService extends IntentService {
                     smallContentText = String.format(getString(R.string.gcm_message_transaction_content),
                             amount, outlet);
                     smallContentInfo = String.valueOf(amount);
-                    notificationImageResource = R.drawable.ic_gcm_point;
+                    notificationImageResource = R.drawable.ic_noty_point;
                     notificationID = getRandomInt(51, 100);
 
                     mBuilder.setStyle(new NotificationCompat.BigTextStyle().bigText(smallContentText));
+                    mBuilder.setColor(getResources().getColor(R.color.alizarin));
+
 
                     activityIntent.setClass(this, PointReceivedActivity.class);
                     activityIntent.setAction(NOTIFICATION_ACTION_POINTS);
@@ -194,6 +200,8 @@ public class GcmIntentService extends IntentService {
                     notificationImageResource = R.drawable.ic_gcm_discount;
                     notificationID = NOTIFICATION_ID_NEW_MARKET;
 
+                    mBuilder.setColor(getResources().getColor(R.color.sunflower));
+
                     activityIntent.setClass(this, DiscountItemDetailsActivity.class);
                     activityIntent.putExtra(Helper.INTENT_CONTAINER_INFO, msg);
                     activityIntent.putExtra(Helper.NOTIFICATIONID, NOTIFICATION_ID_NEW_MARKET);
@@ -202,10 +210,16 @@ public class GcmIntentService extends IntentService {
                         mBuilder.setCategory(Notification.CATEGORY_PROMO);
                     break;
                 case NEW_FEED:
-                    notificationTitle = "New feed";
+                    notificationTitle = "New message";
                     smallContentText = object.getString("msg");
-                    notificationImageResource = R.drawable.ic_gcm_point;
+                    notificationImageResource = R.drawable.ic_noty_announcement;
                     notificationID = NOTIFICATION_ID_FEED;
+
+                    activityIntent.setClass(this, FeedActivity.class);
+                    activityIntent.putExtra(Helper.NOTIFICATIONID, NOTIFICATION_ID_FEED);
+                    activityIntent.setAction(NOTIFICATION_ACTION_FEED);
+
+                    mBuilder.setColor(getResources().getColor(R.color.alizarin));
                     break;
                 case THANK_CONTACT:
                     //contact thanks you for sending points
@@ -213,8 +227,10 @@ public class GcmIntentService extends IntentService {
                     notificationTitle = getString(R.string.gcm_message_thanked);
                     smallContentText = String.format(getString(R.string.gcm_message_thanked_small_content), thanksString);
                     mBuilder.setStyle(new NotificationCompat.BigTextStyle().bigText(smallContentText));
-                    notificationImageResource = R.drawable.ic_gcm_point;
+                    notificationImageResource = R.drawable.ic_noty_thank;
                     notificationID = NOTIFICATION_ID_THANKED;
+                    mBuilder.setColor(getResources().getColor(R.color.belizehole));
+
                     break;
                 case CHECKIN:
                     //checkin notification
@@ -225,12 +241,16 @@ public class GcmIntentService extends IntentService {
                     notificationID = NOTIFICATION_ID_CHECKIN;
                     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP)
                         mBuilder.setCategory(Notification.CATEGORY_STATUS);
+                    mBuilder.setColor(getResources().getColor(R.color.wisteria));
+
                     break;
                 case INFO_NEEDED:
                     notificationTitle = getString(R.string.gcm_message_meta_info_title);
                     smallContentText = getString(R.string.gcm_message_meta_info_title);
-                    notificationImageResource = R.drawable.ic_gcm_point;
+                    notificationImageResource = R.drawable.ic_noty_information;
                     notificationID = NOTIFICATION_ID_INFO;
+
+                    mBuilder.setColor(getResources().getColor(R.color.emarald));
 
                     activityIntent.setClass(this, ExtraInfoActivity.class);
                     activityIntent.setAction(NOTIFICATION_ACTION_INFO);
@@ -256,7 +276,7 @@ public class GcmIntentService extends IntentService {
                     this.getSystemService(Context.NOTIFICATION_SERVICE);
 
             mBuilder.setLargeIcon(BitmapFactory.decodeResource(getResources(), notificationImageResource))
-                    .setSmallIcon(notificationImageResource)
+                    .setSmallIcon(R.drawable.ic_noty_graaby)
                     .setContentTitle(notificationTitle)
                     .setContentText(smallContentText)
                     .setContentInfo(smallContentInfo)
