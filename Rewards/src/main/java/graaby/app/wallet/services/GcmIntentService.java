@@ -41,9 +41,9 @@ import java.util.Random;
 
 import graaby.app.wallet.GraabyBroadcastReceiver;
 import graaby.app.wallet.R;
-import graaby.app.wallet.activities.DiscountItemDetailsActivity;
 import graaby.app.wallet.activities.ExtraInfoActivity;
 import graaby.app.wallet.activities.FeedActivity;
+import graaby.app.wallet.activities.MarketActivity;
 import graaby.app.wallet.activities.PointReceivedActivity;
 import graaby.app.wallet.receivers.GcmBroadcastReceiver;
 import graaby.app.wallet.util.Helper;
@@ -61,6 +61,7 @@ public class GcmIntentService extends IntentService {
     public static final String NOTIFICATION_ACTION_TX = "action_points_reward";
     public static final String NOTIFICATION_ACTION_INFO = "action_info";
     public static final String NOTIFICATION_ACTION_FEED = "action_feed";
+    public static final String NOTIFICATION_ACTION_NEW_DISCOUNT = "action_new_discount";
 
     public static int NOTIFICATION_ID_NEW_MARKET = 3;
     public static int NOTIFICATION_ID_THANKED = 4;
@@ -195,14 +196,19 @@ public class GcmIntentService extends IntentService {
                     //new marketplace voucher has appeared
                     outlet = object.getString(getString(R.string.field_business_name));
                     notificationTitle = getString(R.string.gcm_message_market);
-                    smallContentText = String.format(getString(R.string.gcm_message_market_content), outlet);
+                    if (object.has("msg"))
+                        smallContentText = object.getString("msg") + " @ " + outlet;
+                    else
+                        smallContentText = String.format(getString(R.string.gcm_message_market_content), outlet);
                     smallContentInfo = "";
                     notificationImageResource = R.drawable.ic_gcm_discount;
                     notificationID = NOTIFICATION_ID_NEW_MARKET;
 
+                    mBuilder.setStyle(new NotificationCompat.BigTextStyle().bigText(String.format(getString(R.string.gcm_message_market_content), outlet)));
                     mBuilder.setColor(getResources().getColor(R.color.sunflower));
 
-                    activityIntent.setClass(this, DiscountItemDetailsActivity.class);
+                    activityIntent.setClass(this, MarketActivity.class);
+                    activityIntent.setAction(NOTIFICATION_ACTION_NEW_DISCOUNT);
                     activityIntent.putExtra(Helper.INTENT_CONTAINER_INFO, msg);
                     activityIntent.putExtra(Helper.NOTIFICATIONID, NOTIFICATION_ID_NEW_MARKET);
                     activityIntent.putExtra(Helper.MY_DISCOUNT_ITEMS_FLAG, false);
@@ -220,6 +226,10 @@ public class GcmIntentService extends IntentService {
                     activityIntent.setAction(NOTIFICATION_ACTION_FEED);
 
                     mBuilder.setColor(getResources().getColor(R.color.alizarin));
+
+                    pendingIntent = TaskStackBuilder.create(this)
+                            .addNextIntentWithParentStack(activityIntent)
+                            .getPendingIntent(0, PendingIntent.FLAG_UPDATE_CURRENT);
                     break;
                 case THANK_CONTACT:
                     //contact thanks you for sending points

@@ -194,7 +194,7 @@ public class MarketFragment extends BaseFragment implements OnItemClickListener 
         }
         Subscription subscriber = tempObs.subscribeOn(Schedulers.newThread())
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(new CacheSubscriber<MarketResponse>(getActivity(), mSwipeRefresh) {
+                .subscribe(new CacheSubscriber<MarketResponse>(getActivity(), mSwipeRefresh, true) {
                     @Override
                     public void onSuccess(MarketResponse result) {
                         if (result.items.size() > 0) {

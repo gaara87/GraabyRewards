@@ -80,7 +80,8 @@
             android:name=".activities.MarketActivity"
             android:icon="@drawable/nav_market"
             android:label="@string/title_activity_my_cpn_vcr"
-            android:parentActivityName=".MainActivity">
+            android:parentActivityName=".MainActivity"
+            android:theme="@style/Graaby.Theme.Market">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".MainActivity" />

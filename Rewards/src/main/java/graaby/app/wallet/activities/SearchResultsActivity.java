@@ -23,7 +23,7 @@ import javax.inject.Inject;
 
 import de.greenrobot.event.EventBus;
 import graaby.app.wallet.R;
-import graaby.app.wallet.adapter.BusinessesAdapter;
+import graaby.app.wallet.adapter.SearchResultsAdapter;
 import graaby.app.wallet.events.ToolbarEvents;
 import graaby.app.wallet.models.android.GraabySearchSuggestionsProvider;
 import graaby.app.wallet.models.retrofit.SearchRequest;
@@ -40,9 +40,8 @@ public class SearchResultsActivity extends BaseAppCompatActivity
     final public static boolean SEARCH_COLLAPSE = true;
     @Inject
     SearchService mSearchService;
-    private SwipeRefreshLayout mSwipeRefreshLayout;
     private String mQueryString;
-    private BusinessesAdapter mAdapter;
+    private SearchResultsAdapter mAdapter;
     private boolean collapseFlag;
     private SearchView mSearchView;
 
@@ -65,11 +64,11 @@ public class SearchResultsActivity extends BaseAppCompatActivity
         else
             EventBus.getDefault().postSticky(new ToolbarEvents(R.color.wisteria, R.color.wisteria_darker));
 
-        mSwipeRefreshLayout = (SwipeRefreshLayout) findViewById(R.id.swiperefresh);
+        SwipeRefreshLayout mSwipeRefreshLayout = (SwipeRefreshLayout) findViewById(R.id.swiperefresh);
         mSwipeRefreshLayout.setEnabled(Boolean.FALSE);
         mSwipeRefreshLayout.setColorSchemeResources(R.color.midnightblue, R.color.wetasphalt, R.color.asbestos, R.color.concrete);
         ListView mListView = (ListView) findViewById(android.R.id.list);
-        mAdapter = new BusinessesAdapter(this);
+        mAdapter = new SearchResultsAdapter(this);
         mListView.setAdapter(mAdapter);
         mListView.setOnItemClickListener(this);
         mListView.setEmptyView(findViewById(android.R.id.empty));

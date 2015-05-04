@@ -29,9 +29,11 @@ public abstract class CacheSubscriber<T> extends Subscriber<T> {
 
     public CacheSubscriber(@NotNull final Context context, SwipeRefreshLayout swipeRefreshLayout, boolean startRefreshingImmediatelyFlag) {
         this.mContext = new WeakReference<>(context);
-        mSwipeRefreshLayout = swipeRefreshLayout;
-        if (startRefreshingImmediatelyFlag)
-            mSwipeRefreshLayout.setRefreshing(true);
+        if (swipeRefreshLayout != null) {
+            mSwipeRefreshLayout = swipeRefreshLayout;
+            if (startRefreshingImmediatelyFlag)
+                mSwipeRefreshLayout.setRefreshing(true);
+        }
     }
 
 
