@@ -36,19 +36,9 @@ public class OnboardingActivity extends Activity {
         PagerAdapter mPagerAdapter = new OnboardingPagerAdapter();
         mPager.setAdapter(mPagerAdapter);
 
-        findViewById(R.id.onboarding_next).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                mPager.setCurrentItem(mPager.getCurrentItem() + 1);
-            }
-        });
+        findViewById(R.id.onboarding_next).setOnClickListener(v -> mPager.setCurrentItem(mPager.getCurrentItem() + 1));
 
-        findViewById(R.id.onboarding_skip).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                OnboardingActivity.this.finish();
-            }
-        });
+        findViewById(R.id.onboarding_skip).setOnClickListener(v -> OnboardingActivity.this.finish());
 
         mPager.setOnPageChangeListener(new ViewPager.OnPageChangeListener() {
             @Override

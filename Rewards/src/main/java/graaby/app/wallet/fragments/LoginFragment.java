@@ -15,7 +15,6 @@ import android.support.annotation.Nullable;
 import android.text.TextUtils;
 import android.text.method.LinkMovementMethod;
 import android.util.Log;
-import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -91,19 +90,15 @@ public class LoginFragment extends BaseFragment {
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        final ArrayAdapter<CharSequence> adapter = new ArrayAdapter<CharSequence>(getActivity(), android.R.layout.simple_dropdown_item_1line, UserLoginActivity.getAccountNames(getActivity()));
+        final ArrayAdapter<CharSequence> adapter = new ArrayAdapter<>(getActivity(), android.R.layout.simple_dropdown_item_1line, UserLoginActivity.getAccountNames(getActivity()));
         mAutoCompleteSpinner.setAdapter(adapter);
         mPasswordView
-                .setOnEditorActionListener(new TextView.OnEditorActionListener() {
-                    @Override
-                    public boolean onEditorAction(TextView textView, int id,
-                                                  KeyEvent keyEvent) {
-                        if (id == 697 || id == EditorInfo.IME_NULL) {
-                            sendRequest();
-                            return true;
-                        }
-                        return false;
+                .setOnEditorActionListener((textView, id, keyEvent) -> {
+                    if (id == 697 || id == EditorInfo.IME_NULL) {
+                        sendRequest();
+                        return true;
                     }
+                    return false;
                 });
     }
 

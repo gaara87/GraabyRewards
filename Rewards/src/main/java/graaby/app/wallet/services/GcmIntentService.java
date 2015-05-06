@@ -31,6 +31,7 @@ import android.os.Build;
 import android.os.Bundle;
 import android.support.v4.app.NotificationCompat;
 import android.support.v4.app.TaskStackBuilder;
+import android.text.TextUtils;
 
 import com.google.android.gms.gcm.GoogleCloudMessaging;
 
@@ -39,13 +40,13 @@ import org.json.JSONObject;
 
 import java.util.Random;
 
-import graaby.app.wallet.GraabyBroadcastReceiver;
 import graaby.app.wallet.R;
 import graaby.app.wallet.activities.ExtraInfoActivity;
 import graaby.app.wallet.activities.FeedActivity;
 import graaby.app.wallet.activities.MarketActivity;
 import graaby.app.wallet.activities.PointReceivedActivity;
 import graaby.app.wallet.receivers.GcmBroadcastReceiver;
+import graaby.app.wallet.receivers.GraabyBroadcastReceiver;
 import graaby.app.wallet.util.Helper;
 import graaby.app.wallet.util.NotificationType;
 
@@ -112,7 +113,7 @@ public class GcmIntentService extends IntentService {
 
             Uri noty_sound = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);
 
-            if (!pref.getString("notifications_new_message_ringtone", "").equals("")) {
+            if (!TextUtils.isEmpty(pref.getString("notifications_new_message_ringtone", ""))) {
                 noty_sound = Uri.parse(pref.getString("notifications_new_message_ringtone", ""));
             }
 

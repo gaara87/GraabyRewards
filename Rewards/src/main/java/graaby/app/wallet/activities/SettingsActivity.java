@@ -10,7 +10,6 @@ import android.annotation.TargetApi;
 import android.app.AlertDialog;
 import android.content.ActivityNotFoundException;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.res.Configuration;
 import android.media.Ringtone;
@@ -66,53 +65,50 @@ public class SettingsActivity extends PreferenceActivity {
      * shown on tablets.
      */
     private static final boolean ALWAYS_SIMPLE_PREFS = false;
-    private static Preference.OnPreferenceChangeListener sBindPreferenceSummaryToValueListener = new Preference.OnPreferenceChangeListener() {
-        @Override
-        public boolean onPreferenceChange(Preference preference, Object value) {
-            String stringValue = value.toString();
+    private static Preference.OnPreferenceChangeListener sBindPreferenceSummaryToValueListener = (preference, value) -> {
+        String stringValue = value.toString();
 
-            if (preference instanceof ListPreference) {
-                // For list preferences, look up the correct display value in
-                // the preference's 'entries' list.
-                ListPreference listPreference = (ListPreference) preference;
-                int index = listPreference.findIndexOfValue(stringValue);
+        if (preference instanceof ListPreference) {
+            // For list preferences, look up the correct display value in
+            // the preference's 'entries' list.
+            ListPreference listPreference = (ListPreference) preference;
+            int index = listPreference.findIndexOfValue(stringValue);
 
-                // Set the summary to reflect the new value.
-                preference.setSummary(
-                        index >= 0
-                                ? listPreference.getEntries()[index]
-                                : null
-                );
+            // Set the summary to reflect the new value.
+            preference.setSummary(
+                    index >= 0
+                            ? listPreference.getEntries()[index]
+                            : null
+            );
 
-            } else if (preference instanceof RingtonePreference) {
-                // For ringtone preferences, look up the correct display value
-                // using RingtoneManager.
-                if (TextUtils.isEmpty(stringValue)) {
-                    // Empty values correspond to 'silent' (no ringtone).
-                    preference.setSummary(R.string.pref_ringtone_silent);
-
-                } else {
-                    Ringtone ringtone = RingtoneManager.getRingtone(
-                            preference.getContext(), Uri.parse(stringValue));
-
-                    if (ringtone == null) {
-                        // Clear the summary if there was a lookup error.
-                        preference.setSummary(null);
-                    } else {
-                        // Set the summary to reflect the new ringtone display
-                        // name.
-                        String name = ringtone.getTitle(preference.getContext());
-                        preference.setSummary(name);
-                    }
-                }
+        } else if (preference instanceof RingtonePreference) {
+            // For ringtone preferences, look up the correct display value
+            // using RingtoneManager.
+            if (TextUtils.isEmpty(stringValue)) {
+                // Empty values correspond to 'silent' (no ringtone).
+                preference.setSummary(R.string.pref_ringtone_silent);
 
             } else {
-                // For all other preferences, set the summary to the value's
-                // simple string representation.
-                preference.setSummary(stringValue);
+                Ringtone ringtone = RingtoneManager.getRingtone(
+                        preference.getContext(), Uri.parse(stringValue));
+
+                if (ringtone == null) {
+                    // Clear the summary if there was a lookup error.
+                    preference.setSummary(null);
+                } else {
+                    // Set the summary to reflect the new ringtone display
+                    // name.
+                    String name = ringtone.getTitle(preference.getContext());
+                    preference.setSummary(name);
+                }
             }
-            return true;
+
+        } else {
+            // For all other preferences, set the summary to the value's
+            // simple string representation.
+            preference.setSummary(stringValue);
         }
+        return true;
     };
     /**
      * A preference value change listener that updates the preference's summary
@@ -139,8 +135,7 @@ public class SettingsActivity extends PreferenceActivity {
      * "simplified" settings UI should be shown.
      */
     private static boolean isSimplePreferences(Context context) {
-        return ALWAYS_SIMPLE_PREFS
-                || Build.VERSION.SDK_INT < Build.VERSION_CODES.HONEYCOMB
+        return Build.VERSION.SDK_INT < Build.VERSION_CODES.HONEYCOMB
                 || !isXLargeTablet(context);
     }
 
@@ -256,49 +251,46 @@ public class SettingsActivity extends PreferenceActivity {
                 AlertDialog.Builder builder = new AlertDialog.Builder(SettingsActivity.this);
                 builder.setMessage(R.string.logout_dialog_message)
                         .setTitle(R.string.logout_dialog_title)
-                        .setPositiveButton("Logout", new DialogInterface.OnClickListener() {
-                            @Override
-                            public void onClick(DialogInterface dialogInterface, int i) {
-                                final AccountManager acm = AccountManager.get(SettingsActivity.this);
-                                final Account[] accounts = acm
-                                        .getAccountsByType(UserLoginActivity.ACCOUNT_TYPE);
-                                if (accounts.length != 0) {
-                                    mSettingsService.logoutUser(new EmptyJson())
-                                            .subscribeOn(Schedulers.newThread())
-                                            .observeOn(AndroidSchedulers.mainThread())
-                                            .subscribe(new CacheSubscriber<BaseResponse>(SettingsActivity.this) {
-                                                @Override
-                                                public void onFail(Throwable e) {
-                                                    Toast.makeText(SettingsActivity.this, "Unable to log you out with the server", Toast.LENGTH_SHORT).show();
-                                                }
+                        .setPositiveButton("Logout", (dialogInterface, i) -> {
+                            final AccountManager acm = AccountManager.get(SettingsActivity.this);
+                            final Account[] accounts = acm
+                                    .getAccountsByType(UserLoginActivity.ACCOUNT_TYPE);
+                            if (accounts.length != 0) {
+                                mSettingsService.logoutUser(new EmptyJson())
+                                        .subscribeOn(Schedulers.newThread())
+                                        .observeOn(AndroidSchedulers.mainThread())
+                                        .subscribe(new CacheSubscriber<BaseResponse>(SettingsActivity.this) {
+                                            @Override
+                                            public void onFail(Throwable e) {
+                                                Toast.makeText(SettingsActivity.this, "Unable to log you out with the server", Toast.LENGTH_SHORT).show();
+                                            }
 
-                                                @Override
-                                                public void onSuccess(BaseResponse result) {
-                                                    acm.removeAccount(accounts[0], new AccountManagerCallback<Boolean>() {
-                                                        @Override
-                                                        public void run(AccountManagerFuture<Boolean> future) {
-                                                            if (future.isDone()) {
-                                                                try {
-                                                                    if (future.getResult()) {
-                                                                        EventBus.getDefault().post(new ProfileEvents.LoggedOutEvent());
-                                                                        Toast.makeText(SettingsActivity.this, "Logged out successfully", Toast.LENGTH_SHORT).show();
-                                                                        setResult(RESULT_OK);
-                                                                        SettingsActivity.this.finish();
-                                                                    }
-                                                                } catch (OperationCanceledException e) {
-                                                                    e.printStackTrace();
-                                                                } catch (IOException e) {
-                                                                    e.printStackTrace();
-                                                                } catch (AuthenticatorException e) {
-                                                                    e.printStackTrace();
+                                            @Override
+                                            public void onSuccess(BaseResponse result) {
+                                                acm.removeAccount(accounts[0], new AccountManagerCallback<Boolean>() {
+                                                    @Override
+                                                    public void run(AccountManagerFuture<Boolean> future) {
+                                                        if (future.isDone()) {
+                                                            try {
+                                                                if (future.getResult()) {
+                                                                    EventBus.getDefault().post(new ProfileEvents.LoggedOutEvent());
+                                                                    Toast.makeText(SettingsActivity.this, "Logged out successfully", Toast.LENGTH_SHORT).show();
+                                                                    setResult(RESULT_OK);
+                                                                    SettingsActivity.this.finish();
                                                                 }
+                                                            } catch (OperationCanceledException e) {
+                                                                e.printStackTrace();
+                                                            } catch (IOException e) {
+                                                                e.printStackTrace();
+                                                            } catch (AuthenticatorException e) {
+                                                                e.printStackTrace();
                                                             }
                                                         }
-                                                    }, null);
+                                                    }
+                                                }, null);
 
-                                                }
-                                            });
-                                }
+                                            }
+                                        });
                             }
                         }).setNegativeButton("Cancel", null);
                 AlertDialog dialog = builder.create();
@@ -307,28 +299,20 @@ public class SettingsActivity extends PreferenceActivity {
             }
         });
 
-        findPreference("social_btn_fb").setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
-            @Override
-            public boolean onPreferenceClick(Preference preference) {
-                return true;
-            }
-        });
+        findPreference("social_btn_fb").setOnPreferenceClickListener(preference -> true);
 
-        findPreference("send_feedback").setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
-            @Override
-            public boolean onPreferenceClick(Preference preference) {
-                Intent i = new Intent(Intent.ACTION_SEND);
-                i.setType("message/rfc822");
-                i.putExtra(Intent.EXTRA_EMAIL, new String[]{"contact@graaby.com"});
-                i.putExtra(Intent.EXTRA_SUBJECT, "[Graaby app feedback]");
-                i.putExtra(Intent.EXTRA_TEXT, "");
-                try {
-                    startActivity(Intent.createChooser(i, "E-mail Graaby through..."));
-                } catch (ActivityNotFoundException ex) {
-                    Toast.makeText(SettingsActivity.this, "There are no email clients installed.", Toast.LENGTH_SHORT).show();
-                }
-                return true;
+        findPreference("send_feedback").setOnPreferenceClickListener(preference -> {
+            Intent i = new Intent(Intent.ACTION_SEND);
+            i.setType("message/rfc822");
+            i.putExtra(Intent.EXTRA_EMAIL, new String[]{"contact@graaby.com"});
+            i.putExtra(Intent.EXTRA_SUBJECT, "[Graaby app feedback]");
+            i.putExtra(Intent.EXTRA_TEXT, "");
+            try {
+                startActivity(Intent.createChooser(i, "E-mail Graaby through..."));
+            } catch (ActivityNotFoundException ex) {
+                Toast.makeText(SettingsActivity.this, "There are no email clients installed.", Toast.LENGTH_SHORT).show();
             }
+            return true;
         });
     }
 

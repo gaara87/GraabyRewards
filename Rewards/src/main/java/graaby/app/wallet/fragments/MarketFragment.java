@@ -28,7 +28,7 @@ import graaby.app.wallet.MainActivity;
 import graaby.app.wallet.R;
 import graaby.app.wallet.activities.DiscountItemDetailsActivity;
 import graaby.app.wallet.activities.SearchResultsActivity;
-import graaby.app.wallet.adapter.MarketAdapter;
+import graaby.app.wallet.adapters.MarketAdapter;
 import graaby.app.wallet.models.retrofit.DiscountItemDetailsResponse;
 import graaby.app.wallet.models.retrofit.MarketForBusinessRequest;
 import graaby.app.wallet.models.retrofit.MarketRequest;

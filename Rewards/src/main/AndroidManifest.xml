@@ -187,7 +187,7 @@
         </activity>
 
         <receiver
-            android:name=".GraabyBroadcastReceiver"
+            android:name=".receivers.GraabyBroadcastReceiver"
             android:enabled="true"
             android:exported="true" />
 

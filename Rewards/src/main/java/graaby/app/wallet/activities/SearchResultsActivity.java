@@ -23,7 +23,7 @@ import javax.inject.Inject;
 
 import de.greenrobot.event.EventBus;
 import graaby.app.wallet.R;
-import graaby.app.wallet.adapter.SearchResultsAdapter;
+import graaby.app.wallet.adapters.SearchResultsAdapter;
 import graaby.app.wallet.events.ToolbarEvents;
 import graaby.app.wallet.models.android.GraabySearchSuggestionsProvider;
 import graaby.app.wallet.models.retrofit.SearchRequest;
@@ -49,10 +49,10 @@ public class SearchResultsActivity extends BaseAppCompatActivity
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_search_results);
-
-        getSupportActionBar().setDisplayShowTitleEnabled(false);
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-
+        if (getSupportActionBar() != null) {
+            getSupportActionBar().setDisplayShowTitleEnabled(false);
+            getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        }
         Intent intent = getIntent();
         mQueryString = intent.getStringExtra(SearchManager.QUERY);
         mQueryString = mQueryString == null ? "" : mQueryString;

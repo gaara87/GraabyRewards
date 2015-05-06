@@ -77,13 +77,10 @@ public class RetrofitModule {
     @Singleton
     @Named(value = "authenticated")
     public RequestInterceptor provideRequestInterceptorForAuth(final UserAuthenticationHandler authenticationHandler) {
-        return new RequestInterceptor() {
-            @Override
-            public void intercept(RequestFacade request) {
-                request.addHeader("User-Agent", "Android Graaby Rewards App " + BuildConfig.VERSION_CODE);
-                request.addHeader("oauth", authenticationHandler.oAuth);
-                request.addHeader("uid", authenticationHandler.uid);
-            }
+        return request -> {
+            request.addHeader("User-Agent", "Android Graaby Rewards App " + BuildConfig.VERSION_CODE);
+            request.addHeader("oauth", authenticationHandler.oAuth);
+            request.addHeader("uid", authenticationHandler.uid);
         };
     }
 
@@ -91,12 +88,7 @@ public class RetrofitModule {
     @Singleton
     @Named(value = "open")
     public RequestInterceptor provideRequestInterceptorForUnauth() {
-        return new RequestInterceptor() {
-            @Override
-            public void intercept(RequestFacade request) {
-                request.addHeader("User-Agent", "Android Graaby Rewards App " + BuildConfig.VERSION_CODE);
-            }
-        };
+        return request -> request.addHeader("User-Agent", "Android Graaby Rewards App " + BuildConfig.VERSION_CODE);
     }
 
     @Provides
@@ -109,12 +101,7 @@ public class RetrofitModule {
                 .setRequestInterceptor(requestInterceptor)
                 .setErrorHandler(errorHandler)
                 .setLogLevel(RestAdapter.LogLevel.FULL)
-                .setLog(new RestAdapter.Log() {
-                    @Override
-                    public void log(String message) {
-                        Log.v("RETROFIT", message);
-                    }
-                })
+                .setLog(message -> Log.v("RETROFIT", message))
                 .setConverter(new LoganSquareConverter())
                 .build();
     }
@@ -129,12 +116,7 @@ public class RetrofitModule {
                 .setRequestInterceptor(requestInterceptor)
                 .setErrorHandler(errorHandler)
                 .setLogLevel(RestAdapter.LogLevel.FULL)
-                .setLog(new RestAdapter.Log() {
-                    @Override
-                    public void log(String message) {
-                        Log.v("RETROFIT", message);
-                    }
-                })
+                .setLog(message -> Log.v("RETROFIT", message))
                 .setConverter(new LoganSquareConverter())
                 .build();
     }

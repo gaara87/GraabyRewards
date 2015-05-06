@@ -45,14 +45,9 @@ public class BusinessDetailsActivity extends BaseAppCompatActivity implements Bu
         tabs.setDistributeEvenly(false);
 
         tabs.setViewPager(mViewPager);
-        tabs.setCustomTabColorizer(new SlidingTabLayout.TabColorizer() {
-            @Override
-            public int getIndicatorColor(int position) {
-                return getResources().getColor(android.R.color.white);
-            }
-        });
-
-        getSupportActionBar().setDisplayHomeAsUpEnabled(Boolean.TRUE);
+        tabs.setCustomTabColorizer(position -> getResources().getColor(android.R.color.white));
+        if (getSupportActionBar() != null)
+            getSupportActionBar().setDisplayHomeAsUpEnabled(Boolean.TRUE);
     }
 
     @Override

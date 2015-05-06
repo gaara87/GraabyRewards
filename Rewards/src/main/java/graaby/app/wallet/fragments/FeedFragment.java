@@ -16,7 +16,7 @@ import butterknife.InjectView;
 import graaby.app.wallet.GraabyApplication;
 import graaby.app.wallet.MainActivity;
 import graaby.app.wallet.R;
-import graaby.app.wallet.adapter.FeedsAdapter;
+import graaby.app.wallet.adapters.FeedsAdapter;
 import graaby.app.wallet.models.retrofit.FeedsResponse;
 import graaby.app.wallet.network.services.FeedService;
 import graaby.app.wallet.util.CacheSubscriber;

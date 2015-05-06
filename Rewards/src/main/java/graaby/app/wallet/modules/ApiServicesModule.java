@@ -10,7 +10,6 @@ import javax.inject.Singleton;
 
 import dagger.Module;
 import dagger.Provides;
-import graaby.app.wallet.GraabyBroadcastReceiver;
 import graaby.app.wallet.activities.BrandDetailsActivity;
 import graaby.app.wallet.activities.BusinessDetailsActivity;
 import graaby.app.wallet.activities.DiscountItemDetailsActivity;
@@ -38,6 +37,7 @@ import graaby.app.wallet.network.services.MarketService;
 import graaby.app.wallet.network.services.ProfileService;
 import graaby.app.wallet.network.services.SearchService;
 import graaby.app.wallet.network.services.SettingsService;
+import graaby.app.wallet.receivers.GraabyBroadcastReceiver;
 import graaby.app.wallet.services.GraabyOutletDiscoveryService;
 import retrofit.RestAdapter;
 

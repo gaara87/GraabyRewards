@@ -1,4 +1,4 @@
-package graaby.app.wallet;
+package graaby.app.wallet.receivers;
 
 import android.app.NotificationManager;
 import android.content.BroadcastReceiver;
@@ -12,6 +12,8 @@ import org.json.JSONObject;
 
 import javax.inject.Inject;
 
+import graaby.app.wallet.GraabyApplication;
+import graaby.app.wallet.R;
 import graaby.app.wallet.models.retrofit.BaseResponse;
 import graaby.app.wallet.models.retrofit.ThankContactRequest;
 import graaby.app.wallet.network.services.ContactService;

@@ -1,4 +1,4 @@
-package graaby.app.wallet.adapter;
+package graaby.app.wallet.adapters;
 
 import android.app.Activity;
 import android.text.format.DateUtils;

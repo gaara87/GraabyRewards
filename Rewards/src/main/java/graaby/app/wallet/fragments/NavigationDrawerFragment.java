@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.content.res.Configuration;
+import android.os.Build;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.support.annotation.Nullable;
@@ -20,7 +21,6 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
@@ -36,7 +36,6 @@ import graaby.app.wallet.R;
 import graaby.app.wallet.events.ProfileEvents;
 import graaby.app.wallet.models.realm.ProfileDAO;
 
-;
 
 /**
  * Fragment used for managing interactions for and presentation of a navigation drawer.
@@ -152,12 +151,7 @@ public class NavigationDrawerFragment extends Fragment {
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        mDrawerListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                selectItem(position);
-            }
-        });
+        mDrawerListView.setOnItemClickListener((parent, view1, position, id) -> selectItem(position));
         mDrawerListView.setItemChecked(mCurrentSelectedPosition, true);
 
         ProfileDAO profile = GraabyApplication.getORMDbService().getProfileInfo();
@@ -180,7 +174,7 @@ public class NavigationDrawerFragment extends Fragment {
      *
      * @param fragmentId       The android:id of this fragment in its activity's layout.
      * @param drawerLayout     The DrawerLayout containing this fragment's UI.
-     * @param supportActionBar
+     * @param supportActionBar pass in the toolbar
      */
     public void setUp(int fragmentId, DrawerLayout drawerLayout, Toolbar toolbar, ActionBar supportActionBar) {
         mFragmentContainerView = getActivity().findViewById(fragmentId);
@@ -233,12 +227,7 @@ public class NavigationDrawerFragment extends Fragment {
         }
 
         // Defer code dependent on restoration of previous instance state.
-        mDrawerLayout.post(new Runnable() {
-            @Override
-            public void run() {
-                mDrawerToggle.syncState();
-            }
-        });
+        mDrawerLayout.post(mDrawerToggle::syncState);
 
         mDrawerLayout.setDrawerListener(mDrawerToggle);
 
@@ -305,11 +294,8 @@ public class NavigationDrawerFragment extends Fragment {
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        if (mDrawerToggle.onOptionsItemSelected(item)) {
-            return true;
-        }
+        return mDrawerToggle.onOptionsItemSelected(item) || super.onOptionsItemSelected(item);
 
-        return super.onOptionsItemSelected(item);
     }
 
     /**
@@ -319,7 +305,6 @@ public class NavigationDrawerFragment extends Fragment {
     private void showGlobalContextActionBar() {
         ActionBar actionBar = getActionBar();
         actionBar.setDisplayShowTitleEnabled(true);
-        actionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_STANDARD);
         actionBar.setTitle(R.string.app_name);
     }
 
@@ -336,7 +321,7 @@ public class NavigationDrawerFragment extends Fragment {
     /**
      * Callbacks interface that all activities using this fragment must implement.
      */
-    public static interface NavigationDrawerCallbacks {
+    public interface NavigationDrawerCallbacks {
         /**
          * Called when an item in the navigation drawer is selected.
          */
@@ -361,8 +346,13 @@ public class NavigationDrawerFragment extends Fragment {
             tv.setText(item[0]);
             int drawableId = mContext.getResources().getIdentifier(item[1],
                     "drawable", mContext.getPackageName());
-            tv.setCompoundDrawablesWithIntrinsicBounds(getResources()
-                    .getDrawable(drawableId), null, null, null);
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+                tv.setCompoundDrawablesWithIntrinsicBounds(getResources()
+                        .getDrawable(drawableId, getContext().getTheme()), null, null, null);
+            } else {
+                tv.setCompoundDrawablesWithIntrinsicBounds(getResources()
+                        .getDrawable(drawableId), null, null, null);
+            }
             return convertView;
         }
     }

@@ -131,7 +131,7 @@ public class RegistrationFragment extends BaseFragment implements Validator.Vali
                              Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.fragment_registration, container, false);
         ButterKnife.inject(this, rootView);
-        final ArrayAdapter<CharSequence> adapter = new ArrayAdapter<CharSequence>(getActivity(), android.R.layout.simple_spinner_item, UserLoginActivity.getAccountNames(getActivity()));
+        final ArrayAdapter<CharSequence> adapter = new ArrayAdapter<>(getActivity(), android.R.layout.simple_spinner_item, UserLoginActivity.getAccountNames(getActivity()));
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         mSpinner.setAdapter(adapter);
         mSpinner.requestFocus();
@@ -205,12 +205,7 @@ public class RegistrationFragment extends BaseFragment implements Validator.Vali
     }
 
     private void show(final String message) {
-        getActivity().runOnUiThread(new Runnable() {
-            @Override
-            public void run() {
-                mVerificationMessage.setText(message);
-            }
-        });
+        getActivity().runOnUiThread(() -> mVerificationMessage.setText(message));
     }
 
     @Override

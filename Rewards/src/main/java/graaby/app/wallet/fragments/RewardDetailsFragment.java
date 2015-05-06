@@ -7,13 +7,13 @@ import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
 
 import java.util.List;
 
 import graaby.app.wallet.R;
+import graaby.app.wallet.adapters.PunchAdapter;
 import graaby.app.wallet.models.retrofit.OutletDetail;
 
 /**
@@ -51,27 +51,4 @@ public class RewardDetailsFragment extends Fragment {
         mListView.setAdapter(new PunchAdapter(context, punches));
     }
 
-    private class PunchAdapter extends ArrayAdapter<OutletDetail.Reward> {
-
-        private LayoutInflater inflater;
-
-        public PunchAdapter(Context context, List<OutletDetail.Reward> punches) {
-            super(context, R.layout.fragment_punchcards, punches);
-            inflater = LayoutInflater.from(getContext());
-        }
-
-        @Override
-        public View getView(int position, View convertView, ViewGroup parent) {
-            convertView = inflater.inflate(R.layout.item_list_reward_info, null);
-            OutletDetail.Reward node = getItem(position);
-
-            TextView tv;
-            tv = (TextView) convertView.findViewById(android.R.id.text1);
-            tv.setText(node.rewardDetail);
-            tv = (TextView) convertView.findViewById(android.R.id.text2);
-            tv.setText(node.onVisitCount);
-
-            return convertView;
-        }
-    }
 }

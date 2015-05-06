@@ -6,7 +6,6 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
-import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -131,12 +130,9 @@ public class ProfileFragment extends BaseFragment {
         dialog.setCanceledOnTouchOutside(true);
         dialog.show();
 
-        dialog.findViewById(R.id.view_outlets).setOnClickListener(new OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                dialog.dismiss();
-                mCallback.onViewBusinessesRequest();
-            }
+        dialog.findViewById(R.id.view_outlets).setOnClickListener(view -> {
+            dialog.dismiss();
+            mCallback.onViewBusinessesRequest();
         });
     }
 
