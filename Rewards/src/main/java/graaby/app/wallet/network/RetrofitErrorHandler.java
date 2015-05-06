@@ -4,15 +4,12 @@ import android.accounts.Account;
 import android.accounts.AccountManager;
 import android.app.Activity;
 import android.content.Context;
-import android.widget.Toast;
 
 import org.apache.http.HttpStatus;
 
-import javax.inject.Inject;
-
 import graaby.app.wallet.R;
 import graaby.app.wallet.auth.UserLoginActivity;
-import graaby.app.wallet.modules.ForApplication;
+import graaby.app.wallet.util.CustomRetrofitErrorThrowable;
 import retrofit.ErrorHandler;
 import retrofit.RetrofitError;
 
@@ -20,9 +17,11 @@ import retrofit.RetrofitError;
  * Created by Akash on 3/23/15.
  */
 public class RetrofitErrorHandler implements ErrorHandler {
-    @Inject
-    @ForApplication
     Context application;
+
+    public RetrofitErrorHandler(Context application) {
+        this.application = application;
+    }
 
     @Override
     public Throwable handleError(RetrofitError cause) {
@@ -61,7 +60,7 @@ public class RetrofitErrorHandler implements ErrorHandler {
                 break;
         }
         if (errorResourceString != -1) {
-            Toast.makeText(application, errorResourceString, Toast.LENGTH_SHORT).show();
+            return new CustomRetrofitErrorThrowable(application.getString(errorResourceString), cause);
         }
         return cause;
     }

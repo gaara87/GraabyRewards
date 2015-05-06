@@ -63,8 +63,6 @@ import graaby.app.wallet.models.retrofit.OutletsResponse;
 import graaby.app.wallet.network.services.BusinessService;
 import graaby.app.wallet.util.CacheSubscriber;
 import graaby.app.wallet.util.Helper;
-import rx.android.schedulers.AndroidSchedulers;
-import rx.schedulers.Schedulers;
 
 
 public class BusinessesFragment extends BaseFragment
@@ -166,8 +164,7 @@ public class BusinessesFragment extends BaseFragment
             request.longitude = mLatLng.longitude;
         }
         mCompositeSubscriptions.add(mBusinessService.getOutletsAroundLocation(request)
-                .subscribeOn(Schedulers.newThread())
-                .observeOn(AndroidSchedulers.mainThread())
+                .compose(this.<OutletsResponse>applySchedulers())
                 .subscribe(new CacheSubscriber<OutletsResponse>(getActivity(), mSwipeRefresh, false) {
                     @Override
                     public void onSuccess(OutletsResponse result) {

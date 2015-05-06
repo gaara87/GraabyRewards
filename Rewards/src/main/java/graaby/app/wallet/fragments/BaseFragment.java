@@ -13,6 +13,9 @@ import de.greenrobot.event.EventBus;
 import graaby.app.wallet.GraabyApplication;
 import graaby.app.wallet.R;
 import graaby.app.wallet.events.ToolbarEvents;
+import rx.Observable;
+import rx.android.schedulers.AndroidSchedulers;
+import rx.schedulers.Schedulers;
 import rx.subscriptions.CompositeSubscription;
 
 /**
@@ -21,7 +24,7 @@ import rx.subscriptions.CompositeSubscription;
 public abstract class BaseFragment extends Fragment implements SwipeRefreshLayout.OnRefreshListener {
     protected final CompositeSubscription mCompositeSubscriptions;
     protected SwipeRefreshLayout mSwipeRefresh;
-
+    protected Observable.Transformer<Object, Object> mTransformer;
     public BaseFragment() {
         mCompositeSubscriptions = new CompositeSubscription();
     }
@@ -56,12 +59,31 @@ public abstract class BaseFragment extends Fragment implements SwipeRefreshLayou
     }
 
     @Override
+    public void onDetach() {
+        if (mSwipeRefresh != null)
+            mSwipeRefresh.setRefreshing(false);
+        super.onDetach();
+    }
+
+    @Override
     public void onDestroy() {
         super.onDestroy();
+        if (mSwipeRefresh != null)
+            mSwipeRefresh.setRefreshing(false);
         mCompositeSubscriptions.unsubscribe();
     }
 
     protected void setToolbarColors(int toolbarColorResourceID, int statusBarColorResourceID) {
         EventBus.getDefault().postSticky(new ToolbarEvents(toolbarColorResourceID, statusBarColorResourceID));
+    }
+
+    protected <T> Observable.Transformer<T, T> applySchedulers() {
+        return new Observable.Transformer<T, T>() {
+            @Override
+            public Observable<T> call(Observable<T> observable) {
+                return observable.subscribeOn(Schedulers.io())
+                        .observeOn(AndroidSchedulers.mainThread());
+            }
+        };
     }
 }

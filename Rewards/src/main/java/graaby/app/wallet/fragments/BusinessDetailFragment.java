@@ -35,8 +35,6 @@ import graaby.app.wallet.models.retrofit.OutletDetailsRequest;
 import graaby.app.wallet.network.services.BusinessService;
 import graaby.app.wallet.util.CacheSubscriber;
 import graaby.app.wallet.util.Helper;
-import rx.android.schedulers.AndroidSchedulers;
-import rx.schedulers.Schedulers;
 
 /**
  * Created by gaara on 8/4/14.
@@ -119,8 +117,7 @@ public class BusinessDetailFragment extends BaseFragment {
     protected void sendRequest() {
         mCompositeSubscriptions.add(
                 mBusinessService.getOutletDetails(new OutletDetailsRequest(originalOutletDetail.outletID))
-                        .subscribeOn(Schedulers.newThread())
-                        .observeOn(AndroidSchedulers.mainThread())
+                        .compose(this.<OutletDetail>applySchedulers())
                         .subscribe(new CacheSubscriber<OutletDetail>(getActivity(), mSwipeRefresh) {
                                        @Override
                                        public void onSuccess(OutletDetail result) {

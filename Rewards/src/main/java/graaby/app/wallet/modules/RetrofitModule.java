@@ -141,8 +141,8 @@ public class RetrofitModule {
 
     @Provides
     @Singleton
-    public ErrorHandler provideErrorHandler() {
-        return new RetrofitErrorHandler();
+    public ErrorHandler provideErrorHandler(@ForApplication Context application) {
+        return new RetrofitErrorHandler(application);
     }
 
 

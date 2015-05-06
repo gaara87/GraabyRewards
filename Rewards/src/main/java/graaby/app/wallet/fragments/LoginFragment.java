@@ -12,7 +12,6 @@ import android.nfc.NfcAdapter;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
-import android.support.v4.app.Fragment;
 import android.text.TextUtils;
 import android.text.method.LinkMovementMethod;
 import android.util.Log;
@@ -48,16 +47,15 @@ import graaby.app.wallet.auth.UserLoginActivity;
 import graaby.app.wallet.models.retrofit.UserCredentials;
 import graaby.app.wallet.models.retrofit.UserCredentialsResponse;
 import graaby.app.wallet.network.services.AuthService;
+import graaby.app.wallet.util.CacheSubscriber;
 import graaby.app.wallet.util.Helper;
-import retrofit.Callback;
-import retrofit.RetrofitError;
 
 
 /**
  * Created by gaara on 2/8/15.
  * Make some impeccable shyte
  */
-public class LoginFragment extends Fragment implements Callback<UserCredentialsResponse> {
+public class LoginFragment extends BaseFragment {
 
     LoginInterface loginActivity;
     @InjectView(R.id.password)
@@ -74,12 +72,6 @@ public class LoginFragment extends Fragment implements Callback<UserCredentialsR
     AuthService mLoginService;
     private String mEmail;
     private AccountManager mAccountMgr;
-
-    @Override
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        GraabyApplication.inject(this);
-    }
 
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -107,7 +99,7 @@ public class LoginFragment extends Fragment implements Callback<UserCredentialsR
                     public boolean onEditorAction(TextView textView, int id,
                                                   KeyEvent keyEvent) {
                         if (id == 697 || id == EditorInfo.IME_NULL) {
-                            attemptLogin();
+                            sendRequest();
                             return true;
                         }
                         return false;
@@ -118,7 +110,7 @@ public class LoginFragment extends Fragment implements Callback<UserCredentialsR
     @OnClick(R.id.sign_in_button)
     public void signInButtonClick() {
         Helper.closeKeyboard(getActivity(), mAutoCompleteSpinner);
-        attemptLogin();
+        sendRequest();
     }
 
     @OnClick(R.id.new_user_register)
@@ -127,20 +119,7 @@ public class LoginFragment extends Fragment implements Callback<UserCredentialsR
     }
 
     @Override
-    public void onDestroy() {
-        super.onDestroy();
-        ButterKnife.reset(this);
-        loginActivity = null;
-    }
-
-    public void loginAfterRegistering(String username, String password) {
-        mAutoCompleteSpinner.setText(username);
-        mPasswordView.setText(password);
-        attemptLogin();
-    }
-
-    public void attemptLogin() {
-
+    protected void sendRequest() {
         // Reset errors.
         mPasswordView.setError(null);
 
@@ -191,8 +170,78 @@ public class LoginFragment extends Fragment implements Callback<UserCredentialsR
             creds.nfcCapable = (mNfcAdapter != null);
             Crashlytics.setBool(Helper.CRASHLYTICS_KEY_NFC, creds.nfcCapable);
 
-            mLoginService.attemptLogin(creds, this);
+            mCompositeSubscriptions.add(mLoginService.attemptLogin(creds)
+                    .compose(this.<UserCredentialsResponse>applySchedulers())
+                    .subscribe(new CacheSubscriber<UserCredentialsResponse>(getActivity()) {
+                        @Override
+                        public void onFail(Throwable e) {
+                            super.onFail(e);
+                            showProgress(false);
+                        }
+
+                        @Override
+                        public void onSuccess(UserCredentialsResponse userCredentialsResponse) {
+                            showProgress(false);
+                            if (!TextUtils.isEmpty(userCredentialsResponse.message)) {
+                                Toast.makeText(getActivity(), userCredentialsResponse.message, Toast.LENGTH_SHORT).show();
+                            } else {
+                                try {
+                                    Crashlytics.setUserEmail(mEmail.split("@")[0]);
+                                } catch (Exception ignored) {
+
+                                }
+                                Account acc = new Account(mEmail, UserLoginActivity.ACCOUNT_TYPE);
+                                Bundle b = new Bundle();
+                                b.putString("url", userCredentialsResponse.url);
+                                b.putString(UserLoginActivity.AUTHTOKEN_USERDATA_KEY, userCredentialsResponse.oauth);
+
+                                GraabyApplication.getORMDbService().clearProfileInfo();
+                                GraabyApplication.getORMDbService().addProfileInfo(mEmail);
+
+                                mAccountMgr.addAccountExplicitly(acc, "welovegoogle", b);
+
+                                if (userCredentialsResponse.core != null && !TextUtils.isEmpty(userCredentialsResponse.core)) {
+                                    FileOutputStream fos;
+                                    try {
+                                        fos = getActivity().openFileOutput("beamer", Activity.MODE_PRIVATE);
+                                        DataOutputStream dos = new DataOutputStream(fos);
+                                        dos.writeUTF(userCredentialsResponse.core);
+                                        dos.close();
+                                        fos.close();
+                                    } catch (IOException ignored) {
+                                        Crashlytics.logException(ignored);
+                                    }
+                                }
+
+                                MainActivity.getGcmPreferences(getActivity()).edit().clear();
+
+                                Intent intent = new Intent();
+                                intent.putExtra(AccountManager.KEY_ACCOUNT_NAME, mEmail);
+                                intent.putExtra(AccountManager.KEY_ACCOUNT_TYPE,
+                                        UserLoginActivity.ACCOUNT_TYPE);
+                                intent.putExtra(AccountManager.KEY_AUTHTOKEN, userCredentialsResponse.oauth);
+                                intent.putExtra(UserLoginActivity.AUTHTOKEN_USERDATA_KEY, userCredentialsResponse.oauth);
+
+                                loginActivity.onLoginSuccessful(intent);
+
+                                Log.i("Graaby Account", "Account added successfully");
+                            }
+                        }
+                    }));
         }
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        ButterKnife.reset(this);
+        loginActivity = null;
+    }
+
+    public void loginAfterRegistering(String username, String password) {
+        mAutoCompleteSpinner.setText(username);
+        mPasswordView.setText(password);
+        sendRequest();
     }
 
     /**
@@ -235,63 +284,6 @@ public class LoginFragment extends Fragment implements Callback<UserCredentialsR
             mLoginFormView.setVisibility(show ? View.GONE : View.VISIBLE);
         }
     }
-
-    @Override
-    public void success(UserCredentialsResponse userCredentialsResponse, retrofit.client.Response response) {
-        if (!isAdded()) return;
-
-        showProgress(false);
-        if (!TextUtils.isEmpty(userCredentialsResponse.message)) {
-            Toast.makeText(getActivity(), userCredentialsResponse.message, Toast.LENGTH_SHORT).show();
-        } else {
-            try {
-                Crashlytics.setUserEmail(mEmail.split("@")[0]);
-            } catch (Exception ignored) {
-
-            }
-            Account acc = new Account(mEmail, UserLoginActivity.ACCOUNT_TYPE);
-            Bundle b = new Bundle();
-            b.putString("url", userCredentialsResponse.url);
-            b.putString(UserLoginActivity.AUTHTOKEN_USERDATA_KEY, userCredentialsResponse.oauth);
-
-            GraabyApplication.getORMDbService().clearProfileInfo();
-            GraabyApplication.getORMDbService().addProfileInfo(mEmail);
-
-            mAccountMgr.addAccountExplicitly(acc, "welovegoogle", b);
-
-            if (userCredentialsResponse.core != null && !TextUtils.isEmpty(userCredentialsResponse.core)) {
-                FileOutputStream fos;
-                try {
-                    fos = getActivity().openFileOutput("beamer", Activity.MODE_PRIVATE);
-                    DataOutputStream dos = new DataOutputStream(fos);
-                    dos.writeUTF(userCredentialsResponse.core);
-                    dos.close();
-                    fos.close();
-                } catch (IOException ignored) {
-                    Crashlytics.logException(ignored);
-                }
-            }
-
-            MainActivity.getGcmPreferences(getActivity()).edit().clear();
-
-            Intent intent = new Intent();
-            intent.putExtra(AccountManager.KEY_ACCOUNT_NAME, mEmail);
-            intent.putExtra(AccountManager.KEY_ACCOUNT_TYPE,
-                    UserLoginActivity.ACCOUNT_TYPE);
-            intent.putExtra(AccountManager.KEY_AUTHTOKEN, userCredentialsResponse.oauth);
-            intent.putExtra(UserLoginActivity.AUTHTOKEN_USERDATA_KEY, userCredentialsResponse.oauth);
-
-            loginActivity.onLoginSuccessful(intent);
-
-            Log.i("Graaby Account", "Account added successfully");
-        }
-    }
-
-    @Override
-    public void failure(RetrofitError error) {
-        showProgress(false);
-    }
-
 
     public interface LoginInterface {
         void onLoginSuccessful(Intent accountAuthenticatorResultIntent);

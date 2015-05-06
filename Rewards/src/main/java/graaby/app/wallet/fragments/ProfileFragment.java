@@ -31,8 +31,6 @@ import graaby.app.wallet.util.CacheSubscriber;
 import graaby.app.wallet.util.DiscountItemType;
 import graaby.app.wallet.util.Helper;
 import rx.Subscription;
-import rx.android.schedulers.AndroidSchedulers;
-import rx.schedulers.Schedulers;
 
 public class ProfileFragment extends BaseFragment {
 
@@ -83,8 +81,7 @@ public class ProfileFragment extends BaseFragment {
     @Override
     protected void sendRequest() {
         Subscription subscriber = mProfileService.getProfileInfo()
-                .subscribeOn(Schedulers.newThread())
-                .observeOn(AndroidSchedulers.mainThread())
+                .compose(this.<ProfileResponse>applySchedulers())
                 .subscribe(new CacheSubscriber<ProfileResponse>(getActivity(), mSwipeRefresh) {
                     @Override
                     public void onSuccess(ProfileResponse result) {

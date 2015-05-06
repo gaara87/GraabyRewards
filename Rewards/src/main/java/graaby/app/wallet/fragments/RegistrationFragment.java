@@ -4,7 +4,6 @@ import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
 import android.annotation.TargetApi;
 import android.app.Activity;
-import android.app.Fragment;
 import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
@@ -38,11 +37,9 @@ import graaby.app.wallet.auth.UserLoginActivity;
 import graaby.app.wallet.models.retrofit.BaseResponse;
 import graaby.app.wallet.models.retrofit.RegistrationRequest;
 import graaby.app.wallet.network.services.AuthService;
-import retrofit.Callback;
-import retrofit.RetrofitError;
-import retrofit.client.Response;
+import graaby.app.wallet.util.CacheSubscriber;
 
-public class RegistrationFragment extends Fragment implements Validator.ValidationListener {
+public class RegistrationFragment extends BaseFragment implements Validator.ValidationListener {
 
     @InjectView(R.id.emails_spinner)
     Spinner mSpinner;
@@ -84,14 +81,49 @@ public class RegistrationFragment extends Fragment implements Validator.Validati
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
-        GraabyApplication.inject(this);
         super.onCreate(savedInstanceState);
-        if (getArguments() != null) {
-
-        }
         mValidator = new Validator(this);
         mValidator.setValidationListener(this);
         mValidator.setValidationMode(Validator.Mode.IMMEDIATE);
+    }
+
+    @Override
+    protected void sendRequest() {
+        RegistrationRequest request = new RegistrationRequest();
+        request.email = mSpinner.getSelectedItem().toString();
+        request.password = mPasswordView.getText().toString();
+        request.firstName = mFirstNameView.getText().toString();
+        request.lastName = mLastNameView.getText().toString();
+        request.isPhoneNumberVerified = false;
+
+        //TODO: get google server side authtoken
+
+        mCompositeSubscriptions.add(
+                mAuthService.attemptRegister(request)
+                        .compose(this.<BaseResponse>applySchedulers())
+                        .subscribe(new CacheSubscriber<BaseResponse>(getActivity()) {
+
+                            @Override
+                            public void onFail(Throwable e) {
+                                super.onFail(e);
+                                showProgress(false);
+                            }
+
+                            @Override
+                            public void onSuccess(BaseResponse baseResponse) {
+                                if (baseResponse.responseSuccessCode == GraabyApplication.getContainerHolder().getContainer().getLong(getString(R.string.gtm_response_success))) {
+                                    show("Registered successfully!");
+                                    showProgress(false);
+                                    mCallback.onRegistrationComplete(mSpinner.getSelectedItem().toString(), mPasswordView.getText().toString());
+                                } else {
+                                    show(baseResponse.message);
+                                    showProgress(false);
+                                    Toast.makeText(getActivity(), baseResponse.message, Toast.LENGTH_LONG).show();
+                                }
+                            }
+                        }));
+        show("Attempting to register");
+        showProgress(true);
     }
 
     @Override
@@ -183,36 +215,7 @@ public class RegistrationFragment extends Fragment implements Validator.Validati
 
     @Override
     public void onValidationSucceeded() {
-        RegistrationRequest request = new RegistrationRequest();
-        request.email = mSpinner.getSelectedItem().toString();
-        request.password = mPasswordView.getText().toString();
-        request.firstName = mFirstNameView.getText().toString();
-        request.lastName = mLastNameView.getText().toString();
-        request.isPhoneNumberVerified = false;
-
-        //TODO: get google server side authtoken
-
-        mAuthService.attemptRegister(request, new Callback<BaseResponse>() {
-            @Override
-            public void success(BaseResponse baseResponse, Response response) {
-                if (baseResponse.responseSuccessCode == GraabyApplication.getContainerHolder().getContainer().getLong(getString(R.string.gtm_response_success))) {
-                    show("Registered successfully!");
-                    showProgress(false);
-                    mCallback.onRegistrationComplete(mSpinner.getSelectedItem().toString(), mPasswordView.getText().toString());
-                } else {
-                    show(baseResponse.message);
-                    showProgress(false);
-                    Toast.makeText(getActivity(), baseResponse.message, Toast.LENGTH_LONG).show();
-                }
-            }
-
-            @Override
-            public void failure(RetrofitError error) {
-                showProgress(false);
-            }
-        });
-        show("Attempting to register");
-        showProgress(true);
+        sendRequest();
     }
 
     @Override
@@ -223,7 +226,7 @@ public class RegistrationFragment extends Fragment implements Validator.Validati
     }
 
     public interface OnRegistrationListener {
-        public void onRegistrationComplete(String email, String password);
+        void onRegistrationComplete(String email, String password);
     }
 
 

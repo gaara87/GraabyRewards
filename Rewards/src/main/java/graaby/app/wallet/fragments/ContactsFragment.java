@@ -42,8 +42,6 @@ import graaby.app.wallet.models.retrofit.SendPointsRequest;
 import graaby.app.wallet.network.services.ContactService;
 import graaby.app.wallet.util.CacheSubscriber;
 import graaby.app.wallet.util.Helper;
-import rx.android.schedulers.AndroidSchedulers;
-import rx.schedulers.Schedulers;
 
 /**
  * Created by gaara on 1/6/14.
@@ -122,8 +120,7 @@ public class ContactsFragment extends BaseFragment implements DialogInterface.On
     @Override
     protected void sendRequest() {
         mCompositeSubscriptions.add(mContactService.getUserContacts()
-                .subscribeOn(Schedulers.newThread())
-                .observeOn(AndroidSchedulers.mainThread())
+                .compose(this.<ContactsResponse>applySchedulers())
                 .subscribe(new CacheSubscriber<ContactsResponse>(getActivity(), mSwipeRefresh) {
                     @Override
                     public void onSuccess(ContactsResponse result) {
@@ -148,8 +145,7 @@ public class ContactsFragment extends BaseFragment implements DialogInterface.On
 
         mCompositeSubscriptions.add(
                 mContactService.sendPointsToUser(new SendPointsRequest(contactIDToSendPointsTo, pointsToSend))
-                        .subscribeOn(Schedulers.newThread())
-                        .observeOn(AndroidSchedulers.mainThread())
+                        .compose(this.<BaseResponse>applySchedulers())
                         .subscribe(new CacheSubscriber<BaseResponse>(getActivity(), mSwipeRefresh) {
                             @Override
                             public void onSuccess(BaseResponse result) {
@@ -210,8 +206,7 @@ public class ContactsFragment extends BaseFragment implements DialogInterface.On
                 }
                 mCompositeSubscriptions.add(
                         mContactService.addContact(new AddContactRequest(formattedPhone))
-                                .subscribeOn(Schedulers.newThread())
-                                .observeOn(AndroidSchedulers.mainThread())
+                                .compose(this.<BaseResponse>applySchedulers())
                                 .subscribe(new CacheSubscriber<BaseResponse>(getActivity(), mSwipeRefresh) {
                                     @Override
                                     public void onSuccess(BaseResponse result) {

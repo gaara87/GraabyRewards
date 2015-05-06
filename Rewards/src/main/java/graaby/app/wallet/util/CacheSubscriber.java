@@ -3,6 +3,7 @@ package graaby.app.wallet.util;
 import android.content.Context;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.util.Log;
+import android.widget.Toast;
 
 import com.crashlytics.android.Crashlytics;
 
@@ -48,6 +49,9 @@ public abstract class CacheSubscriber<T> extends Subscriber<T> {
     final public void onError(Throwable e) {
         Crashlytics.logException(e);
         if (mContext.get() != null) {
+            if (e instanceof CustomRetrofitErrorThrowable) {
+                Toast.makeText(mContext.get(), e.getMessage(), Toast.LENGTH_SHORT).show();
+            }
             onFail(e);
         }
         if (mSwipeRefreshLayout != null)

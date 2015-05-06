@@ -41,8 +41,6 @@ import graaby.app.wallet.util.Helper;
 import graaby.app.wallet.widgets.MultiSwipeRefreshLayout;
 import rx.Observable;
 import rx.Subscription;
-import rx.android.schedulers.AndroidSchedulers;
-import rx.schedulers.Schedulers;
 
 public class MarketFragment extends BaseFragment implements OnItemClickListener {
 
@@ -192,8 +190,7 @@ public class MarketFragment extends BaseFragment implements OnItemClickListener 
                     break;
             }
         }
-        Subscription subscriber = tempObs.subscribeOn(Schedulers.newThread())
-                .observeOn(AndroidSchedulers.mainThread())
+        Subscription subscriber = tempObs.compose(this.<MarketResponse>applySchedulers())
                 .subscribe(new CacheSubscriber<MarketResponse>(getActivity(), mSwipeRefresh, true) {
                     @Override
                     public void onSuccess(MarketResponse result) {

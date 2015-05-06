@@ -4,9 +4,9 @@ import graaby.app.wallet.models.retrofit.BaseResponse;
 import graaby.app.wallet.models.retrofit.RegistrationRequest;
 import graaby.app.wallet.models.retrofit.UserCredentials;
 import graaby.app.wallet.models.retrofit.UserCredentialsResponse;
-import retrofit.Callback;
 import retrofit.http.Body;
 import retrofit.http.POST;
+import rx.Observable;
 
 /**
  * Created by gaara on 1/14/15.
@@ -15,9 +15,9 @@ import retrofit.http.POST;
 public interface AuthService {
 
     @POST("/login")
-    void attemptLogin(@Body UserCredentials creds, Callback<UserCredentialsResponse> callback);
+    Observable<UserCredentialsResponse> attemptLogin(@Body UserCredentials request);
 
     @POST("/register")
-    void attemptRegister(@Body RegistrationRequest request, Callback<BaseResponse> callback);
+    Observable<BaseResponse> attemptRegister(@Body RegistrationRequest request);
 
 }

@@ -22,8 +22,6 @@ import graaby.app.wallet.network.services.FeedService;
 import graaby.app.wallet.util.CacheSubscriber;
 import graaby.app.wallet.util.EndlessScrollListener;
 import graaby.app.wallet.util.Helper;
-import rx.android.schedulers.AndroidSchedulers;
-import rx.schedulers.Schedulers;
 
 public class FeedFragment extends BaseFragment implements SwipeRefreshLayout.OnRefreshListener {
 
@@ -87,8 +85,7 @@ public class FeedFragment extends BaseFragment implements SwipeRefreshLayout.OnR
     @Override
     protected void sendRequest() {
         mFeedService.getUserFeeds(mCurrentPage, Helper.PAGE_SIZE)
-                .subscribeOn(Schedulers.newThread())
-                .observeOn(AndroidSchedulers.mainThread())
+                .compose(this.<FeedsResponse>applySchedulers())
                 .subscribe(new CacheSubscriber<FeedsResponse>(getActivity(), mSwipeRefresh) {
                     @Override
                     public void onSuccess(FeedsResponse result) {
