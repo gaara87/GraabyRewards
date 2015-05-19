@@ -190,8 +190,8 @@ public class GraabyOutletDiscoveryService extends Service implements GoogleApiCl
 
     @Override
     public void onLocationChanged(Location location) {
-        if (location.getAccuracy() < GraabyApplication.getContainerHolder().getContainer().getDouble(getString(R.string.gtm_accuracy)))
-            return;
+//        if (location.getAccuracy() > GraabyApplication.getContainerHolder().getContainer().getDouble(getString(R.string.gtm_accuracy)))
+//            return;
         RealmResults<OutletDAO> outlets = realmDBService.getAllOutlets();
         if (outlets != null) {
             ListIterator<OutletDAO> iterator = outlets.listIterator();

@@ -1,6 +1,7 @@
 
 package graaby.app.wallet;
 
+import android.app.Activity;
 import android.content.Context;
 import android.nfc.NdefMessage;
 import android.nfc.NdefRecord;
@@ -8,14 +9,17 @@ import android.os.Parcel;
 import android.os.Parcelable;
 import android.util.Base64;
 
-import org.json.JSONException;
-import org.json.JSONObject;
+import com.bluelinelabs.logansquare.LoganSquare;
+import com.crashlytics.android.Crashlytics;
 
-import java.io.DataInputStream;
 import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.io.IOException;
 import java.nio.charset.Charset;
 import java.util.Calendar;
 import java.util.Date;
+
+import graaby.app.wallet.models.retrofit.UserCredentialsResponse;
 
 public final class GraabyNDEFCore implements Parcelable {
 
@@ -29,6 +33,7 @@ public final class GraabyNDEFCore implements Parcelable {
         }
 
     };
+    private static final String NDEF_TYPE_APPLICATION = "application/graaby.app";
     private static final long serialVersionUID = -4251480829022377156L;
     public static int BASE_YEAR = 2010;
     private Long graabyID;
@@ -46,14 +51,14 @@ public final class GraabyNDEFCore implements Parcelable {
         this.expiryDate.set(this.expiry[0] + GraabyNDEFCore.BASE_YEAR, this.expiry[1], this.expiry[2]);
     }
 
-    public GraabyNDEFCore(JSONObject object, Context context) throws JSONException {
-        graabyID = object.getLong(context.getString(R.string.core_id));
-        String keyString = object.getString(context.getString(R.string.core_key));
+    private GraabyNDEFCore(UserCredentialsResponse.NFCData object) {
+        graabyID = object.id;
+        String keyString = object.key;
         localAESKey = Base64.decode(keyString, Base64.DEFAULT);
-        name = object.getString(context.getString(R.string.core_name));
-        male = object.getBoolean(context.getString(R.string.core_gender));
+        name = object.name;
+        male = object.gender;
 
-        Long expiryLong = object.getLong(context.getString(R.string.core_expiry));
+        Long expiryLong = object.expiry;
 
         this.expiryDate = Calendar.getInstance();
         this.expiryDate.setTime(new Date(expiryLong));
@@ -63,27 +68,33 @@ public final class GraabyNDEFCore implements Parcelable {
         this.expiry[2] = (byte) this.expiryDate.get(Calendar.DATE);
     }
 
-    public static NdefMessage createNdefMessage(Context applicationContext) {
-        Parcel pc = Parcel.obtain();
-        try {
-            FileInputStream fis = applicationContext.openFileInput("beamer");
-            DataInputStream ois = new DataInputStream(fis);
-            String jsonString = ois.readUTF();
-            JSONObject jsonCore = new JSONObject(jsonString);
-            byte[] iv = Base64.decode(jsonCore.getString(applicationContext.getString(R.string.core_iv)), Base64.DEFAULT);
-            GraabyNDEFCore core = new GraabyNDEFCore(jsonCore, applicationContext);
-            ois.close();
-            fis.close();
-            core.writeToParcel(pc, Parcelable.PARCELABLE_WRITE_RETURN_VALUE);
-            byte[] data = pc.marshall();
-            NdefRecord nr = new NdefRecord(NdefRecord.TNF_MIME_MEDIA,
-                    "application/graaby.app".getBytes(Charset.forName("US-ASCII")),
-                    iv, data);
-            NdefMessage nm = new NdefMessage(new NdefRecord[]{nr});
-            return nm;
-        } catch (Exception e) {
+    public static void saveNfcData(Context context, UserCredentialsResponse.NFCData data) {
+        if (data != null) {
+            try {
+                FileOutputStream fos = context.openFileOutput("beamer", Activity.MODE_PRIVATE);
+                LoganSquare.serialize(data, fos);
+                fos.close();
+            } catch (IOException ignored) {
+                Crashlytics.logException(ignored);
+            }
         }
-        return null;
+    }
+
+    public static NdefMessage createNdefMessage(Context applicationContext) throws IOException {
+        Parcel pc = Parcel.obtain();
+        //TODO: handle converting jsonobject to logansquare deserialization
+        FileInputStream fis = applicationContext.openFileInput("beamer");
+        UserCredentialsResponse.NFCData nfcCore = LoganSquare.parse(fis, UserCredentialsResponse.NFCData.class);
+        byte[] iv = Base64.decode(nfcCore.iv, Base64.DEFAULT);
+        GraabyNDEFCore core = new GraabyNDEFCore(nfcCore);
+        fis.close();
+
+        core.writeToParcel(pc, Parcelable.PARCELABLE_WRITE_RETURN_VALUE);
+        byte[] data = pc.marshall();
+        NdefRecord nr = new NdefRecord(NdefRecord.TNF_MIME_MEDIA,
+                NDEF_TYPE_APPLICATION.getBytes(Charset.forName("US-ASCII")),
+                iv, data);
+        return new NdefMessage(new NdefRecord[]{nr});
     }
 
     @Override
@@ -101,4 +112,5 @@ public final class GraabyNDEFCore implements Parcelable {
         });
         dest.writeByteArray(this.localAESKey);
     }
+
 }

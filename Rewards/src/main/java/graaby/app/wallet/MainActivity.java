@@ -326,7 +326,7 @@ public class MainActivity extends BaseAppCompatActivity
 
     /**
      * Gets the current registration ID for application on GCM service, if there is one.
-     * <p/>
+     * <p>
      * If result is empty, the app needs to register.
      *
      * @return registration ID, or empty string if there is no existing
@@ -353,7 +353,7 @@ public class MainActivity extends BaseAppCompatActivity
 
     /**
      * Registers the application with GCM servers asynchronously.
-     * <p/>
+     * <p>
      * Stores the registration ID and the app versionCode in the application's
      * shared preferences.
      *

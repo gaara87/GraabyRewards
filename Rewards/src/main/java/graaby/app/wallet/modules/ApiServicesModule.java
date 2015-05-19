@@ -68,7 +68,8 @@ import retrofit.RestAdapter;
                 SearchResultsActivity.class,
                 GraabyOutletDiscoveryService.class,
                 ExtraInfoActivity.class,
-                FeedActivity.class
+                FeedActivity.class,
+                ProfileService.class
         })
 public class ApiServicesModule {
     private static final String TAG = ApiServicesModule.class.getSimpleName();

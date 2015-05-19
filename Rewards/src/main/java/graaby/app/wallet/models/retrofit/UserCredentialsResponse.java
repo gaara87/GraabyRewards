@@ -15,5 +15,26 @@ public class UserCredentialsResponse extends BaseResponse {
     public String oauth;
 
     @JsonField
-    public String core;
+    public NFCData core;
+
+    @JsonObject
+    public static class NFCData {
+        @JsonField(name = "m")
+        public boolean gender;
+
+        @JsonField(name = "name")
+        public String name;
+
+        @JsonField(name = "id")
+        public long id;
+
+        @JsonField(name = "key")
+        public String key;
+
+        @JsonField(name = "expiry")
+        public long expiry;
+
+        @JsonField(name = "iv")
+        public String iv;
+    }
 }

@@ -183,7 +183,7 @@ public class GcmIntentService extends IntentService {
 
 
                     activityIntent.setClass(this, PointReceivedActivity.class);
-                    activityIntent.setAction(NOTIFICATION_ACTION_POINTS);
+                    activityIntent.setAction(NOTIFICATION_ACTION_TX);
                     activityIntent.putExtra(Helper.INTENT_CONTAINER_INFO, msg);
                     activityIntent.putExtra(Helper.NOTIFICATIONID, notificationID);
 

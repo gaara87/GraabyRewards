@@ -27,7 +27,6 @@ import android.widget.Toast;
 
 import com.crashlytics.android.Crashlytics;
 
-import java.io.DataOutputStream;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
@@ -40,6 +39,7 @@ import butterknife.ButterKnife;
 import butterknife.InjectView;
 import butterknife.OnClick;
 import graaby.app.wallet.GraabyApplication;
+import graaby.app.wallet.GraabyNDEFCore;
 import graaby.app.wallet.MainActivity;
 import graaby.app.wallet.R;
 import graaby.app.wallet.auth.UserLoginActivity;
@@ -195,18 +195,7 @@ public class LoginFragment extends BaseFragment {
 
                                 mAccountMgr.addAccountExplicitly(acc, "welovegoogle", b);
 
-                                if (userCredentialsResponse.core != null && !TextUtils.isEmpty(userCredentialsResponse.core)) {
-                                    FileOutputStream fos;
-                                    try {
-                                        fos = getActivity().openFileOutput("beamer", Activity.MODE_PRIVATE);
-                                        DataOutputStream dos = new DataOutputStream(fos);
-                                        dos.writeUTF(userCredentialsResponse.core);
-                                        dos.close();
-                                        fos.close();
-                                    } catch (IOException ignored) {
-                                        Crashlytics.logException(ignored);
-                                    }
-                                }
+                                GraabyNDEFCore.saveNfcData(getActivity(), userCredentialsResponse.core);
 
                                 MainActivity.getGcmPreferences(getActivity()).edit().clear();
 
@@ -257,8 +246,9 @@ public class LoginFragment extends BaseFragment {
                     .setListener(new AnimatorListenerAdapter() {
                         @Override
                         public void onAnimationEnd(Animator animation) {
-                            mLoginStatusView.setVisibility(show ? View.VISIBLE
-                                    : View.GONE);
+                            if (mLoginStatusView != null)
+                                mLoginStatusView.setVisibility(show ? View.VISIBLE
+                                        : View.GONE);
                         }
                     });
 
@@ -268,8 +258,9 @@ public class LoginFragment extends BaseFragment {
                     .setListener(new AnimatorListenerAdapter() {
                         @Override
                         public void onAnimationEnd(Animator animation) {
-                            mLoginFormView.setVisibility(show ? View.GONE
-                                    : View.VISIBLE);
+                            if (mLoginStatusView != null)
+                                mLoginFormView.setVisibility(show ? View.GONE
+                                        : View.VISIBLE);
                         }
                     });
         } else {
