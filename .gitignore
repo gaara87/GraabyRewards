@@ -9,3 +9,4 @@ local.properties
 
 *.iml
 .idea
+manifest-merger-dev-release-report.txt

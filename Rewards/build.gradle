@@ -53,13 +53,13 @@ android {
     productFlavors {
         prod {
             applicationId "graaby.app.wallet"
-            versionName "1"
-            versionCode 32
+            versionName "Zeta1 Scorpii"
+            versionCode 35
         }
         dev {
             applicationId "graaby.app.wallet.dev"
-            versionName "2-dev"
-            versionCode 34
+            versionName "Zeta1 Scorpii-dev"
+            versionCode 35
         }
     }
     applicationVariants.all { variant ->
