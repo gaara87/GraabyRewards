@@ -43,6 +43,8 @@ import graaby.app.wallet.GraabyNDEFCore;
 import graaby.app.wallet.MainActivity;
 import graaby.app.wallet.R;
 import graaby.app.wallet.auth.UserLoginActivity;
+import graaby.app.wallet.models.retrofit.BaseResponse;
+import graaby.app.wallet.models.retrofit.ForgotPasswordRequest;
 import graaby.app.wallet.models.retrofit.UserCredentials;
 import graaby.app.wallet.models.retrofit.UserCredentialsResponse;
 import graaby.app.wallet.network.services.AuthService;
@@ -106,6 +108,31 @@ public class LoginFragment extends BaseFragment {
     public void signInButtonClick() {
         Helper.closeKeyboard(getActivity(), mAutoCompleteSpinner);
         sendRequest();
+    }
+
+    @OnClick(R.id.forgot_password)
+    public void forgotPasswordRequest() {
+        mEmail = mAutoCompleteSpinner.getText().toString();
+        if (TextUtils.isEmpty(mEmail) || !mEmail.contains("@")) {
+            Toast.makeText(getActivity(), "Please use a valid email", Toast.LENGTH_SHORT).show();
+        } else {
+            ForgotPasswordRequest request = new ForgotPasswordRequest();
+            request.email = mEmail;
+            Toast.makeText(getActivity(), "Resetting password", Toast.LENGTH_SHORT).show();
+            mCompositeSubscriptions.add(mLoginService.passwordReset(request)
+                    .compose(this.<BaseResponse>applySchedulers())
+                    .subscribe(new CacheSubscriber<BaseResponse>(getActivity()) {
+                        @Override
+                        public void onSuccess(BaseResponse result) {
+                            if (result.responseSuccessCode == GraabyApplication.getContainerHolder().getContainer().getLong(getString(R.string.gtm_response_success))) {
+                                Toast.makeText(getActivity(), "Check e-mail for instructions", Toast.LENGTH_LONG).show();
+                            } else {
+                                Toast.makeText(getActivity(), result.message, Toast.LENGTH_LONG).show();
+                            }
+
+                        }
+                    }));
+        }
     }
 
     @OnClick(R.id.new_user_register)

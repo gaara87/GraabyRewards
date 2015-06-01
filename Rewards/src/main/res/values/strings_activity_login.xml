@@ -14,6 +14,7 @@
     <string name="error_field_lastname">Lastname not found</string>
     <string name="login_welcome">Don\'t have an account yet? <a href='http://www.graaby.com/signup'>Sign up here</a> \n\n Didn\'t get an activation mail? <a href='http://www.graaby.com/signup'>Re-send it</a></string>
     <string name="login_register_here">New to Graaby? Register here</string>
+    <string name="login_forgot_pwd">Forgot Password?</string>
     <string name="login_progress_signing_in">Logging in&#8230;</string>
     <string name="registering">Registering&#8230;</string>
 

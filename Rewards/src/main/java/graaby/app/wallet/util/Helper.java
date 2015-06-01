@@ -25,6 +25,7 @@ public class Helper {
     public static final String KEY_TYPE = "type";
     public static final String MY_DISCOUNT_ITEMS_FLAG = "market";
     public static final String BRAND_ID_BUNDLE_KEY = "bidkey";
+    public static final String OUTLET_ID_BUNDLE_KEY = "oidkey";
     public static final String CRASHLYTICS_KEY_NFC = "nfc_phone";
     public static final int DEFAULT_NON_BRAND_RELATED = -1;
     private static final int PLAY_SERVICES_RESOLUTION_REQUEST = 9000;

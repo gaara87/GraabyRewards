@@ -83,13 +83,22 @@
 
             <com.gc.materialdesign.views.ButtonFlat
                 android:id="@+id/new_user_register"
-                android:layout_width="match_parent"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginBottom="@dimen/global16"
+                android:layout_gravity="center_horizontal"
                 android:layout_marginTop="@dimen/global16"
                 android:background="@color/belizehole"
                 android:text="@string/login_register_here"
                 materialdesign:rippleSpeed="300" />
+
+            <com.gc.materialdesign.views.ButtonFlat
+                android:id="@+id/forgot_password"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+                android:layout_marginBottom="@dimen/global16"
+                android:background="@color/asbestos"
+                android:text="@string/login_forgot_pwd" />
 
             <TextView
                 android:id="@+id/agreement"

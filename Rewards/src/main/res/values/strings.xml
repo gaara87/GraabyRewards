@@ -11,7 +11,7 @@
     <string name="title_contacts">Contacts</string>
     <string name="title_activity_main">Graaby Rewards</string>
     <string name="title_activity_discount_item_details">Details</string>
-    <string name="title_activity_my_cpn_vcr">"Market"</string>
+    <string name="title_activity_my_cpn_vcr">"My"</string>
     <string name="title_activity_slide">Graaby</string>
     <string name="title_activity_business_details">Business Details</string>
 
@@ -115,7 +115,10 @@
     <string name="gtm_max_distance_from_user">location_update_radius_threshold</string>
     <string name="gtm_accuracy">location_update_accuracy_threshold</string>
     <string name="gtm_update_interval">location_update_to_server_interval_in_mins</string>
+    <string name="gtm_page_size">page_size</string>
     <string name="title_activity_feed">Feeds</string>
 
     <string name="hello_world">Hello world!</string>
+    <string name="discount_for">for</string>
+    <string name="discount_purchased_for">purchased for</string>
 </resources>

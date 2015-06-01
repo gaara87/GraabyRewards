@@ -5,19 +5,12 @@
     android:layout_width="fill_parent"
     android:layout_height="wrap_content"
     android:background="@color/wetasphalt"
-    android:orientation="vertical"
-    android:paddingRight="@dimen/globalPadding8">
+    android:orientation="vertical">
     <!--android:elevation="2dp"-->
 
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal">
-
         <RelativeLayout
-            android:layout_width="0dp"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_weight="3"
             android:orientation="vertical">
 
             <TextView
@@ -35,7 +28,6 @@
                 tools:text="8264" />
 
             <TextView
-                android:id="@+id/textView2"
                 style="@style/Graaby.Theme.TextAppearance.Stat.Caption.Inverse"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -44,6 +36,16 @@
                 android:layout_below="@+id/points_textView"
                 android:text="@string/profile_stat_balance" />
         </RelativeLayout>
+
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/textView2"
+        android:layout_marginBottom="@dimen/globalPadding8"
+        android:layout_marginTop="@dimen/globalPadding8"
+        android:orientation="horizontal"
+        android:weightSum="4">
 
         <LinearLayout
             android:layout_width="0dp"
@@ -71,17 +73,6 @@
                 android:layout_gravity="center"
                 android:text="@string/profile_stat_checkin" />
         </LinearLayout>
-    </LinearLayout>
-
-
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/textView2"
-        android:layout_marginBottom="@dimen/globalPadding8"
-        android:layout_marginTop="@dimen/globalPadding8"
-        android:orientation="horizontal"
-        android:weightSum="4">
 
         <LinearLayout
             android:layout_width="0dp"
@@ -133,33 +124,6 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
                 android:text="@string/profile_stat_name_savings" />
-
-        </LinearLayout>
-
-        <LinearLayout
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:orientation="vertical">
-
-            <TextView
-                android:id="@+id/profile_total_points_textView"
-                style="@style/Graaby.Theme.TextAppearance.Stat.Number.Invserse"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:drawableEnd="@drawable/ic_earnings"
-                android:drawableRight="@drawable/ic_earnings"
-                android:hint="@string/hint_placeholder"
-                tools:text="82640" />
-
-
-            <TextView
-                style="@style/Graaby.Theme.TextAppearance.Stat.Caption.Inverse"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:text="@string/profile_stat_earnings" />
 
         </LinearLayout>
 

@@ -39,6 +39,9 @@ import graaby.app.wallet.network.services.SettingsService;
 import graaby.app.wallet.receivers.UpdateLocationBroadcastReceiver;
 import graaby.app.wallet.util.CacheSubscriber;
 import io.realm.RealmResults;
+import retrofit.Callback;
+import retrofit.RetrofitError;
+import retrofit.client.Response;
 import rx.Observable;
 import rx.Subscriber;
 import rx.schedulers.Schedulers;
@@ -117,23 +120,25 @@ public class GraabyOutletDiscoveryService extends Service implements GoogleApiCl
     }
 
     private void sendLocationUpdateRequest(Location location) {
-
-        mService.updateUserLocation(new LocationUpdateRequest(location))
+        Observable.just(location)
                 .delaySubscription(new Random().nextInt(5), TimeUnit.SECONDS)
-                .observeOn(Schedulers.newThread())
-                .subscribeOn(Schedulers.newThread())
-                .subscribe(new CacheSubscriber<BaseResponse>(this) {
+                .subscribe(new CacheSubscriber<Location>(this) {
                     @Override
-                    public void onFail(Throwable e) {
-                        Log.e(TAG, "Location update failed");
-                    }
+                    public void onSuccess(Location result) {
+                        mService.updateUserLocation(new LocationUpdateRequest(location), new Callback<BaseResponse>() {
+                            @Override
+                            public void success(BaseResponse result, Response response) {
+                                if (result.responseSuccessCode == GraabyApplication.getContainerHolder().getContainer().getLong(getString(R.string.gtm_response_success)))
+                                    Log.d(TAG, "Location updated");
+                                else
+                                    Log.e(TAG, "Location update failed");
+                            }
 
-                    @Override
-                    public void onSuccess(BaseResponse result) {
-                        if (result.responseSuccessCode == GraabyApplication.getContainerHolder().getContainer().getLong(getString(R.string.gtm_response_success)))
-                            Log.d(TAG, "Location updated");
-                        else
-                            Log.e(TAG, "Location update failed");
+                            @Override
+                            public void failure(RetrofitError error) {
+                                Log.e(TAG, "Location update failed");
+                            }
+                        });
                     }
                 });
     }
