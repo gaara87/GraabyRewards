@@ -64,21 +64,37 @@
                 android:hint="Primary e-mail for this account"
                 android:textAppearance="?android:attr/textAppearanceSmall" />
 
-            <com.rengwuxian.materialedittext.MaterialEditText
-                android:id="@+id/password"
-                style="@style/SuccessEditText"
+            <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:hint="@string/register_prompt_password"
-                android:imeOptions="flagNavigateNext"
-                android:inputType="textPassword"
-                android:maxLength="15"
-                android:maxLines="1"
-                android:nextFocusForward="@+id/login_first_name"
-                android:singleLine="true"
-                app:met_floatingLabelText="Password"
-                app:met_helperText="More complicated = more security"
-                app:met_maxCharacters="15" />
+                android:orientation="horizontal">
+
+                <com.rengwuxian.materialedittext.MaterialEditText
+                    android:id="@+id/password"
+                    style="@style/SuccessEditText"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:hint="@string/register_prompt_password"
+                    android:imeOptions="flagNavigateNext"
+                    android:inputType="textPassword"
+                    android:maxLength="15"
+                    android:maxLines="1"
+                    android:nextFocusForward="@+id/login_first_name"
+                    android:singleLine="true"
+                    app:met_floatingLabelText="Password"
+                    app:met_helperText="More complicated = more security"
+                    app:met_maxCharacters="15" />
+
+                <android.support.v7.widget.SwitchCompat
+                    android:id="@+id/password_switch"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:drawableLeft="@drawable/ic_visibility_off"
+                    android:drawableStart="@drawable/ic_visibility_off" />
+
+
+            </LinearLayout>
 
             <LinearLayout
                 android:layout_width="match_parent"

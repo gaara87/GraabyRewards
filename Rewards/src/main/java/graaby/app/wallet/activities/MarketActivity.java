@@ -34,7 +34,7 @@ public class MarketActivity extends BaseAppCompatActivity {
             try {
                 OutletDetail outlet = LoganSquare.parse(info, OutletDetail.class);
                 getSupportActionBar().setTitle(outlet.businessName);
-                if (getIntent().getAction().equals(GcmIntentService.NOTIFICATION_ACTION_NEW_DISCOUNT)) {
+                if (getIntent().getAction() != null && getIntent().getAction().equals(GcmIntentService.NOTIFICATION_ACTION_NEW_DISCOUNT)) {
                     getSupportActionBar().setTitle(outlet.outletName);
                 }
                 args.putInt(Helper.BRAND_ID_BUNDLE_KEY, outlet.businessID);

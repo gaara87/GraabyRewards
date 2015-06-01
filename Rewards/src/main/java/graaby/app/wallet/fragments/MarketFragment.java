@@ -14,6 +14,7 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.GridView;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import com.bluelinelabs.logansquare.LoganSquare;
@@ -31,6 +32,7 @@ import graaby.app.wallet.activities.SearchResultsActivity;
 import graaby.app.wallet.adapters.MarketAdapter;
 import graaby.app.wallet.models.retrofit.DiscountItemDetailsResponse;
 import graaby.app.wallet.models.retrofit.MarketForBusinessRequest;
+import graaby.app.wallet.models.retrofit.MarketForOutletRequest;
 import graaby.app.wallet.models.retrofit.MarketRequest;
 import graaby.app.wallet.models.retrofit.MarketResponse;
 import graaby.app.wallet.network.services.MarketService;
@@ -49,6 +51,9 @@ public class MarketFragment extends BaseFragment implements OnItemClickListener 
     GridView mGrid;
     @InjectView(android.R.id.empty)
     TextView mEmpty;
+    @InjectView(R.id.progressBar)
+    ProgressBar mProgress;
+
     @Inject
     MarketService mMarketService;
     private DiscountItemType whatType;
@@ -58,10 +63,11 @@ public class MarketFragment extends BaseFragment implements OnItemClickListener 
     private Integer mBrandID = Helper.DEFAULT_NON_BRAND_RELATED;
     private int mCurrentPage;
 
-    public static MarketFragment newInstance(Boolean myFlag, int brandIDNum, Boolean searchable) {
+    public static MarketFragment newInstance(Boolean myFlag, int outletID, Boolean searchable) {
         MarketFragment fragment = new MarketFragment();
         Bundle args = new Bundle();
-        args.putInt(Helper.BRAND_ID_BUNDLE_KEY, brandIDNum);
+        args.putInt(Helper.BRAND_ID_BUNDLE_KEY, outletID);
+        args.putInt(Helper.OUTLET_ID_BUNDLE_KEY, outletID);
         args.putBoolean(Helper.MY_DISCOUNT_ITEMS_FLAG, myFlag);
         args.putBoolean(SEARCHABLE_PARAMETER, searchable);
         fragment.setArguments(args);
@@ -119,8 +125,10 @@ public class MarketFragment extends BaseFragment implements OnItemClickListener 
                              Bundle savedInstanceState) {
         View v = super.onCreateView(inflater, container, savedInstanceState, R.layout.fragment_marketplace);
         ButterKnife.inject(this, v);
-        mSwipeRefresh.setColorSchemeResources(R.color.sunflower, R.color.nephritis, R.color.peterriver, R.color.pumpkin);
+        setSwipeRefreshColors(R.color.sunflower, R.color.nephritis, R.color.peterriver, R.color.pumpkin);
+        mSwipeRefresh.setEnabled(false);
         mGrid.setOnItemClickListener(this);
+        mGrid.setEmptyView(mProgress);
         return v;
     }
 
@@ -172,7 +180,11 @@ public class MarketFragment extends BaseFragment implements OnItemClickListener 
     protected void sendRequest() {
         MarketRequest request = new MarketRequest();
         if (mBrandID != Helper.DEFAULT_NON_BRAND_RELATED) {
-            request = new MarketForBusinessRequest(mBrandID);
+            if (getArguments().getInt(Helper.OUTLET_ID_BUNDLE_KEY, -1) != -1) {
+                request = new MarketForOutletRequest(getArguments().getInt(Helper.OUTLET_ID_BUNDLE_KEY));
+            } else {
+                request = new MarketForBusinessRequest(mBrandID);
+            }
         }
         request.page = mCurrentPage;
         //TODO: convert PAGE_SIZE to configuration parameter from GTM
@@ -201,6 +213,7 @@ public class MarketFragment extends BaseFragment implements OnItemClickListener 
                             adapter.addAll(result.items);
                         } else if (mCurrentPage == 0) {
                             mGrid.setEmptyView(mEmpty);
+                            mProgress.setVisibility(View.GONE);
                         }
                         adapter.notifyDataSetChanged();
                     }

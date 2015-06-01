@@ -59,6 +59,8 @@ public class DiscountItemDetailsActivity extends BaseAppCompatActivity implement
     TextView mItemDetailsTextView;
     @InjectView(R.id.item_terms_textView)
     TextView mItemTermsTextView;
+    @InjectView(R.id.item_discount_for)
+    TextView mItemFor;
     @InjectView(R.id.grab_it_button)
     FloatingActionButton mGrabItButton;
     @InjectView(R.id.swiperefresh)
@@ -137,12 +139,15 @@ public class DiscountItemDetailsActivity extends BaseAppCompatActivity implement
             mGrabItButton.setColorPressedResId(R.color.graaby_light_blue);
             mGrabItButton.setColorRippleResId(R.color.peterriver);
             mGrabItButton.setImageDrawable(getResources().getDrawable(R.drawable.ic_add_shopping_cart));
+            mItemFor.setText(getString(R.string.discount_for));
         } else {
             mGrabItButton.setOnClickListener(null);
             mGrabItButton.setColorNormalResId(android.R.color.white);
             mGrabItButton.setColorPressedResId(R.color.graaby_grey);
             mGrabItButton.setColorRippleResId(R.color.graaby_light_blue);
             mGrabItButton.setImageDrawable(getResources().getDrawable(R.drawable.ic_check));
+            mItemFor.setText(getString(R.string.discount_purchased_for));
+
         }
     }
 

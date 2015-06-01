@@ -39,8 +39,6 @@ public class ProfileFragment extends BaseFragment {
     TextView mPointsTextView;
     @InjectView(R.id.profile_total_savings_textView)
     TextView mProfileTotalSavingsTextView;
-    @InjectView(R.id.profile_total_points_textView)
-    TextView mProfileTotalPointsTextView;
     @InjectView(R.id.profile_total_vouchers_textView)
     TextView mProfileTotalVouchersTextView;
     @InjectView(R.id.profile_total_coupons_textView)
@@ -150,7 +148,6 @@ public class ProfileFragment extends BaseFragment {
         }
         if (profile.pointStatistics != null) {
             mPointsTextView.setText(profile.pointStatistics.currentPointBalance);
-            mProfileTotalPointsTextView.setText(profile.pointStatistics.cumulativePointTotal);
             mProfileTotalSavingsTextView.setText(profile.pointStatistics.cumulativeSavingsTotal);
             mProfileConnectionsTextview.setText(profile.pointStatistics.totalNumberOfContacts);
             mProfileCheckinsTextview.setText(profile.pointStatistics.totalCheckinCount);

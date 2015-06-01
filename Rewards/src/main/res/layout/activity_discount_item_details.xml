@@ -68,10 +68,10 @@
                             android:textAppearance="@style/TextAppearance.AppCompat.Subhead" />
 
                         <TextView
+                            android:id="@+id/item_discount_for"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:layout_marginTop="@dimen/global8"
-                            android:text="for " />
+                            android:layout_marginTop="@dimen/global8"/>
 
                         <TextView
                             android:id="@+id/item_costTextView"

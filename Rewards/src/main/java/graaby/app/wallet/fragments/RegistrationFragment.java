@@ -7,10 +7,13 @@ import android.app.Activity;
 import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
+import android.support.v7.widget.SwitchCompat;
+import android.text.method.PasswordTransformationMethod;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
+import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.TextView;
@@ -39,7 +42,7 @@ import graaby.app.wallet.models.retrofit.RegistrationRequest;
 import graaby.app.wallet.network.services.AuthService;
 import graaby.app.wallet.util.CacheSubscriber;
 
-public class RegistrationFragment extends BaseFragment implements Validator.ValidationListener {
+public class RegistrationFragment extends BaseFragment implements Validator.ValidationListener, CompoundButton.OnCheckedChangeListener {
 
     @InjectView(R.id.emails_spinner)
     Spinner mSpinner;
@@ -63,6 +66,9 @@ public class RegistrationFragment extends BaseFragment implements Validator.Vali
     @Order(value = 5)
     @Pattern(regex = "(\\d{10}|\\d{0})", message = "10 digit number only")
     EditText mPhoneNumber;
+
+    @InjectView(R.id.password_switch)
+    SwitchCompat mPasswordSwitch;
 
     @InjectView(R.id.verification_message)
     TextView mVerificationMessage;
@@ -135,6 +141,7 @@ public class RegistrationFragment extends BaseFragment implements Validator.Vali
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         mSpinner.setAdapter(adapter);
         mSpinner.requestFocus();
+        mPasswordSwitch.setOnCheckedChangeListener(this);
         return rootView;
     }
 
@@ -217,6 +224,17 @@ public class RegistrationFragment extends BaseFragment implements Validator.Vali
     public void onValidationFailed(List<ValidationError> validationErrors) {
         for (ValidationError error : validationErrors) {
             ((EditText) error.getView()).setError(error.getCollatedErrorMessage(getActivity()));
+        }
+    }
+
+    @Override
+    public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
+        if (b) {
+            mPasswordView.setTransformationMethod(null);
+            mPasswordSwitch.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_visibility, 0, 0, 0);
+        } else {
+            mPasswordView.setTransformationMethod(new PasswordTransformationMethod());
+            mPasswordSwitch.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_visibility_off, 0, 0, 0);
         }
     }
 
