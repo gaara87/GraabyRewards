@@ -121,4 +121,8 @@
     <string name="hello_world">Hello world!</string>
     <string name="discount_for">for</string>
     <string name="discount_purchased_for">purchased for</string>
+
+    <string name="service_name">Graaby Rewards Card</string>
+    <string name="service_card_title">Graaby Card</string>
+
 </resources>
