@@ -1,0 +1,21 @@
+<preference-headers xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <!-- These settings headers are only used on tablets. -->
+
+    <header
+        android:fragment="graaby.app.wallet.activities.SettingsActivity$GeneralPreferenceFragment"
+        android:title="@string/pref_header_general" />
+
+    <header
+        android:fragment="graaby.app.wallet.activities.SettingsActivity$NotificationPreferenceFragment"
+        android:title="@string/pref_header_notifications" />
+
+    <header
+        android:fragment="graaby.app.wallet.activities.SettingsActivity$AccountPreferenceFragment"
+        android:title="@string/pref_header_account" />
+
+    <header
+        android:fragment="graaby.app.wallet.activities.SettingsActivity$LegalPreferenceFragment"
+        android:title="@string/pref_header_legal" />
+
+</preference-headers>

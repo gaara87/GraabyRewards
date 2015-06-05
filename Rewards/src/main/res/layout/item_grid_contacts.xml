@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<android.support.v7.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@android:color/white">
+    <!--android:elevation="5dp"-->
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+
+        <ImageView
+            android:id="@+id/contacts_userProfilePicImageView"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/profile_pic_frame_size"
+            android:contentDescription="Contact profile picture"
+            android:scaleType="centerCrop"
+            android:src="@drawable/ic_connections" />
+
+
+        <TextView
+            android:id="@+id/contacts_usertextView"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:paddingBottom="0dp"
+            android:paddingEnd="@dimen/globalPadding8"
+            android:paddingLeft="@dimen/globalPadding8"
+            android:paddingRight="@dimen/globalPadding8"
+            android:paddingStart="@dimen/globalPadding8"
+            android:paddingTop="@dimen/globalPadding8"
+            android:textAppearance="@style/TextAppearance.AppCompat.Subhead"
+            tools:text="Akash Ramani" />
+
+        <TextView
+            android:id="@+id/contacts_points"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:paddingLeft="@dimen/globalPadding8"
+            android:textAppearance="@style/TextAppearance.AppCompat.Caption"
+            tools:text="14 Graaby Points" />
+
+        <Button
+            android:id="@+id/share_points"
+            style="?android:attr/borderlessButtonStyle"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:drawableLeft="@drawable/ic_point_24"
+            android:drawableRight="@drawable/ic_transaction_24"
+            android:text="Share points"
+            android:textColor="@color/belizehole" />
+    </LinearLayout>
+</android.support.v7.widget.CardView>

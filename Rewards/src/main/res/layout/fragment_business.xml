@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<android.support.v4.widget.SwipeRefreshLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:map="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/swiperefresh"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:gravity="center">
+
+        <com.google.android.gms.maps.MapView
+            android:id="@+id/map"
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent"
+            map:cameraZoom="17"
+            map:mapType="normal"
+            map:uiCompass="false"
+            map:uiZoomControls="true"
+            map:uiZoomGestures="true"
+            map:useViewLifecycle="true" />
+
+    </FrameLayout>
+</android.support.v4.widget.SwipeRefreshLayout>

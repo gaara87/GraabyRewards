@@ -1,0 +1,28 @@
+<merge>
+
+    <android.support.v4.view.ViewPager xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:tools="http://schemas.android.com/tools"
+        android:id="@+id/pager"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:paddingLeft="@dimen/global16"
+        android:paddingRight="@dimen/global16"
+        android:paddingTop="@dimen/global16"
+        tools:context=".LoginActivity">
+
+        <fragment
+            android:id="@+id/login_frag"
+            android:name="graaby.app.wallet.fragments.LoginFragment"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            tools:layout="@layout/fragment_login" />
+
+        <fragment
+            android:id="@+id/register_frag"
+            android:name="graaby.app.wallet.fragments.RegistrationFragment"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            tools:layout="@layout/fragment_registration" />
+
+    </android.support.v4.view.ViewPager>
+</merge>

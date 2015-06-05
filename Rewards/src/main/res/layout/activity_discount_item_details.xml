@@ -1,0 +1,177 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <graaby.app.wallet.widgets.MultiSwipeRefreshLayout
+        android:id="@+id/swiperefresh"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <ScrollView
+                android:id="@+id/scrollview"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:paddingBottom="60dp">
+
+                    <ImageView
+                        android:id="@+id/item_businessPicImageView"
+                        android:layout_width="match_parent"
+                        android:layout_height="@dimen/hero_picture_height"
+                        android:layout_gravity="top"
+                        android:contentDescription="business picture"
+                        android:scaleType="centerCrop"
+                        android:src="@color/black_overlay" />
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:layout_marginLeft="@dimen/globalPadding8"
+                        android:layout_marginRight="@dimen/globalPadding8"
+                        android:layout_marginTop="@dimen/globalPadding8"
+                        android:background="?primaryBackgroundLight"
+                        android:gravity="center"
+                        android:orientation="vertical"
+                        android:padding="@dimen/globalPadding8">
+
+                        <TextView
+                            android:id="@+id/item_valueTextView"
+                            android:layout_width="wrap_content"
+                            android:layout_height="match_parent"
+                            android:textIsSelectable="false" />
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="@dimen/global8"
+                            android:text="at" />
+
+                        <TextView
+                            android:id="@+id/item_businessNameTextView"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="@dimen/global8"
+                            android:drawableEnd="@drawable/nav_business"
+                            android:drawablePadding="@dimen/globalPadding8"
+                            android:drawableRight="@drawable/nav_business"
+                            android:gravity="center"
+                            android:textAppearance="@style/TextAppearance.AppCompat.Subhead" />
+
+                        <TextView
+                            android:id="@+id/item_discount_for"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="@dimen/global8"/>
+
+                        <TextView
+                            android:id="@+id/item_costTextView"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="@dimen/global8"
+                            android:drawableEnd="@drawable/ic_point_24"
+                            android:drawableRight="@drawable/ic_point_24"
+                            android:gravity="center_vertical"
+                            android:textAppearance="@style/TextAppearance.AppCompat.Headline" />
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text=" Graaby Points"
+                            android:textAppearance="@style/TextAppearance.AppCompat.Caption" />
+
+
+                    </LinearLayout>
+
+                    <Button
+                        android:id="@+id/view_outlets"
+                        style="?android:attr/borderlessButtonStyle"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center_horizontal"
+                        android:layout_marginBottom="@dimen/globalPadding8"
+                        android:text="View all outlets"
+                        android:textColor="@color/wisteria" />
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginEnd="@dimen/activity_horizontal_margin"
+                        android:layout_marginLeft="@dimen/activity_horizontal_margin"
+                        android:layout_marginRight="@dimen/activity_horizontal_margin"
+                        android:layout_marginStart="@dimen/activity_horizontal_margin"
+                        android:orientation="vertical">
+
+                        <TextView
+                            android:id="@+id/item_expiry_textView"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:drawableLeft="@drawable/ic_time"
+                            android:drawableStart="@drawable/ic_time"
+                            android:gravity="center_vertical"
+                            android:textAppearance="@style/TextAppearance.AppCompat.Body2"
+                            android:visibility="visible" />
+
+                        <include layout="@layout/include_divider" />
+
+                        <TextView
+                            android:id="@+id/item_id_textView"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:drawableLeft="@drawable/ic_barcode"
+                            android:drawableStart="@drawable/ic_barcode"
+                            android:gravity="center_vertical"
+                            android:textAppearance="@style/TextAppearance.AppCompat.Body1" />
+
+                        <include layout="@layout/include_divider" />
+
+                        <TextView
+                            android:id="@+id/item_details_textView"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:drawableLeft="@drawable/ic_detail"
+                            android:drawableStart="@drawable/ic_detail"
+                            android:gravity="center_vertical"
+                            android:textAppearance="@style/TextAppearance.AppCompat.Body1"
+                            android:visibility="visible" />
+
+                        <include layout="@layout/include_divider" />
+
+                        <TextView
+                            android:id="@+id/item_terms_textView"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:drawableLeft="@drawable/ic_terms"
+                            android:drawableStart="@drawable/ic_terms"
+                            android:gravity="center_vertical"
+                            android:textAppearance="@style/TextAppearance.AppCompat.Body1"
+                            android:visibility="visible" />
+                    </LinearLayout>
+                </LinearLayout>
+            </ScrollView>
+
+            <com.melnykov.fab.FloatingActionButton
+                android:id="@+id/grab_it_button"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentBottom="true"
+                android:layout_alignParentEnd="true"
+                android:layout_alignParentRight="true"
+                android:layout_marginBottom="@dimen/fab_margin"
+                android:layout_marginEnd="@dimen/fab_margin"
+                android:layout_marginRight="@dimen/fab_margin" />
+
+        </RelativeLayout>
+    </graaby.app.wallet.widgets.MultiSwipeRefreshLayout>
+
+    <include layout="@layout/include_toolbar" />
+</FrameLayout>

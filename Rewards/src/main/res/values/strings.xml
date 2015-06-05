@@ -1,0 +1,128 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="gtm_tag_id">GTM-TN4PWL</string>
+    <string name="fb_app_id">443146109054494</string>
+    <string name="app_name">Graaby</string>
+    <string name="menu_settings">Settings</string>
+    <string name="title_profile">Profile</string>
+    <string name="title_feed">Activity Feed</string>
+    <string name="title_marketplace">Marketplace</string>
+    <string name="title_businesses">Businesses</string>
+    <string name="title_contacts">Contacts</string>
+    <string name="title_activity_main">Graaby Rewards</string>
+    <string name="title_activity_discount_item_details">Details</string>
+    <string name="title_activity_my_cpn_vcr">"My"</string>
+    <string name="title_activity_slide">Graaby</string>
+    <string name="title_activity_business_details">Business Details</string>
+
+    <string-array name="nav_drawer_items">
+        <item>Profile|nav_profile</item>
+        <item>Marketplace|nav_market</item>
+        <item>Businesses|nav_business</item>
+        <item>Feeds|nav_feeds</item>
+        <item>Contacts|nav_contacts</item>
+        <item>Settings|nav_settings</item>
+    </string-array>
+
+    <string name="market_value_hint">Discount Value</string>
+    <string name="Rs">Rs.</string>
+    <string name="hint_placeholder">-</string>
+    <string name="guide_empty"></string>
+    <string name="guide_10">See how many points of you have left,
+        total of points earned
+        and total money saved</string>
+    <string name="guide_11">Touch to view all the coupons or vouchers you own</string>
+    <string name="guide_12">See how many places you\'ve checked in till now,
+        number of people you are connected with
+        and number of business you follow for latest deals</string>
+    <string name="guide_13">See a quick gist of all your recent actions.</string>
+    <string name="navigation_drawer_open">Navigation Drawer Open</string>
+    <string name="navigation_drawer_close">Navigation Drawer Closed</string>
+    <string name="view_all">View All</string>
+    <string name="buy_tag">Get the Graaby Tag</string>
+    <string name="discount_item_expires_on">Expires On: %1$s</string>
+    <string name="discount_item_generated_on">Generated On: %1$s</string>
+    <string name="discount_item_discount_vale">%1$s off</string>
+    <string name="social_login">social</string>
+    <string name="access_token">access_token</string>
+    <string name="button_grab_it_process">Redeeming…</string>
+
+    //Error messages in retrofit
+    <string name="error_data_parsing">Data processing error</string>
+    <string name="error_network">Network error</string>
+    <string name="error_server">Server error, please try again in a while</string>
+    <string name="error_unauthorized">Unauthorized Access, please re-login</string>
+    <string name="error_timeout">Server took too long to respond</string>
+    <string name="error_connection">No connection available</string>
+    <string name="error_404">404? The server ran away!</string>
+    <string name="error_unexpected">Something unexpected happened, please try again</string>
+
+    <string name="market_item_punch_value">Surprise</string>
+    <string name="market_items_left">%1$s left</string>
+
+    <string name="action_settings">Settings</string>
+    <string name="title_activity_brand_details">Brand Details</string>
+    <string name="search_hint">Search business or area</string>
+    <string name="title_activity_add_contacts">Add/Invite Contacts</string>
+    <string name="logout_dialog_message">You will need to login again to use Graaby app</string>
+    <string name="logout_dialog_title">Logout confirmation</string>
+    <string name="timestamp">time</string>
+    <string name="title_activity_point_received">Points Received</string>
+    <string name="gcm_message_recieved_points">Graaby Points received</string>
+    <string name="gcm_message_recieved_points_content">%1$s sent you %2$d Graaby Points</string>
+    <string name="gcm_message_transaction">Graaby Points rewarded</string>
+    <string name="gcm_message_transaction_content">You just earned %1$d Graaby Points at %2$s</string>
+    <string name="gcm_message_market">New discount</string>
+    <string name="gcm_message_market_content">%1$s has released a new discount! View and Graab it now!</string>
+    <string name="gcm_message_thanked">Thank You</string>
+    <string name="gcm_message_thanked_small_content">%1$s thanks you for sharing points</string>
+    <string name="gcm_message_checkin_title">Check-in successful</string>
+    <string name="gcm_message_checkin_small_content">You just checked-in into %1$s successfully</string>
+    <string name="gcm_message_meta_info_title">Details required</string>
+    <string name="gcm_message_meta_info_content">Looks like we need more information about you</string>
+
+    <string name="profile_stat_balance">Graaby Points Balance</string>
+    <string name="profile_stat_earnings">Earnings</string>
+    <string name="profile_stat_checkin">Check-ins</string>
+    <string name="profile_stat_business">Businesses</string>
+    <string name="profile_stat_contacts">Contacts</string>
+    <string name="profile_recent_activity">Your recent activity</string>
+    <string name="profile_stat_name_savings">Savings(Rs)</string>
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="dialog_tag_explanation"><b>Why do I need the Graaby Tag?</b>\n\n
+    &#8226; The Graaby Tag is a NFC powered tag which will help in identifying you uniquely &amp; securely\n
+    &#8226; You require it collect the rewards and easily redeem them at any Graaby Outlets\n\n
+    <b>You can buy the Graaby Tag from any one of the Graaby Powered Outlets and Partnered Businesses</b>\n<i>(Find them in the Business section)</i></string>
+    <string name="about_graaby_button">WHAT IS GRAABY REWARDS?</string>
+    <string name="agreement">Usage of this app implies\nacknowledgement and agreement to the \n<b><a href="http://www.graaby.com/privacy.html">Privacy Policy</a></b> and <b><a href="http://www.graaby.com/terms.html">Terms &amp; Conditions</a></b></string>
+    <string name="menu_action_search_business">Search Businesses</string>
+    <string name="tab_title_outlet_detail">INFO</string>
+    <string name="tab_title_punch">PUNCHCARD</string>
+    <string name="tab_title_marketplace">MARKETPLACE</string>
+    <string name="contact_invite_using">Invite using...</string>
+    <string name="contact_info_na">Contact info not available. Please invite them!</string>
+
+
+    <string name="title_activity_extra_info">Graaby profile info</string>
+
+    <string name="gtm_response_success">response_success</string>
+    <string name="gtm_response_failure">response_failure</string>
+    <string name="gtm_connection_timeout">connectiontimeout</string>
+    <string name="gtm_read_timeout">readtimeout</string>
+    <string name="gtm_purchase_success">purchase_success</string>
+    <string name="gtm_fastest_interval">location_update_fastest_interval</string>
+    <string name="gtm_smallest_displacement">location_update_smallest_displacement</string>
+    <string name="gtm_max_distance_from_user">location_update_radius_threshold</string>
+    <string name="gtm_accuracy">location_update_accuracy_threshold</string>
+    <string name="gtm_update_interval">location_update_to_server_interval_in_mins</string>
+    <string name="gtm_page_size">page_size</string>
+    <string name="title_activity_feed">Feeds</string>
+
+    <string name="hello_world">Hello world!</string>
+    <string name="discount_for">for</string>
+    <string name="discount_purchased_for">purchased for</string>
+
+    <string name="service_name">Graaby Rewards Card</string>
+    <string name="service_card_title">Graaby Card</string>
+
+</resources>

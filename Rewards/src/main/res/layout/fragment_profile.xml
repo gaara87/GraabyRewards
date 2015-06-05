@@ -1,0 +1,149 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.v4.widget.SwipeRefreshLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:card_view="http://schemas.android.com/apk/res-auto"
+    xmlns:materialdesign="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/swiperefresh"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".fragments.ProfileFragment">
+
+    <ScrollView
+        android:id="@+id/profile_scrollview"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <include layout="@layout/include_profile_stats" />
+
+            <com.gc.materialdesign.views.ButtonRectangle
+                android:id="@+id/buy_tag_card"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_marginTop="@dimen/global8"
+                android:background="@color/alizarin"
+                android:paddingLeft="@dimen/global8"
+                android:paddingRight="@dimen/global8"
+                android:text="@string/buy_tag"
+                android:textColor="@android:color/white"
+                android:visibility="gone"
+                materialdesign:rippleSpeed="250"
+                tools:visibility="visible" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:clipToPadding="false"
+                android:orientation="horizontal"
+                android:paddingBottom="@dimen/activity_vertical_margin"
+                android:paddingEnd="@dimen/activity_horizontal_margin"
+                android:paddingLeft="@dimen/activity_horizontal_margin"
+                android:paddingRight="@dimen/activity_horizontal_margin"
+                android:paddingStart="@dimen/activity_horizontal_margin"
+                android:paddingTop="@dimen/activity_vertical_margin">
+
+                <android.support.v7.widget.CardView
+                    android:id="@+id/profile_vouchers_viewall_card"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginEnd="@dimen/globalPadding8"
+                    android:layout_marginRight="@dimen/globalPadding8"
+                    android:layout_weight="1"
+                    android:clickable="true"
+                    android:foreground="?android:attr/selectableItemBackground"
+                    card_view:cardBackgroundColor="@color/sunflower"
+                    card_view:cardCornerRadius="4dp">
+                    <!--android:elevation="5dp"-->
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:gravity="center"
+                        android:orientation="vertical">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Vouchers"
+                            android:textAppearance="@style/TextAppearance.AppCompat.Subhead" />
+
+                        <TextView
+                            android:id="@+id/profile_total_vouchers_textView"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:drawableLeft="@drawable/voucher_withpadding"
+                            android:drawableStart="@drawable/voucher_withpadding"
+                            android:gravity="center"
+                            android:hint="@string/hint_placeholder"
+                            android:textAppearance="@style/Graaby.Theme.TextAppearance.Display1"
+                            tools:text="12" />
+                    </LinearLayout>
+                </android.support.v7.widget.CardView>
+
+                <android.support.v7.widget.CardView
+                    android:id="@+id/profile_coupons_viewall_card"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="@dimen/globalPadding8"
+                    android:layout_marginStart="@dimen/globalPadding8"
+                    android:layout_weight="1"
+                    android:foreground="?android:attr/selectableItemBackground"
+                    card_view:cardBackgroundColor="@color/peterriver"
+                    card_view:cardCornerRadius="4dp">
+                    <!--android:elevation="5dp"-->
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:layout_weight="1"
+                        android:gravity="center"
+                        android:orientation="vertical">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Coupons"
+                            android:textAppearance="@style/TextAppearance.AppCompat.Subhead" />
+
+                        <TextView
+                            android:id="@+id/profile_total_coupons_textView"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:drawableLeft="@drawable/coupon_withpadding"
+                            android:drawableStart="@drawable/coupon_withpadding"
+                            android:gravity="center"
+                            android:hint="@string/hint_placeholder"
+                            android:textAppearance="@style/Graaby.Theme.TextAppearance.Display1"
+                            tools:text="33" />
+
+                    </LinearLayout>
+                </android.support.v7.widget.CardView>
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/profile_recents"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@android:color/white"
+                android:orientation="vertical"
+                android:paddingEnd="@dimen/activity_horizontal_margin"
+                android:paddingLeft="@dimen/activity_horizontal_margin"
+                android:paddingRight="@dimen/activity_horizontal_margin"
+                android:paddingStart="@dimen/activity_horizontal_margin">
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="center"
+                    android:text="@string/profile_recent_activity"
+                    android:textAppearance="@style/TextAppearance.AppCompat.Subhead" />
+            </LinearLayout>
+        </LinearLayout>
+
+    </ScrollView>
+</android.support.v4.widget.SwipeRefreshLayout>

@@ -1,0 +1,172 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:materialdesign="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:paddingTop="@dimen/global16">
+
+    <LinearLayout
+        android:id="@+id/register_status"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:gravity="center_horizontal"
+        android:orientation="vertical"
+        android:visibility="gone">
+
+        <ProgressBar
+            style="?android:attr/progressBarStyleLarge"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="8dp" />
+
+        <TextView
+            android:id="@+id/verification_message"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="16dp"
+            android:textAppearance="?android:attr/textAppearanceMedium" />
+    </LinearLayout>
+
+    <!-- Login form -->
+
+    <ScrollView
+        android:id="@+id/register_form"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <com.gc.materialdesign.views.ButtonRectangle
+                android:id="@+id/about_graaby"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_marginBottom="@dimen/global16"
+                android:background="@color/belizehole"
+                android:paddingLeft="@dimen/global8"
+                android:paddingRight="@dimen/global8"
+                android:text="@string/about_graaby_button"
+                materialdesign:rippleSpeed="250" />
+
+            <Spinner
+                android:id="@+id/emails_spinner"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:hint="Primary e-mail for this account"
+                android:textAppearance="?android:attr/textAppearanceSmall" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+
+                <com.rengwuxian.materialedittext.MaterialEditText
+                    android:id="@+id/password"
+                    style="@style/SuccessEditText"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:hint="@string/register_prompt_password"
+                    android:imeOptions="flagNavigateNext"
+                    android:inputType="textPassword"
+                    android:maxLength="15"
+                    android:maxLines="1"
+                    android:nextFocusForward="@+id/login_first_name"
+                    android:singleLine="true"
+                    app:met_floatingLabelText="Password"
+                    app:met_helperText="More complicated = more security"
+                    app:met_maxCharacters="15" />
+
+                <android.support.v7.widget.SwitchCompat
+                    android:id="@+id/password_switch"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:drawableLeft="@drawable/ic_visibility_off"
+                    android:drawableStart="@drawable/ic_visibility_off" />
+
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+
+                <com.rengwuxian.materialedittext.MaterialEditText
+                    android:id="@+id/login_first_name"
+                    style="@style/SuccessEditText"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginRight="@dimen/globalPadding8"
+                    android:layout_weight="1"
+                    android:hint="First name"
+                    android:maxEms="15"
+                    android:maxLength="15"
+                    android:nextFocusDown="@+id/login_last_name"
+                    android:nextFocusForward="@+id/login_last_name"
+                    android:nextFocusRight="@+id/login_last_name"
+                    android:singleLine="true"
+                    app:met_maxCharacters="15" />
+
+                <com.rengwuxian.materialedittext.MaterialEditText
+                    android:id="@+id/login_last_name"
+                    style="@style/SuccessEditText"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="@dimen/globalPadding8"
+                    android:layout_weight="1"
+                    android:hint="Last name"
+                    android:maxEms="15"
+                    android:maxLength="15"
+                    android:nextFocusForward="@+id/phone"
+                    android:singleLine="true"
+                    app:met_maxCharacters="15" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:paddingEnd="@dimen/globalPadding8"
+                    android:paddingRight="@dimen/globalPadding8"
+                    android:text="+91" />
+
+                <com.rengwuxian.materialedittext.MaterialEditText
+                    android:id="@+id/phone"
+                    style="@style/SuccessEditText"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="Your mobile phone number"
+                    android:inputType="phone"
+                    android:maxLength="10"
+                    android:singleLine="true"
+                    app:met_floatingLabelText="Phone number"
+                    app:met_helperText="Increase your account security"
+                    app:met_maxCharacters="10" />
+            </LinearLayout>
+
+            <com.gc.materialdesign.views.ButtonRectangle
+                android:id="@+id/register_button"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                android:background="@color/emarald"
+                android:text="REGISTER"
+                materialdesign:rippleSpeed="200" />
+
+        </LinearLayout>
+    </ScrollView>
+</FrameLayout>

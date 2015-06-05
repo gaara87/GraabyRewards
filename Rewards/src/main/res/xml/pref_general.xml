@@ -1,0 +1,18 @@
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <CheckBoxPreference
+        android:defaultValue="true"
+        android:key="checkin_checkbox"
+        android:summary="@string/pref_description_social_recommendations"
+        android:title="@string/pref_title_social_recommendations" />
+
+    <ListPreference
+        android:defaultValue="-1"
+        android:entries="@array/pref_list_wake_up_check"
+        android:entryValues="@array/pref_list_wake_up_check_values"
+        android:key="businesss_check_list"
+        android:negativeButtonText="@null"
+        android:positiveButtonText="@null"
+        android:title="@string/pref_title_scan_timing" />
+
+</PreferenceScreen>

@@ -1,0 +1,94 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <style name="GraabyToolbar" parent="Widget.AppCompat.Toolbar">
+        <item name="android:background">?colorPrimary</item>
+        <item name="android:minHeight">?attr/actionBarSize</item>
+        <item name="contentInsetStart">0dp</item>
+        <item name="contentInsetEnd">0dp</item>
+        <item name="popupTheme">@style/ThemeOverlay.AppCompat.Light</item>
+    </style>
+
+    <style name="Graaby.Theme.Widget.DrawerArrowToggle" parent="@style/Widget.AppCompat.DrawerArrowToggle">
+        <item name="spinBars">true</item>
+        <item name="color">@android:color/white</item>
+    </style>
+
+    <style name="LoginFormContainer">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">wrap_content</item>
+    </style>
+
+    <style name="OnboardingItem">
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:textAppearance">?android:attr/textAppearanceLarge</item>
+        <item name="android:gravity">center_vertical</item>
+        <item name="android:layout_marginBottom">@dimen/global16</item>
+    </style>
+
+    <style name="Graaby.Theme.TextAppearance.Stat.Caption" parent="@style/TextAppearance.AppCompat.Caption">
+        <item name="android:gravity">center</item>
+    </style>
+
+    <style name="Graaby.Theme.TextAppearance.Stat.Caption.Inverse" parent="Graaby.Theme.TextAppearance.Stat.Caption">
+        <item name="android:textColor">?android:textColorSecondaryInverse</item>
+    </style>
+
+    <style name="Graaby.Theme.TextAppearance.Stat.Number" parent="@style/TextAppearance.AppCompat.Body1">
+        <item name="android:gravity">center_vertical</item>
+    </style>
+
+    <style name="Graaby.Theme.TextAppearance.Stat.Number.Invserse" parent="Graaby.Theme.TextAppearance.Stat.Number">
+        <item name="android:textColor">?android:textColorSecondaryInverse</item>
+    </style>
+
+    <style name="Graaby.Theme.TextAppearance.Display3.Inverse" parent="@style/TextAppearance.AppCompat.Display3">
+        <item name="android:textColor">?android:textColorSecondaryInverse</item>
+    </style>
+
+    <style name="Graaby.Theme.TextAppearance.Display1" parent="@style/TextAppearance.AppCompat.Display1">
+        <item name="android:textColor">@android:color/black</item>
+    </style>
+
+    <style name="Graaby.Theme.TextAppearance.Title" parent="@style/TextAppearance.AppCompat.Title"/>
+
+    <style name="Graaby.Theme.TextAppearance.Title.Inverse" parent="@style/TextAppearance.AppCompat.Title">
+        <item name="android:textColor">?android:textColorSecondaryInverse</item>
+    </style>
+
+    <style name="Graaby.Theme.Navigation.ListItem" parent="@style/Graaby.Theme.TextAppearance.Body2"></style>
+
+    <style name="Graaby.Theme.TextAppearance.Body2" parent="@style/TextAppearance.AppCompat.Body2">
+        <item name="android:paddingLeft">?android:listPreferredItemPaddingLeft</item>
+        <item name="android:paddingStart">?android:listPreferredItemPaddingStart</item>
+        <item name="android:paddingRight">?android:attr/listPreferredItemPaddingEnd</item>
+        <item name="android:paddingEnd">?android:attr/listPreferredItemPaddingEnd</item>
+        <item name="android:minHeight">?attr/listPreferredItemHeightSmall</item>
+        <item name="android:drawablePadding">32dp</item>
+    </style>
+
+    <style name="GraabySearchViewStyle" parent="Widget.AppCompat.SearchView">
+        <!-- Background for the search query section (e.g. EditText) -->
+        <!--<item name="queryBackground">...</item>-->
+        <!-- Background for the actions section (e.g. voice, submit) -->
+        <!--<item name="submitBackground">...</item>-->
+        <!-- Close button icon -->
+        <!--<item name="closeIcon">...</item>-->
+        <!-- Search button icon -->
+        <!--<item name="searchIcon">...</item>-->
+        <!-- Go/commit button icon -->
+        <!--<item name="goIcon">...</item>-->
+        <!-- Voice search button icon -->
+        <!--<item name="voiceIcon">...</item>-->
+        <!-- Commit icon shown in the query suggestion row -->
+        <!--<item name="commitIcon">...</item>-->
+        <!-- Layout for query suggestion rows -->
+        <!--<item name="suggestionRowLayout">...</item>-->
+    </style>
+
+    <style name="SuccessEditText">
+        <item name="met_floatingLabel">highlight</item>
+        <item name="met_primaryColor">@color/emarald</item>
+    </style>
+</resources>

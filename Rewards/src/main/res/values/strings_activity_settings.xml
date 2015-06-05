@@ -1,0 +1,50 @@
+<resources>
+    <string name="title_activity_settings">Settings</string>
+
+    <!-- Strings related to Settings -->
+
+    <!-- Example General settings -->
+    <string name="pref_header_general">General</string>
+
+    <string name="pref_title_social_recommendations">Publish Check-in</string>
+    <string name="pref_description_social_recommendations">Let your friend\'s know where you\'ve checked in</string>
+
+    <string name="pref_title_display_name">Display name</string>
+
+    <string name="pref_title_email">E-mail</string>
+
+    <string name="pref_title_scan_timing">Business proximity scanning</string>
+
+    <string-array name="pref_list_wake_up_check">
+        <item>Always</item>
+        <item>When possible</item>
+        <item>Never</item>
+    </string-array>
+    <string-array name="pref_list_wake_up_check_values">
+        <item>1</item>
+        <item>0</item>
+        <item>-1</item>
+    </string-array>
+
+    <!-- Example settings for Notifications -->
+    <string name="pref_header_notifications">Notifications</string>
+
+    <!--<string name="pref_title_new_message_notifications">New message notifications</string>-->
+
+    <string name="pref_title_ringtone">Ringtone</string>
+    <string name="pref_ringtone_silent">Silent</string>
+
+    <string name="pref_title_vibrate">Vibrate</string>
+
+    <!-- Settings for account details -->
+    <string name="pref_header_account">Account</string>
+    <string name="pref_social_g">Connect to Google+</string>
+    <string name="pref_social_t">Connect to Twitter</string>
+    <string name="pref_social_f">Connect to Facebook</string>
+    <string name="pref_title_logout">Logout</string>
+
+    <string name="pref_header_legal">Legal stuff</string>
+    <string name="pref_terms">Terms &amp; Conditions</string>
+    <string name="pref_privacy">Privacy Policy</string>
+
+</resources>

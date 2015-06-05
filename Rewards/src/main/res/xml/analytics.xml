@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:tools="http://schemas.android.com/tools"
+    tools:ignore="TypographyDashes">
+    <string name="ga_trackingId">UA-62468811-1</string>
+    <string name="ga_appName">Graaby Rewards</string>
+    <bool name="ga_autoActivityTracking">true</bool>
+    <!-- Track exceptions -->
+    <bool name="ga_reportUncaughtExceptions">true</bool>
+
+    <integer name="ga_sessionTimeout">300</integer>
+
+    <!--Put this inside debug only-->
+    <bool name="ga_dryRun">true</bool>
+
+    <!--screen names-->
+    <!--fragments-->
+    <screenName name="graaby.app.wallet.fragments.ProfileFragment">Profile</screenName>
+    <screenName name="graaby.app.wallet.fragments.MarketFragment">Marketplace</screenName>
+    <screenName name="graaby.app.wallet.fragments.BusinessesFragment">Businesses map</screenName>
+    <screenName name="graaby.app.wallet.fragments.FeedFragment">Feeds</screenName>
+    <screenName name="graaby.app.wallet.fragments.ContactsFragment">Contacts</screenName>
+    <screenName name="graaby.app.wallet.fragments.BusinessDetailFragment">Business info</screenName>
+    <screenName name="graaby.app.wallet.fragments.RewardDetailsFragment">Business reward details
+    </screenName>
+    <screenName name="graaby.app.wallet.fragments.LoginFragment">Login</screenName>
+    <screenName name="graaby.app.wallet.fragments.RegistrationFragment">Registration</screenName>
+    <screenName name="graaby.app.wallet.fragments.PointReceivedFromContactFragment">Points shared
+    </screenName>
+    <screenName name="graaby.app.wallet.fragments.PointReceivedFromTransactionFragment">Points
+        earned
+    </screenName>
+    <!--activities-->
+    <screenName name="graaby.app.wallet.activities.BusinessDetailsActivity">Business details
+    </screenName>
+    <screenName name="graaby.app.wallet.activities.BrandDetailsActivity">Brand map</screenName>
+    <screenName name="graaby.app.wallet.activities.DiscountItemDetailsActivity">Discount item
+        details
+    </screenName>
+    <screenName name="graaby.app.wallet.activities.SearchResultsActivity">Search</screenName>
+    <screenName name="graaby.app.wallet.activities.SettingsActivity">Settings</screenName>
+    <screenName name="graaby.app.wallet.activities.OnboardingActivity">Onboarding</screenName>
+    <screenName name="graaby.app.wallet.activities.FeedActivity">Feeds activity</screenName>
+
+
+</resources>

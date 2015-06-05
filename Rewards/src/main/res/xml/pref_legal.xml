@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <Preference
+        android:key="legal_terms"
+        android:title="@string/pref_terms">
+        <intent
+            android:action="android.intent.action.VIEW"
+            android:data="http://www.graaby.com/terms.html" />
+    </Preference>
+
+    <Preference
+        android:key="legal_privacy"
+        android:title="@string/pref_privacy">
+        <intent
+            android:action="android.intent.action.VIEW"
+            android:data="http://www.graaby.com/privacy.html" />
+    </Preference>
+</PreferenceScreen>
