@@ -82,7 +82,6 @@ public final class GraabyNDEFCore implements Parcelable {
 
     public static NdefMessage createNdefMessage(Context applicationContext) throws IOException {
         Parcel pc = Parcel.obtain();
-        //TODO: handle converting jsonobject to logansquare deserialization
         FileInputStream fis = applicationContext.openFileInput("beamer");
         UserCredentialsResponse.NFCData nfcCore = LoganSquare.parse(fis, UserCredentialsResponse.NFCData.class);
         byte[] iv = Base64.decode(nfcCore.iv, Base64.DEFAULT);
@@ -95,6 +94,17 @@ public final class GraabyNDEFCore implements Parcelable {
                 NDEF_TYPE_APPLICATION.getBytes(Charset.forName("US-ASCII")),
                 iv, data);
         return new NdefMessage(new NdefRecord[]{nr});
+    }
+
+    public static byte[] getGraabyUserAsBytesForHCE(Context applicationContext) throws IOException {
+        Parcel pc = Parcel.obtain();
+        FileInputStream fis = applicationContext.openFileInput("beamer");
+        UserCredentialsResponse.NFCData nfcCore = LoganSquare.parse(fis, UserCredentialsResponse.NFCData.class);
+        fis.close();
+        GraabyNDEFCore core = new GraabyNDEFCore(nfcCore);
+
+        core.writeToParcel(pc, Parcelable.PARCELABLE_WRITE_RETURN_VALUE);
+        return pc.marshall();
     }
 
     @Override
