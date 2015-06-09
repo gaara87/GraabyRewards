@@ -117,7 +117,8 @@ public class PointReceivedFromContactFragment extends BaseFragment {
                                 new TimerTask() {
                                     @Override
                                     public void run() {
-                                        getActivity().finish();
+                                        if (getActivity() != null)
+                                            getActivity().finish();
                                     }
                                 }, 3000);
                     }
