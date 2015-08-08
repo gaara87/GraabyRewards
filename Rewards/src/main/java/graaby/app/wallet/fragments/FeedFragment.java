@@ -11,8 +11,8 @@ import android.widget.ListView;
 
 import javax.inject.Inject;
 
+import butterknife.Bind;
 import butterknife.ButterKnife;
-import butterknife.InjectView;
 import graaby.app.wallet.GraabyApplication;
 import graaby.app.wallet.MainActivity;
 import graaby.app.wallet.R;
@@ -25,7 +25,7 @@ import graaby.app.wallet.util.Helper;
 
 public class FeedFragment extends BaseFragment implements SwipeRefreshLayout.OnRefreshListener {
 
-    @InjectView(android.R.id.list)
+    @Bind(android.R.id.list)
     ListView mList;
     @Inject
     FeedService mFeedService;
@@ -50,7 +50,7 @@ public class FeedFragment extends BaseFragment implements SwipeRefreshLayout.OnR
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View v = super.onCreateView(inflater, container, savedInstanceState, R.layout.fragment_feeds);
-        ButterKnife.inject(this, v);
+        ButterKnife.bind(this, v);
         mSwipeRefresh.setColorSchemeResources(R.color.alizarin, R.color.pomegranate, R.color.wisteria, R.color.peterriver);
         mAdapter = new FeedsAdapter(getActivity());
         mList.setAdapter(mAdapter);
@@ -110,6 +110,6 @@ public class FeedFragment extends BaseFragment implements SwipeRefreshLayout.OnR
     @Override
     public void onDestroyView() {
         super.onDestroyView();
-        ButterKnife.reset(this);
+        ButterKnife.unbind(this);
     }
 }

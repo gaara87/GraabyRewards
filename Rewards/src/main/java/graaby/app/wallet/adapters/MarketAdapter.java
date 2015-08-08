@@ -8,8 +8,8 @@ import android.widget.ArrayAdapter;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import butterknife.Bind;
 import butterknife.ButterKnife;
-import butterknife.InjectView;
 import graaby.app.wallet.R;
 import graaby.app.wallet.models.retrofit.DiscountItemDetailsResponse;
 
@@ -85,19 +85,19 @@ public class MarketAdapter extends ArrayAdapter<DiscountItemDetailsResponse> {
     }
 
     static class ViewHolder {
-        @InjectView(R.id.discount_item_discountValue)
+        @Bind(R.id.discount_item_discountValue)
         TextView mDiscountItemDiscountValue;
-        @InjectView(R.id.discount_item_business_name_textView)
+        @Bind(R.id.discount_item_business_name_textView)
         TextView mDiscountItemBusinessNameTextView;
-        @InjectView(R.id.discount_item_cost)
+        @Bind(R.id.discount_item_cost)
         TextView mDiscountItemCost;
-        @InjectView(R.id.discount_item_count)
+        @Bind(R.id.discount_item_count)
         TextView mDiscountItemCount;
-        @InjectView(R.id.discount_item_cost_container)
+        @Bind(R.id.discount_item_cost_container)
         LinearLayout mDiscountItemCostContainer;
 
         ViewHolder(View view) {
-            ButterKnife.inject(this, view);
+            ButterKnife.bind(this, view);
         }
     }
 

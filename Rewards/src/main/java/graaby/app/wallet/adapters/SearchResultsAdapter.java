@@ -8,8 +8,8 @@ import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.TextView;
 
+import butterknife.Bind;
 import butterknife.ButterKnife;
-import butterknife.InjectView;
 import graaby.app.wallet.R;
 import graaby.app.wallet.models.retrofit.OutletDetail;
 
@@ -49,13 +49,13 @@ public class SearchResultsAdapter extends ArrayAdapter<OutletDetail> {
      * @author ButterKnifeZelezny, plugin for Android Studio by Avast Developers (http://github.com/avast)
      */
     static class ViewHolder {
-        @InjectView(R.id.item_businessNameTextView)
+        @Bind(R.id.item_businessNameTextView)
         TextView businessName;
-        @InjectView(R.id.item_businessAddressTextView)
+        @Bind(R.id.item_businessAddressTextView)
         TextView businessAddress;
 
         ViewHolder(View view) {
-            ButterKnife.inject(this, view);
+            ButterKnife.bind(this, view);
         }
     }
 }

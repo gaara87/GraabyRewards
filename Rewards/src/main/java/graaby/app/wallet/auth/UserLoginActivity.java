@@ -13,8 +13,8 @@ import android.widget.Toast;
 
 import com.google.android.gms.auth.GoogleAuthUtil;
 
+import butterknife.Bind;
 import butterknife.ButterKnife;
-import butterknife.InjectView;
 import de.greenrobot.event.EventBus;
 import graaby.app.wallet.BuildConfig;
 import graaby.app.wallet.R;
@@ -34,7 +34,7 @@ public class UserLoginActivity extends AccountAuthenticatorActivity implements
     final public static String AUTHTOKEN_TYPE = "graaby.app.wallet";
     final public static String AUTHTOKEN_USERDATA_KEY = "oauth";
     final private static String TAG = "UserLoginActivity";
-    @InjectView(R.id.pager)
+    @Bind(R.id.pager)
     ViewPager mPager;
 
 
@@ -56,7 +56,7 @@ public class UserLoginActivity extends AccountAuthenticatorActivity implements
         super.onCreate(savedInstanceState);
 
         setContentView(R.layout.activity_login);
-        ButterKnife.inject(this);
+        ButterKnife.bind(this);
 
         mPager.setAdapter(new UserLoginPagerAdapter());
 

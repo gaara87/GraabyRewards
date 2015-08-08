@@ -35,8 +35,8 @@ import java.util.UUID;
 
 import javax.inject.Inject;
 
+import butterknife.Bind;
 import butterknife.ButterKnife;
-import butterknife.InjectView;
 import butterknife.OnClick;
 import graaby.app.wallet.GraabyApplication;
 import graaby.app.wallet.GraabyNDEFCore;
@@ -59,15 +59,15 @@ import graaby.app.wallet.util.Helper;
 public class LoginFragment extends BaseFragment {
 
     LoginInterface loginActivity;
-    @InjectView(R.id.password)
+    @Bind(R.id.password)
     EditText mPasswordView;
-    @InjectView(R.id.emails_spinner)
+    @Bind(R.id.emails_spinner)
     AutoCompleteTextView mAutoCompleteSpinner;
-    @InjectView(R.id.login_form)
+    @Bind(R.id.login_form)
     View mLoginFormView;
-    @InjectView(R.id.login_status)
+    @Bind(R.id.login_status)
     View mLoginStatusView;
-    @InjectView(R.id.verification_message)
+    @Bind(R.id.verification_message)
     TextView mLoginStatusMessageView;
     @Inject
     AuthService mLoginService;
@@ -77,7 +77,7 @@ public class LoginFragment extends BaseFragment {
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_login, container);
-        ButterKnife.inject(this, view);
+        ButterKnife.bind(this, view);
         ((TextView) view.findViewById(R.id.agreement)).setMovementMethod(LinkMovementMethod.getInstance());
         return view;
     }
@@ -245,7 +245,7 @@ public class LoginFragment extends BaseFragment {
     @Override
     public void onDestroy() {
         super.onDestroy();
-        ButterKnife.reset(this);
+        ButterKnife.unbind(this);
         loginActivity = null;
     }
 

@@ -27,8 +27,8 @@ import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
 
+import butterknife.Bind;
 import butterknife.ButterKnife;
-import butterknife.InjectView;
 import de.greenrobot.event.EventBus;
 import de.hdodenhof.circleimageview.CircleImageView;
 import graaby.app.wallet.GraabyApplication;
@@ -54,13 +54,13 @@ public class NavigationDrawerFragment extends Fragment {
      * expands it. This shared preference tracks this.
      */
     private static final String PREF_USER_LEARNED_DRAWER = "navigation_drawer_learned";
-    @InjectView(R.id.navigation_drawer_profile_photo)
+    @Bind(R.id.navigation_drawer_profile_photo)
     CircleImageView navigationDrawerProfilePhoto;
-    @InjectView(R.id.navigation_drawer_name)
+    @Bind(R.id.navigation_drawer_name)
     TextView navigationDrawerName;
-    @InjectView(R.id.navigation_drawer_email)
+    @Bind(R.id.navigation_drawer_email)
     TextView navigationDrawerEmail;
-    @InjectView(android.R.id.list)
+    @Bind(android.R.id.list)
     ListView mDrawerListView;
 
     /**
@@ -140,7 +140,7 @@ public class NavigationDrawerFragment extends Fragment {
                              Bundle savedInstanceState) {
         View view = inflater.inflate(
                 R.layout.fragment_navigation_drawer, container, false);
-        ButterKnife.inject(this, view);
+        ButterKnife.bind(this, view);
 
         mDrawerListView.setAdapter(new NavigationDrawerAdapter(getActivity(),
                 getResources().getStringArray(R.array.nav_drawer_items)));
@@ -315,7 +315,7 @@ public class NavigationDrawerFragment extends Fragment {
     @Override
     public void onDestroyView() {
         super.onDestroyView();
-        ButterKnife.reset(this);
+        ButterKnife.unbind(this);
     }
 
     /**

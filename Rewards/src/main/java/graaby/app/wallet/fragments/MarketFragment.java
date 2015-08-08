@@ -23,8 +23,8 @@ import java.io.IOException;
 
 import javax.inject.Inject;
 
+import butterknife.Bind;
 import butterknife.ButterKnife;
-import butterknife.InjectView;
 import graaby.app.wallet.MainActivity;
 import graaby.app.wallet.R;
 import graaby.app.wallet.activities.DiscountItemDetailsActivity;
@@ -47,11 +47,11 @@ import rx.Subscription;
 public class MarketFragment extends BaseFragment implements OnItemClickListener {
 
     public final static String SEARCHABLE_PARAMETER = "searchable";
-    @InjectView(R.id.grid)
+    @Bind(R.id.grid)
     GridView mGrid;
-    @InjectView(android.R.id.empty)
+    @Bind(android.R.id.empty)
     TextView mEmpty;
-    @InjectView(R.id.progressBar)
+    @Bind(R.id.progressBar)
     ProgressBar mProgress;
 
     @Inject
@@ -124,7 +124,7 @@ public class MarketFragment extends BaseFragment implements OnItemClickListener 
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View v = super.onCreateView(inflater, container, savedInstanceState, R.layout.fragment_marketplace);
-        ButterKnife.inject(this, v);
+        ButterKnife.bind(this, v);
         setSwipeRefreshColors(R.color.sunflower, R.color.nephritis, R.color.peterriver, R.color.pumpkin);
         mSwipeRefresh.setEnabled(false);
         mGrid.setOnItemClickListener(this);
@@ -172,7 +172,7 @@ public class MarketFragment extends BaseFragment implements OnItemClickListener 
     @Override
     public void onDestroyView() {
         super.onDestroyView();
-        ButterKnife.reset(this);
+        ButterKnife.unbind(this);
         mActivity = null;
     }
 

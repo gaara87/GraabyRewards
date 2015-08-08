@@ -24,8 +24,8 @@ import java.util.List;
 
 import javax.inject.Inject;
 
+import butterknife.Bind;
 import butterknife.ButterKnife;
-import butterknife.InjectView;
 import de.greenrobot.event.EventBus;
 import de.hdodenhof.circleimageview.CircleImageView;
 import graaby.app.wallet.R;
@@ -41,23 +41,23 @@ import graaby.app.wallet.util.Helper;
  */
 public class BusinessDetailFragment extends BaseFragment {
 
-    @InjectView(R.id.item_businessPicImageView)
+    @Bind(R.id.item_businessPicImageView)
     CircleImageView itemBusinessPicImageView;
-    @InjectView(R.id.item_businessAddressTextView)
+    @Bind(R.id.item_businessAddressTextView)
     TextView itemBusinessAddressTextView;
-    @InjectView(R.id.business_points)
+    @Bind(R.id.business_points)
     TextView businessPoints;
-    @InjectView(R.id.business_followers)
+    @Bind(R.id.business_followers)
     TextView businessFollowers;
-    @InjectView(R.id.business_checkins)
+    @Bind(R.id.business_checkins)
     TextView businessCheckins;
-    @InjectView(R.id.points_earned_textView)
+    @Bind(R.id.points_earned_textView)
     TextView pointsEarnedTextView;
-    @InjectView(R.id.profile_total_savings_textView)
+    @Bind(R.id.profile_total_savings_textView)
     TextView profileTotalSavingsTextView;
-    @InjectView(R.id.profile_checkins_textview)
+    @Bind(R.id.profile_checkins_textview)
     TextView profileCheckinsTextview;
-    @InjectView(R.id.swiperefresh)
+    @Bind(R.id.swiperefresh)
     SwipeRefreshLayout mSwipeRefresh;
     @Inject
     BusinessService mBusinessService;
@@ -102,7 +102,7 @@ public class BusinessDetailFragment extends BaseFragment {
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View v = super.onCreateView(inflater, container, savedInstanceState, R.layout.fragment_business_detail);
-        ButterKnife.inject(this, v);
+        ButterKnife.bind(this, v);
         mSwipeRefresh.setColorSchemeResources(R.color.midnightblue, R.color.wetasphalt, R.color.asbestos, R.color.concrete);
         return v;
     }
@@ -205,7 +205,7 @@ public class BusinessDetailFragment extends BaseFragment {
     @Override
     public void onDestroyView() {
         super.onDestroyView();
-        ButterKnife.reset(this);
+        ButterKnife.unbind(this);
     }
 
     public interface BusinessDetailFragmentCallback {

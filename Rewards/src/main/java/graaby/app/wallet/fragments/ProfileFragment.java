@@ -7,15 +7,14 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
-import com.gc.materialdesign.views.ButtonRectangle;
-
 import javax.inject.Inject;
 
+import butterknife.Bind;
 import butterknife.ButterKnife;
-import butterknife.InjectView;
 import butterknife.OnClick;
 import de.greenrobot.event.EventBus;
 import graaby.app.wallet.GraabyApplication;
@@ -33,23 +32,23 @@ import rx.Subscription;
 
 public class ProfileFragment extends BaseFragment {
 
-    @InjectView(R.id.buy_tag_card)
-    ButtonRectangle mBuyTagCardView;
-    @InjectView(R.id.points_textView)
+    @Bind(R.id.buy_tag_card)
+    Button mBuyTagCardView;
+    @Bind(R.id.points_textView)
     TextView mPointsTextView;
-    @InjectView(R.id.profile_total_savings_textView)
+    @Bind(R.id.profile_total_savings_textView)
     TextView mProfileTotalSavingsTextView;
-    @InjectView(R.id.profile_total_vouchers_textView)
+    @Bind(R.id.profile_total_vouchers_textView)
     TextView mProfileTotalVouchersTextView;
-    @InjectView(R.id.profile_total_coupons_textView)
+    @Bind(R.id.profile_total_coupons_textView)
     TextView mProfileTotalCouponsTextView;
-    @InjectView(R.id.profile_checkins_textview)
+    @Bind(R.id.profile_checkins_textview)
     TextView mProfileCheckinsTextview;
-    @InjectView(R.id.profile_following_textview)
+    @Bind(R.id.profile_following_textview)
     TextView mProfileFollowingTextview;
-    @InjectView(R.id.profile_connections_textview)
+    @Bind(R.id.profile_connections_textview)
     TextView mProfileConnectionsTextview;
-    @InjectView(R.id.profile_recents)
+    @Bind(R.id.profile_recents)
     LinearLayout mProfileRecents;
     @Inject
     ProfileService mProfileService;
@@ -93,7 +92,7 @@ public class ProfileFragment extends BaseFragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View v = super.onCreateView(inflater, container, savedInstanceState, R.layout.fragment_profile);
-        ButterKnife.inject(this, v);
+        ButterKnife.bind(this, v);
         setSwipeRefreshColors(R.color.emarald, R.color.peterriver, R.color.wisteria, R.color.sunflower);
         return v;
     }
@@ -101,7 +100,7 @@ public class ProfileFragment extends BaseFragment {
     @Override
     public void onDestroyView() {
         super.onDestroyView();
-        ButterKnife.reset(this);
+        ButterKnife.unbind(this);
     }
 
     @OnClick({R.id.profile_coupons_viewall_card, R.id.profile_vouchers_viewall_card})

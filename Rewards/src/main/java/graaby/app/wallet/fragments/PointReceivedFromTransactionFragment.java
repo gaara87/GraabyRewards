@@ -17,8 +17,8 @@ import java.util.Date;
 
 import javax.inject.Inject;
 
+import butterknife.Bind;
 import butterknife.ButterKnife;
-import butterknife.InjectView;
 import graaby.app.wallet.GraabyApplication;
 import graaby.app.wallet.R;
 import graaby.app.wallet.models.retrofit.BaseResponse;
@@ -33,13 +33,13 @@ import rx.schedulers.Schedulers;
  * Created by gaara on 9/1/14.
  */
 public class PointReceivedFromTransactionFragment extends BaseFragment implements RatingBar.OnRatingBarChangeListener {
-    @InjectView(R.id.timestamp)
+    @Bind(R.id.timestamp)
     TextView timestamp;
-    @InjectView(R.id.name)
+    @Bind(R.id.name)
     TextView nameTextView;
-    @InjectView(R.id.points_textView)
+    @Bind(R.id.points_textView)
     TextView pointsTextView;
-    @InjectView(R.id.ratingBar)
+    @Bind(R.id.ratingBar)
     RatingBar ratingBar;
     @Inject
     BusinessService mBusinessService;
@@ -84,7 +84,7 @@ public class PointReceivedFromTransactionFragment extends BaseFragment implement
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View rootView = super.onCreateView(inflater, container, savedInstanceState, R.layout.fragment_point_received_from_tx);
-        ButterKnife.inject(this, rootView);
+        ButterKnife.bind(this, rootView);
 
         mSwipeRefresh.setEnabled(false);
 
@@ -120,6 +120,6 @@ public class PointReceivedFromTransactionFragment extends BaseFragment implement
     @Override
     public void onDestroyView() {
         super.onDestroyView();
-        ButterKnife.reset(this);
+        ButterKnife.unbind(this);
     }
 }

@@ -9,8 +9,8 @@ import android.widget.TextView;
 
 import java.util.List;
 
+import butterknife.Bind;
 import butterknife.ButterKnife;
-import butterknife.InjectView;
 import graaby.app.wallet.R;
 import graaby.app.wallet.models.retrofit.OutletDetail;
 
@@ -52,13 +52,13 @@ public class PunchAdapter extends ArrayAdapter<OutletDetail.Reward> {
      * @author ButterKnifeZelezny, plugin for Android Studio by Avast Developers (http://github.com/avast)
      */
     static class ViewHolder {
-        @InjectView(android.R.id.text1)
+        @Bind(android.R.id.text1)
         TextView text1;
-        @InjectView(android.R.id.text2)
+        @Bind(android.R.id.text2)
         TextView text2;
 
         ViewHolder(View view) {
-            ButterKnife.inject(this, view);
+            ButterKnife.bind(this, view);
         }
     }
 }

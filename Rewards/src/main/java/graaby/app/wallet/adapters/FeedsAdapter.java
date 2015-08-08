@@ -11,8 +11,8 @@ import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
 
+import butterknife.Bind;
 import butterknife.ButterKnife;
-import butterknife.InjectView;
 import graaby.app.wallet.R;
 import graaby.app.wallet.models.retrofit.FeedsResponse;
 import graaby.app.wallet.util.ActivityType;
@@ -65,19 +65,19 @@ public class FeedsAdapter extends ArrayAdapter<FeedsResponse.NewsFeed> {
      * @author ButterKnifeZelezny, plugin for Android Studio by Inmite Developers (http://inmite.github.io)
      */
     static class ViewHolder {
-        @InjectView(R.id.pic)
+        @Bind(R.id.pic)
         ImageView mPic;
-        @InjectView(R.id.feed_type)
+        @Bind(R.id.feed_type)
         ImageView mIcon;
-        @InjectView(R.id.name)
+        @Bind(R.id.name)
         TextView mName;
-        @InjectView(R.id.content)
+        @Bind(R.id.content)
         TextView mContent;
-        @InjectView(R.id.tstamp)
+        @Bind(R.id.tstamp)
         TextView mTstamp;
 
         ViewHolder(View view) {
-            ButterKnife.inject(this, view);
+            ButterKnife.bind(this, view);
         }
     }
 }

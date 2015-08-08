@@ -11,8 +11,8 @@ import android.widget.Toast;
 
 import javax.inject.Inject;
 
+import butterknife.Bind;
 import butterknife.ButterKnife;
-import butterknife.InjectView;
 import graaby.app.wallet.GraabyApplication;
 import graaby.app.wallet.R;
 import graaby.app.wallet.models.retrofit.BaseResponse;
@@ -33,11 +33,11 @@ public class ExtraInfoActivity extends BaseAppCompatActivity implements Calendar
     @Inject
     SettingsService mService;
 
-    @InjectView(R.id.radio_gender_male)
+    @Bind(R.id.radio_gender_male)
     RadioButton radioGenderMale;
-    @InjectView(R.id.radio_gender_female)
+    @Bind(R.id.radio_gender_female)
     RadioButton radioGenderFemale;
-    @InjectView(R.id.birthday)
+    @Bind(R.id.birthday)
     DatePicker birthday;
 
     @Override
@@ -48,7 +48,7 @@ public class ExtraInfoActivity extends BaseAppCompatActivity implements Calendar
             finish();
         } else {
             setContentView(R.layout.activity_extra_info);
-            ButterKnife.inject(this);
+            ButterKnife.bind(this);
             birthday.init(2000, 1, 1, this);
         }
     }

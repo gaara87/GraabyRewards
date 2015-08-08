@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
@@ -159,16 +160,23 @@
                 </LinearLayout>
             </ScrollView>
 
-            <com.melnykov.fab.FloatingActionButton
+            <android.support.design.widget.FloatingActionButton
                 android:id="@+id/grab_it_button"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_alignParentBottom="true"
                 android:layout_alignParentEnd="true"
                 android:layout_alignParentRight="true"
+                android:layout_gravity="bottom|end"
                 android:layout_marginBottom="@dimen/fab_margin"
                 android:layout_marginEnd="@dimen/fab_margin"
-                android:layout_marginRight="@dimen/fab_margin" />
+                android:layout_marginRight="@dimen/fab_margin"
+                android:src="@drawable/ic_add_shopping_cart"
+                app:backgroundTint="@color/graaby_dark_blue"
+                app:borderWidth="@dimen/fab_border_width"
+                app:elevation="6dp"
+                app:pressedTranslationZ="12dp"
+                app:rippleColor="@android:color/white" />
 
         </RelativeLayout>
     </graaby.app.wallet.widgets.MultiSwipeRefreshLayout>

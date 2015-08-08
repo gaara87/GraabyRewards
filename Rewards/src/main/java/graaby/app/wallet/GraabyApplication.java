@@ -4,7 +4,6 @@ import android.app.Application;
 
 import com.crashlytics.android.Crashlytics;
 import com.google.android.gms.common.api.PendingResult;
-import com.google.android.gms.common.api.ResultCallback;
 import com.google.android.gms.tagmanager.ContainerHolder;
 import com.google.android.gms.tagmanager.TagManager;
 
@@ -44,12 +43,9 @@ public class GraabyApplication extends Application {
     public void onCreate() {
         super.onCreate();
         PendingResult<ContainerHolder> pendingResult = TagManager.getInstance(this).loadContainerPreferNonDefault(getString(R.string.gtm_tag_id), R.raw.gtm);
-        pendingResult.setResultCallback(new ResultCallback<ContainerHolder>() {
-            @Override
-            public void onResult(ContainerHolder containerHolder) {
-                GraabyApplication.containerHolder = containerHolder;
-                containerHolder.getContainer();
-            }
+        pendingResult.setResultCallback(containerHolder1 -> {
+            containerHolder = containerHolder1;
+            containerHolder1.getContainer();
         });
         TagManager.getInstance(this).setVerboseLoggingEnabled(true);
 
@@ -60,14 +56,7 @@ public class GraabyApplication extends Application {
 
         UserAuthenticationHandler authHandler = graph.get(UserAuthenticationHandler.class);
         authHandler.login(this);
-
-        if (BuildConfig.DEBUG) {
-            final Fabric fabric = new Fabric.Builder(this)
-                    .kits(new Crashlytics())
-                    .debuggable(true)
-                    .build();
-            Fabric.with(fabric);
-        } else {
+        if (BuildConfig.USE_CRASHLYTICS) {
             Fabric.with(this, new Crashlytics());
         }
     }

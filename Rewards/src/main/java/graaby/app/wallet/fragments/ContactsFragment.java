@@ -30,8 +30,8 @@ import com.bumptech.glide.Glide;
 
 import javax.inject.Inject;
 
+import butterknife.Bind;
 import butterknife.ButterKnife;
-import butterknife.InjectView;
 import graaby.app.wallet.GraabyApplication;
 import graaby.app.wallet.MainActivity;
 import graaby.app.wallet.R;
@@ -48,7 +48,7 @@ import graaby.app.wallet.util.Helper;
  */
 public class ContactsFragment extends BaseFragment implements DialogInterface.OnClickListener, View.OnClickListener {
 
-    @InjectView(R.id.grid)
+    @Bind(R.id.grid)
     GridView mGrid;
     @Inject
     ContactService mContactService;
@@ -80,7 +80,7 @@ public class ContactsFragment extends BaseFragment implements DialogInterface.On
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View v = super.onCreateView(inflater, container, savedInstanceState, R.layout.fragment_contacts);
-        ButterKnife.inject(this, v);
+        ButterKnife.bind(this, v);
         mAdapter = new ContactsAdapter(getActivity());
         mSwipeRefresh.setColorSchemeResources(R.color.belizehole, R.color.pomegranate, R.color.orange, R.color.peterriver);
         mGrid.setAdapter(mAdapter);
@@ -174,7 +174,7 @@ public class ContactsFragment extends BaseFragment implements DialogInterface.On
     @Override
     public void onDestroyView() {
         super.onDestroyView();
-        ButterKnife.reset(this);
+        ButterKnife.unbind(this);
     }
 
     @Override
@@ -234,17 +234,17 @@ public class ContactsFragment extends BaseFragment implements DialogInterface.On
     }
 
     static class ViewHolder {
-        @InjectView(R.id.contacts_userProfilePicImageView)
+        @Bind(R.id.contacts_userProfilePicImageView)
         ImageView contactPic;
-        @InjectView(R.id.contacts_usertextView)
+        @Bind(R.id.contacts_usertextView)
         TextView contactName;
-        @InjectView(R.id.contacts_points)
+        @Bind(R.id.contacts_points)
         TextView contactPoints;
-        @InjectView(R.id.share_points)
+        @Bind(R.id.share_points)
         Button sharePoints;
 
         ViewHolder(View view) {
-            ButterKnife.inject(this, view);
+            ButterKnife.bind(this, view);
         }
     }
 

@@ -9,7 +9,6 @@ import android.support.v7.widget.Toolbar;
 import com.google.android.gms.analytics.Tracker;
 
 import java.io.File;
-import java.io.IOException;
 
 import javax.inject.Inject;
 
@@ -17,6 +16,7 @@ import de.greenrobot.event.EventBus;
 import graaby.app.wallet.GraabyApplication;
 import graaby.app.wallet.GraabyNDEFCore;
 import graaby.app.wallet.R;
+import graaby.app.wallet.auth.UserAuthenticationHandler;
 import graaby.app.wallet.events.ToolbarEvents;
 import graaby.app.wallet.models.retrofit.UserCredentialsResponse;
 import graaby.app.wallet.network.services.ProfileService;
@@ -99,20 +99,21 @@ public class BaseAppCompatActivity extends AppCompatActivity {
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.ICE_CREAM_SANDWICH) {
                 try {
                     mNfcAdapter.setNdefPushMessage(GraabyNDEFCore.createNdefMessage(this), this);
-                } catch (IOException e) {
+                } catch (Exception e) {
                     File f = new File(getFilesDir() + "/beamer");
                     if (f.exists()) {
                         f.delete();
-                        mCompositeSubscriptions.add(
-                                GraabyApplication.getOG().get(ProfileService.class).getNFCInfo().observeOn(Schedulers.newThread())
-                                        .subscribeOn(Schedulers.newThread())
-                                        .subscribe(new CacheSubscriber<UserCredentialsResponse.NFCData>(this) {
-                                            @Override
-                                            public void onSuccess(UserCredentialsResponse.NFCData result) {
-                                                GraabyNDEFCore.saveNfcData(BaseAppCompatActivity.this, result);
-                                            }
-                                        })
-                        );
+                        if (GraabyApplication.getOG().get(UserAuthenticationHandler.class).isAuthenticated())
+                            mCompositeSubscriptions.add(
+                                    GraabyApplication.getOG().get(ProfileService.class).getNFCInfo().observeOn(Schedulers.newThread())
+                                            .subscribeOn(Schedulers.newThread())
+                                            .subscribe(new CacheSubscriber<UserCredentialsResponse.NFCData>(this) {
+                                                @Override
+                                                public void onSuccess(UserCredentialsResponse.NFCData result) {
+                                                    GraabyNDEFCore.saveNfcData(BaseAppCompatActivity.this, result);
+                                                }
+                                            })
+                            );
                     }
                 }
             }

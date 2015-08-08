@@ -108,7 +108,7 @@
 
 -dontwarn butterknife.internal.**
 -keep class **$$ViewInjector { *; }
--keepnames class * { @butterknife.InjectView *;}
+-keepnames class * { @ButterKnife.bindView *;}
 
 #Play services
 -keep class * extends java.util.ListResourceBundle {

@@ -19,8 +19,8 @@ import java.util.TimerTask;
 
 import javax.inject.Inject;
 
+import butterknife.Bind;
 import butterknife.ButterKnife;
-import butterknife.InjectView;
 import butterknife.OnClick;
 import de.greenrobot.event.EventBus;
 import graaby.app.wallet.GraabyApplication;
@@ -39,11 +39,11 @@ import retrofit.client.Response;
  */
 public class PointReceivedFromContactFragment extends BaseFragment {
 
-    @InjectView(R.id.contacts_userProfilePicImageView)
+    @Bind(R.id.contacts_userProfilePicImageView)
     ImageView contactsUserProfilePicImageView;
-    @InjectView(R.id.points_textView)
+    @Bind(R.id.points_textView)
     TextView pointsTextView;
-    @InjectView(R.id.btn_thanks)
+    @Bind(R.id.btn_thanks)
     Button btnThanks;
     @Inject
     ContactService mContactService;
@@ -83,7 +83,7 @@ public class PointReceivedFromContactFragment extends BaseFragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View rootView = super.onCreateView(inflater, container, savedInstanceState, R.layout.fragment_point_received);
-        ButterKnife.inject(this, rootView);
+        ButterKnife.bind(this, rootView);
         mSwipeRefresh.setEnabled(Boolean.FALSE);
 
         Glide.with(getActivity())
@@ -139,6 +139,6 @@ public class PointReceivedFromContactFragment extends BaseFragment {
     @Override
     public void onDestroyView() {
         super.onDestroyView();
-        ButterKnife.reset(this);
+        ButterKnife.unbind(this);
     }
 }

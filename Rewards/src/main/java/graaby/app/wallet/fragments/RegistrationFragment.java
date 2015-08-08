@@ -21,17 +21,17 @@ import android.widget.Toast;
 
 import com.mobsandgeeks.saripaar.ValidationError;
 import com.mobsandgeeks.saripaar.Validator;
+import com.mobsandgeeks.saripaar.annotation.Min;
 import com.mobsandgeeks.saripaar.annotation.Order;
 import com.mobsandgeeks.saripaar.annotation.Password;
 import com.mobsandgeeks.saripaar.annotation.Pattern;
-import com.mobsandgeeks.saripaar.annotation.Size;
 
 import java.util.List;
 
 import javax.inject.Inject;
 
+import butterknife.Bind;
 import butterknife.ButterKnife;
-import butterknife.InjectView;
 import butterknife.OnClick;
 import graaby.app.wallet.GraabyApplication;
 import graaby.app.wallet.R;
@@ -44,37 +44,37 @@ import graaby.app.wallet.util.CacheSubscriber;
 
 public class RegistrationFragment extends BaseFragment implements Validator.ValidationListener, CompoundButton.OnCheckedChangeListener {
 
-    @InjectView(R.id.emails_spinner)
+    @Bind(R.id.emails_spinner)
     Spinner mSpinner;
 
     @Order(value = 1)
     @Password(min = 6, scheme = Password.Scheme.ANY, message = "Minimum 6 characters")
-    @InjectView(R.id.password)
+    @Bind(R.id.password)
     EditText mPasswordView;
 
     @Order(value = 2)
-    @Size(min = 3, message = "Minimum 3 characters")
-    @InjectView(R.id.login_first_name)
+    @Min(value = 3, message = "Minimum 3 characters")
+    @Bind(R.id.login_first_name)
     EditText mFirstNameView;
 
     @Order(value = 4)
-    @Size(min = 3, message = "Minimum 3 characters")
-    @InjectView(R.id.login_last_name)
+    @Min(value = 3, message = "Minimum 3 characters")
+    @Bind(R.id.login_last_name)
     EditText mLastNameView;
 
-    @InjectView(R.id.phone)
+    @Bind(R.id.phone)
     @Order(value = 5)
     @Pattern(regex = "(\\d{10}|\\d{0})", message = "10 digit number only")
     EditText mPhoneNumber;
 
-    @InjectView(R.id.password_switch)
+    @Bind(R.id.password_switch)
     SwitchCompat mPasswordSwitch;
 
-    @InjectView(R.id.verification_message)
+    @Bind(R.id.verification_message)
     TextView mVerificationMessage;
-    @InjectView(R.id.register_status)
+    @Bind(R.id.register_status)
     View mRegisterStatusView;
-    @InjectView(R.id.register_form)
+    @Bind(R.id.register_form)
     View mRegisterFormView;
     @Inject
     AuthService mAuthService;
@@ -100,6 +100,7 @@ public class RegistrationFragment extends BaseFragment implements Validator.Vali
         request.password = mPasswordView.getText().toString();
         request.firstName = mFirstNameView.getText().toString();
         request.lastName = mLastNameView.getText().toString();
+        request.phoneNumber = mPhoneNumber.getText().toString();
         request.isPhoneNumberVerified = false;
 
         //TODO: get google server side authtoken
@@ -136,7 +137,7 @@ public class RegistrationFragment extends BaseFragment implements Validator.Vali
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.fragment_registration, container, false);
-        ButterKnife.inject(this, rootView);
+        ButterKnife.bind(this, rootView);
         final ArrayAdapter<CharSequence> adapter = new ArrayAdapter<>(getActivity(), android.R.layout.simple_spinner_item, UserLoginActivity.getAccountNames(getActivity()));
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         mSpinner.setAdapter(adapter);
@@ -170,7 +171,7 @@ public class RegistrationFragment extends BaseFragment implements Validator.Vali
     @Override
     public void onDestroyView() {
         super.onDestroyView();
-        ButterKnife.reset(this);
+        ButterKnife.unbind(this);
     }
 
     @TargetApi(Build.VERSION_CODES.HONEYCOMB_MR2)

@@ -294,7 +294,7 @@ public class GcmIntentService extends IntentService {
                     .setContentIntent(pendingIntent);
 
             mNotificationManager.notify(notificationID, mBuilder.build());
-        } catch (JSONException e) {
+        } catch (JSONException | NullPointerException e) {
             e.printStackTrace();
         }
     }

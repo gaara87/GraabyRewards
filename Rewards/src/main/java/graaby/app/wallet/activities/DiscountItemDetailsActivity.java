@@ -2,6 +2,7 @@ package graaby.app.wallet.activities;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.design.widget.FloatingActionButton;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.text.TextUtils;
 import android.view.MenuItem;
@@ -12,7 +13,6 @@ import android.widget.Toast;
 
 import com.bluelinelabs.logansquare.LoganSquare;
 import com.bumptech.glide.Glide;
-import com.melnykov.fab.FloatingActionButton;
 
 import java.io.IOException;
 import java.text.DateFormat;
@@ -23,8 +23,8 @@ import java.util.Locale;
 
 import javax.inject.Inject;
 
+import butterknife.Bind;
 import butterknife.ButterKnife;
-import butterknife.InjectView;
 import butterknife.OnClick;
 import de.greenrobot.event.EventBus;
 import graaby.app.wallet.GraabyApplication;
@@ -43,27 +43,27 @@ import rx.schedulers.Schedulers;
 public class DiscountItemDetailsActivity extends BaseAppCompatActivity implements
         SwipeRefreshLayout.OnRefreshListener, View.OnClickListener {
 
-    @InjectView(R.id.item_businessPicImageView)
+    @Bind(R.id.item_businessPicImageView)
     ImageView mItemBusinessPicImageView;
-    @InjectView(R.id.item_businessNameTextView)
+    @Bind(R.id.item_businessNameTextView)
     TextView mItemBusinessNameTextView;
-    @InjectView(R.id.item_valueTextView)
+    @Bind(R.id.item_valueTextView)
     TextView mItemValueTextView;
-    @InjectView(R.id.item_costTextView)
+    @Bind(R.id.item_costTextView)
     TextView mItemCostTextView;
-    @InjectView(R.id.item_id_textView)
+    @Bind(R.id.item_id_textView)
     TextView mItemIdTextView;
-    @InjectView(R.id.item_expiry_textView)
+    @Bind(R.id.item_expiry_textView)
     TextView mItemExpiryTextView;
-    @InjectView(R.id.item_details_textView)
+    @Bind(R.id.item_details_textView)
     TextView mItemDetailsTextView;
-    @InjectView(R.id.item_terms_textView)
+    @Bind(R.id.item_terms_textView)
     TextView mItemTermsTextView;
-    @InjectView(R.id.item_discount_for)
+    @Bind(R.id.item_discount_for)
     TextView mItemFor;
-    @InjectView(R.id.grab_it_button)
+    @Bind(R.id.grab_it_button)
     FloatingActionButton mGrabItButton;
-    @InjectView(R.id.swiperefresh)
+    @Bind(R.id.swiperefresh)
     MultiSwipeRefreshLayout mSwiperefresh;
     @Inject
     MarketService marketService;
@@ -74,7 +74,7 @@ public class DiscountItemDetailsActivity extends BaseAppCompatActivity implement
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_discount_item_details);
-        ButterKnife.inject(this);
+        ButterKnife.bind(this);
 
         EventBus.getDefault().register(this);
 
@@ -135,16 +135,10 @@ public class DiscountItemDetailsActivity extends BaseAppCompatActivity implement
     private void resetButtonState() {
         if (!isItemGraabed) {
             mGrabItButton.setOnClickListener(this);
-            mGrabItButton.setColorNormalResId(R.color.graaby_dark_blue);
-            mGrabItButton.setColorPressedResId(R.color.graaby_light_blue);
-            mGrabItButton.setColorRippleResId(R.color.peterriver);
             mGrabItButton.setImageDrawable(getResources().getDrawable(R.drawable.ic_add_shopping_cart));
             mItemFor.setText(getString(R.string.discount_for));
         } else {
             mGrabItButton.setOnClickListener(null);
-            mGrabItButton.setColorNormalResId(android.R.color.white);
-            mGrabItButton.setColorPressedResId(R.color.graaby_grey);
-            mGrabItButton.setColorRippleResId(R.color.graaby_light_blue);
             mGrabItButton.setImageDrawable(getResources().getDrawable(R.drawable.ic_check));
             mItemFor.setText(getString(R.string.discount_purchased_for));
 

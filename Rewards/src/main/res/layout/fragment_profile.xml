@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <android.support.v4.widget.SwipeRefreshLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:card_view="http://schemas.android.com/apk/res-auto"
-    xmlns:materialdesign="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/swiperefresh"
     android:layout_width="match_parent"
@@ -20,19 +19,17 @@
 
             <include layout="@layout/include_profile_stats" />
 
-            <com.gc.materialdesign.views.ButtonRectangle
+            <Button
                 android:id="@+id/buy_tag_card"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
                 android:layout_marginTop="@dimen/global8"
-                android:background="@color/alizarin"
                 android:paddingLeft="@dimen/global8"
                 android:paddingRight="@dimen/global8"
                 android:text="@string/buy_tag"
                 android:textColor="@android:color/white"
                 android:visibility="gone"
-                materialdesign:rippleSpeed="250"
                 tools:visibility="visible" />
 
             <LinearLayout

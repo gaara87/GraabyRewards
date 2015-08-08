@@ -44,8 +44,6 @@ import graaby.app.wallet.services.GraabyOutletDiscoveryService;
 import graaby.app.wallet.util.Helper;
 import rx.Observable;
 import rx.Subscriber;
-import rx.android.app.AppObservable;
-import rx.functions.Func1;
 import rx.schedulers.Schedulers;
 
 public class MainActivity extends BaseAppCompatActivity
@@ -368,50 +366,47 @@ public class MainActivity extends BaseAppCompatActivity
         final StringBuilder regIDBuilder = new StringBuilder(regid);
         // You should send the registration ID to your server over HTTP, so it
         // can use GCM/HTTP or CCS to send messages to your app.
-        AppObservable.bindActivity(this,
-                Observable.just(gcm)
-                        .flatMap(new Func1<GoogleCloudMessaging, Observable<BaseResponse>>() {
-                            @Override
-                            public Observable<BaseResponse> call(GoogleCloudMessaging googleCloudMessaging) {
-                                try {
-                                    String gcmID = googleCloudMessaging.register(SENDER_ID);
-                                    regIDBuilder.setLength(0);
-                                    regIDBuilder.trimToSize();
-                                    regIDBuilder.append(gcmID);
-                                    return mProfileService.get()
-                                            .registerGCM(new GCMInfo(gcmID));
-                                } catch (IOException e) {
-                                    e.printStackTrace();
-                                }
-                                return null;
-                            }
-                        })
-                        .observeOn(Schedulers.newThread())
-                        .subscribeOn(Schedulers.newThread())
-        ).subscribe(new Subscriber<BaseResponse>() {
-            String msg = "";
 
-            @Override
-            public void onCompleted() {
-                Log.d("GCM_REG", msg);
-            }
+        Observable.just(gcm)
+                .flatMap(googleCloudMessaging -> {
+                    try {
+                        String gcmID = googleCloudMessaging.register(SENDER_ID);
+                        regIDBuilder.setLength(0);
+                        regIDBuilder.trimToSize();
+                        regIDBuilder.append(gcmID);
+                        return mProfileService.get()
+                                .registerGCM(new GCMInfo(gcmID));
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+                    return null;
+                })
+                .observeOn(Schedulers.newThread())
+                .subscribeOn(Schedulers.newThread())
+                .subscribe(new Subscriber<BaseResponse>() {
+                    String msg = "";
 
-            @Override
-            public void onError(Throwable e) {
-                msg = "Your app was unable to register :" + regIDBuilder.toString() + " \nError:" + e.getMessage();
-                Log.e("GCM_REG", msg);
-            }
+                    @Override
+                    public void onCompleted() {
+                        Log.d("GCM_REG", msg);
+                    }
 
-            @Override
-            public void onNext(BaseResponse baseResponse) {
-                if (baseResponse.responseSuccessCode == GraabyApplication.getContainerHolder().getContainer().getLong(getString(R.string.gtm_response_success))) {
-                    msg = "Your app has been registered successfully:" + regIDBuilder.toString();
-                    storeRegistrationId(getApplicationContext(), regIDBuilder.toString());
-                } else if (baseResponse.responseSuccessCode == GraabyApplication.getContainerHolder().getContainer().getLong(getString(R.string.gtm_response_failure))) {
-                    msg = "Your app was unable to register:" + regIDBuilder.toString();
-                }
-            }
-        });
+                    @Override
+                    public void onError(Throwable e) {
+                        msg = "Your app was unable to register :" + regIDBuilder.toString() + " \nError:" + e.getMessage();
+                        Log.e("GCM_REG", msg);
+                    }
+
+                    @Override
+                    public void onNext(BaseResponse baseResponse) {
+                        if (baseResponse.responseSuccessCode == GraabyApplication.getContainerHolder().getContainer().getLong(getString(R.string.gtm_response_success))) {
+                            msg = "Your app has been registered successfully:" + regIDBuilder.toString();
+                            storeRegistrationId(getApplicationContext(), regIDBuilder.toString());
+                        } else if (baseResponse.responseSuccessCode == GraabyApplication.getContainerHolder().getContainer().getLong(getString(R.string.gtm_response_failure))) {
+                            msg = "Your app was unable to register:" + regIDBuilder.toString();
+                        }
+                    }
+                });
 
 
     }

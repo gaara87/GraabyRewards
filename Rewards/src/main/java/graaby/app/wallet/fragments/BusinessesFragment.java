@@ -45,8 +45,8 @@ import java.util.Set;
 
 import javax.inject.Inject;
 
+import butterknife.Bind;
 import butterknife.ButterKnife;
-import butterknife.InjectView;
 import de.greenrobot.event.EventBus;
 import graaby.app.wallet.GraabyApplication;
 import graaby.app.wallet.MainActivity;
@@ -73,7 +73,7 @@ public class BusinessesFragment extends BaseFragment
     GoogleMap mMap;
     @Inject
     BusinessService mBusinessService;
-    @InjectView(R.id.map)
+    @Bind(R.id.map)
     MapView mapView;
 
     private ClusterManager<BusinessMarker> mClusterManager;
@@ -115,7 +115,7 @@ public class BusinessesFragment extends BaseFragment
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View inflatedView = super.onCreateView(inflater, container, savedInstanceState, R.layout.fragment_business);
-        ButterKnife.inject(this, inflatedView);
+        ButterKnife.bind(this, inflatedView);
 
         mSwipeRefresh.setEnabled(false);
         setSwipeRefreshColors(R.color.wisteria, R.color.amethyst, R.color.holo_darkpurple, R.color.holo_lightpurple);
@@ -306,7 +306,7 @@ public class BusinessesFragment extends BaseFragment
     @Override
     public void onDestroyView() {
         super.onDestroyView();
-        ButterKnife.reset(this);
+        ButterKnife.unbind(this);
     }
 
     @Override
