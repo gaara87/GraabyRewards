@@ -75,7 +75,7 @@ public final class GraabyNDEFCore implements Parcelable {
                 LoganSquare.serialize(data, fos);
                 fos.close();
             } catch (IOException ignored) {
-                Crashlytics.logException(ignored);
+                if (BuildConfig.USE_CRASHLYTICS) Crashlytics.logException(ignored);
             }
         }
     }

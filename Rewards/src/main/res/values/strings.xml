@@ -15,19 +15,10 @@
     <string name="title_activity_slide">Graaby</string>
     <string name="title_activity_business_details">Business Details</string>
 
-    <string-array name="nav_drawer_items">
-        <item>Profile|nav_profile</item>
-        <item>Marketplace|nav_market</item>
-        <item>Businesses|nav_business</item>
-        <item>Feeds|nav_feeds</item>
-        <item>Contacts|nav_contacts</item>
-        <item>Settings|nav_settings</item>
-    </string-array>
-
     <string name="market_value_hint">Discount Value</string>
     <string name="Rs">Rs.</string>
     <string name="hint_placeholder">-</string>
-    <string name="guide_empty"></string>
+    <string name="guide_empty" />
     <string name="guide_10">See how many points of you have left,
         total of points earned
         and total money saved</string>

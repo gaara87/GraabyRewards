@@ -38,6 +38,7 @@ import javax.inject.Inject;
 import butterknife.Bind;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
+import graaby.app.wallet.BuildConfig;
 import graaby.app.wallet.GraabyApplication;
 import graaby.app.wallet.GraabyNDEFCore;
 import graaby.app.wallet.MainActivity;
@@ -190,7 +191,8 @@ public class LoginFragment extends BaseFragment {
 
             NfcAdapter mNfcAdapter = NfcAdapter.getDefaultAdapter(getActivity());
             creds.nfcCapable = (mNfcAdapter != null);
-            Crashlytics.setBool(Helper.CRASHLYTICS_KEY_NFC, creds.nfcCapable);
+            if (BuildConfig.USE_CRASHLYTICS)
+                Crashlytics.setBool(Helper.CRASHLYTICS_KEY_NFC, creds.nfcCapable);
 
             mCompositeSubscriptions.add(mLoginService.attemptLogin(creds)
                     .compose(this.<UserCredentialsResponse>applySchedulers())
@@ -207,11 +209,9 @@ public class LoginFragment extends BaseFragment {
                             if (!TextUtils.isEmpty(userCredentialsResponse.message)) {
                                 Toast.makeText(getActivity(), userCredentialsResponse.message, Toast.LENGTH_SHORT).show();
                             } else {
-                                try {
+                                if (BuildConfig.USE_CRASHLYTICS)
                                     Crashlytics.setUserEmail(mEmail.split("@")[0]);
-                                } catch (Exception ignored) {
 
-                                }
                                 Account acc = new Account(mEmail, UserLoginActivity.ACCOUNT_TYPE);
                                 Bundle b = new Bundle();
                                 b.putString("url", userCredentialsResponse.url);

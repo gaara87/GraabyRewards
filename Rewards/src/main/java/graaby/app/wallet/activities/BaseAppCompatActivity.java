@@ -13,6 +13,7 @@ import java.io.File;
 import javax.inject.Inject;
 
 import de.greenrobot.event.EventBus;
+import de.greenrobot.event.Subscribe;
 import graaby.app.wallet.GraabyApplication;
 import graaby.app.wallet.GraabyNDEFCore;
 import graaby.app.wallet.R;
@@ -68,8 +69,8 @@ public class BaseAppCompatActivity extends AppCompatActivity {
 
     @Override
     public void onPause() {
+        super.onPause();
         EventBus.getDefault().unregister(this);
-        super.onStop();
     }
 
 
@@ -79,7 +80,8 @@ public class BaseAppCompatActivity extends AppCompatActivity {
         mCompositeSubscriptions.unsubscribe();
     }
 
-    public void onEvent(ToolbarEvents event) {
+    @Subscribe(sticky = true)
+    public void handle(ToolbarEvents event) {
         if (mToolbar != null) {
             mToolbar.setBackgroundColor(getResources().getColor(event.getToolbarBgColor()));
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
@@ -88,7 +90,8 @@ public class BaseAppCompatActivity extends AppCompatActivity {
         }
     }
 
-    public void onEvent(ToolbarEvents.SetTitle event) {
+    @Subscribe
+    public void handle(ToolbarEvents.SetTitle event) {
         if (mToolbar != null) {
             mToolbar.setTitle(event.getName());
         }

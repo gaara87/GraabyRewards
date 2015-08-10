@@ -11,6 +11,7 @@ import org.jetbrains.annotations.NotNull;
 
 import java.lang.ref.WeakReference;
 
+import graaby.app.wallet.BuildConfig;
 import rx.Subscriber;
 
 /**
@@ -47,7 +48,8 @@ public abstract class CacheSubscriber<T> extends Subscriber<T> {
 
     @Override
     final public void onError(Throwable e) {
-        Crashlytics.logException(e);
+        if (BuildConfig.USE_CRASHLYTICS)
+            Crashlytics.logException(e);
         if (mContext.get() != null) {
             if (e instanceof CustomRetrofitErrorThrowable) {
                 Toast.makeText(mContext.get(), e.getMessage(), Toast.LENGTH_SHORT).show();

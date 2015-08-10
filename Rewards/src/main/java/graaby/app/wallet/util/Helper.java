@@ -13,6 +13,7 @@ import com.google.android.gms.common.GooglePlayServicesUtil;
 
 import java.io.IOException;
 
+import graaby.app.wallet.BuildConfig;
 import graaby.app.wallet.activities.BusinessDetailsActivity;
 import graaby.app.wallet.models.retrofit.OutletDetail;
 
@@ -54,7 +55,8 @@ public class Helper {
                 GooglePlayServicesUtil.getErrorDialog(resultCode, activity,
                         PLAY_SERVICES_RESOLUTION_REQUEST).show();
             } else {
-                Crashlytics.log("Device does not contain play services");
+                if (BuildConfig.USE_CRASHLYTICS)
+                    Crashlytics.log("Device does not contain play services");
             }
             return false;
         }

@@ -27,6 +27,8 @@ import java.util.concurrent.TimeUnit;
 import javax.inject.Inject;
 
 import de.greenrobot.event.EventBus;
+import de.greenrobot.event.Subscribe;
+import graaby.app.wallet.BuildConfig;
 import graaby.app.wallet.GraabyApplication;
 import graaby.app.wallet.R;
 import graaby.app.wallet.database.ORMService;
@@ -155,7 +157,8 @@ public class GraabyOutletDiscoveryService extends Service implements GoogleApiCl
 
     @Override
     public void onConnectionFailed(ConnectionResult connectionResult) {
-        Crashlytics.log(Log.ERROR, TAG, "Failed to connect to google api client, connection result error code:- " + connectionResult.getErrorCode());
+        if (BuildConfig.USE_CRASHLYTICS)
+            Crashlytics.log(Log.ERROR, TAG, "Failed to connect to google api client, connection result error code:- " + connectionResult.getErrorCode());
     }
 
     public void onEventBackgroundThread(LocationEvents.SendUpdate event) {
@@ -170,7 +173,8 @@ public class GraabyOutletDiscoveryService extends Service implements GoogleApiCl
         }
     }
 
-    public void onEvent(ProfileEvents.LoggedOutEvent event) {
+    @Subscribe
+    public void handle(ProfileEvents.LoggedOutEvent event) {
         AlarmManager alarmManager = (AlarmManager) getSystemService(Context.ALARM_SERVICE);
         PendingIntent pendingIntent = PendingIntent.getBroadcast(this, UpdateLocationBroadcastReceiver.REQUEST_CODE, new Intent(this, UpdateLocationBroadcastReceiver.class), 0);
         alarmManager.cancel(pendingIntent);
@@ -221,7 +225,7 @@ public class GraabyOutletDiscoveryService extends Service implements GoogleApiCl
             fastestinterval = GraabyApplication.getContainerHolder().getContainer().getLong(getString(R.string.gtm_fastest_interval));
             smallestdisplacement = GraabyApplication.getContainerHolder().getContainer().getLong(getString(R.string.gtm_smallest_displacement));
         } catch (NullPointerException npe) {
-            Crashlytics.log("Unable to get fastest interval");
+            if (BuildConfig.USE_CRASHLYTICS) Crashlytics.log("Unable to get fastest interval");
 
         }
         return new LocationRequest()

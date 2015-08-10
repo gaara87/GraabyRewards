@@ -8,23 +8,31 @@ import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.provider.SearchRecentSuggestions;
+import android.support.design.widget.NavigationView;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
+import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
+import android.support.v7.app.ActionBar;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.TextView;
 import android.widget.Toast;
 
+import com.bumptech.glide.Glide;
 import com.google.android.gms.gcm.GoogleCloudMessaging;
 
 import java.io.IOException;
 
 import javax.inject.Inject;
 
+import butterknife.Bind;
 import dagger.Lazy;
 import de.greenrobot.event.EventBus;
+import de.greenrobot.event.Subscribe;
+import de.hdodenhof.circleimageview.CircleImageView;
 import graaby.app.wallet.activities.BaseAppCompatActivity;
 import graaby.app.wallet.activities.SettingsActivity;
 import graaby.app.wallet.auth.UserAuthenticationHandler;
@@ -34,9 +42,9 @@ import graaby.app.wallet.fragments.BusinessesFragment;
 import graaby.app.wallet.fragments.ContactsFragment;
 import graaby.app.wallet.fragments.FeedFragment;
 import graaby.app.wallet.fragments.MarketFragment;
-import graaby.app.wallet.fragments.NavigationDrawerFragment;
 import graaby.app.wallet.fragments.ProfileFragment;
 import graaby.app.wallet.models.android.GraabySearchSuggestionsProvider;
+import graaby.app.wallet.models.realm.ProfileDAO;
 import graaby.app.wallet.models.retrofit.BaseResponse;
 import graaby.app.wallet.models.retrofit.GCMInfo;
 import graaby.app.wallet.network.services.ProfileService;
@@ -47,7 +55,7 @@ import rx.Subscriber;
 import rx.schedulers.Schedulers;
 
 public class MainActivity extends BaseAppCompatActivity
-        implements NavigationDrawerFragment.NavigationDrawerCallbacks, ProfileFragment.ViewBusinessesListener, UserAuthenticationHandler.OnUserAuthentication {
+        implements ProfileFragment.ViewBusinessesListener, UserAuthenticationHandler.OnUserAuthentication {
 
     public static final String PROPERTY_REG_ID = "registration_id";
     private static final String PROPERTY_APP_VERSION = "appVersion";
@@ -58,10 +66,13 @@ public class MainActivity extends BaseAppCompatActivity
     UserAuthenticationHandler authHandler;
     @Inject
     Lazy<ProfileService> mProfileService;
-    /**
-     * Fragment managing the behaviors, interactions and presentation of the navigation drawer.
-     */
-    private NavigationDrawerFragment mNavigationDrawerFragment;
+
+    @Bind(R.id.navigation_drawer_profile_photo)
+    CircleImageView navigationDrawerProfilePhoto;
+    @Bind(R.id.navigation_drawer_name)
+    TextView navigationDrawerName;
+    @Bind(R.id.navigation_drawer_email)
+    TextView navigationDrawerEmail;
     /**
      * Used to store the last screen title. For use in {@link #restoreActionBar()}.
      */
@@ -69,6 +80,7 @@ public class MainActivity extends BaseAppCompatActivity
 
     private boolean authorized = false;
     private boolean initialized = false;
+    private DrawerLayout mDrawerLayout;
 
     /**
      * @return Application's version code from the {@code PackageManager}.
@@ -122,80 +134,91 @@ public class MainActivity extends BaseAppCompatActivity
 
         mToolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(mToolbar);
+        final ActionBar actionBar = getSupportActionBar();
 
-        mNavigationDrawerFragment = (NavigationDrawerFragment)
-                getSupportFragmentManager().findFragmentById(R.id.navigation_drawer);
+        if (actionBar != null) {
+//            use to set custom home indicator
+//            actionBar.setHomeAsUpIndicator(R.drawable.ic_menu_black_24dp);
+            actionBar.setDisplayHomeAsUpEnabled(true);
+        }
         mTitle = getTitle();
 
-        // Set up the drawer.
-        mNavigationDrawerFragment.setUp(
-                R.id.navigation_drawer,
-                (DrawerLayout) findViewById(R.id.drawer_layout), mToolbar, getSupportActionBar());
+        setupDrawerLayout();
 
         initialized = true;
     }
 
-    @Override
-    public void onNavigationDrawerItemSelected(int position) {
-        Fragment placeHolderFragment = null;
-        Bundle args = new Bundle();
-        switch (position) {
-            case 0:
-                placeHolderFragment = new ProfileFragment();
-                break;
-            case 1:
-                placeHolderFragment = new MarketFragment();
-                args.putBoolean(MarketFragment.SEARCHABLE_PARAMETER, true);
-                break;
-            case 2:
-                placeHolderFragment = new BusinessesFragment();
-                break;
-            case 3:
-                placeHolderFragment = new FeedFragment();
-                break;
-            case 4:
-                placeHolderFragment = new ContactsFragment();
-                break;
-            case 5:
-                Intent intent = new Intent(this, SettingsActivity.class);
-                startActivityForResult(intent, 10);
-                return;
-            default:
-                break;
+    private void setupDrawerLayout() {
+        mDrawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
+
+        ProfileDAO profile = GraabyApplication.getORMDbService().getProfileInfo();
+        if (profile != null) {
+            navigationDrawerName.setText(profile.getFullName());
+            navigationDrawerEmail.setText(profile.getEmail());
+            Glide.with(this)
+                    .load(profile.getPictureURL())
+                    .crossFade()
+                    .into(navigationDrawerProfilePhoto);
         }
 
-        args.putInt(Helper.ARG_SECTION_NUMBER, position);
-        assert placeHolderFragment != null;
-        placeHolderFragment.setArguments(args);
+        NavigationView view = (NavigationView) findViewById(R.id.navigation_view);
+        view.setNavigationItemSelectedListener(menuItem -> {
+            Fragment placeHolderFragment = null;
+            Bundle args = new Bundle();
+            switch (menuItem.getItemId()) {
+                case R.id.drawer_profile:
+                    placeHolderFragment = new ProfileFragment();
+                    break;
+                case R.id.drawer_market:
+                    placeHolderFragment = new MarketFragment();
+                    args.putBoolean(MarketFragment.SEARCHABLE_PARAMETER, true);
+                    break;
+                case R.id.drawer_business:
+                    placeHolderFragment = new BusinessesFragment();
+                    break;
+                case R.id.drawer_feeds:
+                    placeHolderFragment = new FeedFragment();
+                    break;
+                case R.id.drawer_contacts:
+                    placeHolderFragment = new ContactsFragment();
+                    break;
+                case R.id.drawer_settings:
+                    Intent intent = new Intent(MainActivity.this, SettingsActivity.class);
+                    MainActivity.this.startActivityForResult(intent, 10);
+                    return true;
+            }
+            args.putInt(Helper.ARG_SECTION_NUMBER, menuItem.getItemId());
+            assert placeHolderFragment != null;
+            placeHolderFragment.setArguments(args);
 
 
-        // update the main content by replacing fragments
-        FragmentManager fragmentManager = getSupportFragmentManager();
-        fragmentManager.beginTransaction()
-                .replace(R.id.container, placeHolderFragment, "main")
-                .commit();
+            // update the main content by replacing fragments
+            FragmentManager fragmentManager = MainActivity.this.getSupportFragmentManager();
+            fragmentManager.beginTransaction()
+                    .replace(R.id.container, placeHolderFragment, "main")
+                    .commit();
+            menuItem.setChecked(true);
+            mDrawerLayout.closeDrawers();
+            return true;
+        });
     }
+
 
     public void onSectionAttached(int number) {
         switch (number) {
-            case 0:
+            case R.id.drawer_profile:
                 mTitle = getString(R.string.title_profile);
-
-
-//                getSupportActionBar().setBackgroundDrawable(new ColorDrawable(getResources().getColor(R.color.midnightblue)));
                 break;
-            case 1:
+            case R.id.drawer_market:
                 mTitle = getString(R.string.title_marketplace);
-
-//                getSupportActionBar().setBackgroundDrawable(new ColorDrawable(getResources().getColor(R.color.sunflower)));
                 break;
-            case 2:
+            case R.id.drawer_business:
                 mTitle = getString(R.string.title_businesses);
                 break;
-            case 3:
+            case R.id.drawer_feeds:
                 mTitle = getString(R.string.title_feed);
                 break;
-            case 4:
+            case R.id.drawer_contacts:
                 mTitle = getString(R.string.title_contacts);
                 break;
         }
@@ -240,7 +263,7 @@ public class MainActivity extends BaseAppCompatActivity
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         try {
-            if (!mNavigationDrawerFragment.isDrawerOpen()) {
+            if (!mDrawerLayout.isDrawerOpen(GravityCompat.START)) {
                 // Only show items in the action bar relevant to this screen
                 // if the drawer is not showing. Otherwise, let the drawer
                 // decide what to show in the action bar.
@@ -260,16 +283,18 @@ public class MainActivity extends BaseAppCompatActivity
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
-        int id = item.getItemId();
-        if (id == R.id.action_menu_item_nfc_toggle) {
+        switch (item.getItemId()) {
+            case android.R.id.home:
+                mDrawerLayout.openDrawer(GravityCompat.START);
+                return true;
+            case R.id.action_menu_item_nfc_toggle:
             startActivity(new Intent(android.provider.Settings.ACTION_WIRELESS_SETTINGS));
-        } else if (id == R.id.action_menu_item_clear_search) {
-            SearchRecentSuggestions suggestions = new SearchRecentSuggestions(this,
-                    GraabySearchSuggestionsProvider.AUTHORITY, GraabySearchSuggestionsProvider.MODE);
-            suggestions.clearHistory();
+                return true;
+            case R.id.action_menu_item_clear_search:
+                SearchRecentSuggestions suggestions = new SearchRecentSuggestions(this,
+                        GraabySearchSuggestionsProvider.AUTHORITY, GraabySearchSuggestionsProvider.MODE);
+                suggestions.clearHistory();
+                return true;
         }
         return super.onOptionsItemSelected(item);
     }
@@ -407,13 +432,28 @@ public class MainActivity extends BaseAppCompatActivity
                         }
                     }
                 });
+    }
 
+    @Subscribe(sticky = true)
+    public void handle(ProfileEvents.NameUpdatedEvent event) {
+        ProfileDAO profile = GraabyApplication.getORMDbService().getProfileInfo();
+        if (profile != null) {
+            navigationDrawerName.setText(profile.getFullName());
+            navigationDrawerEmail.setText(profile.getEmail());
+        }
+    }
 
+    @Subscribe(sticky = true)
+    public void handle(ProfileEvents.PictureUpdatedEvent event) {
+        Glide.with(this)
+                .load(event.getImageURL())
+                .crossFade()
+                .into(navigationDrawerProfilePhoto);
     }
 
     @Override
     public void onViewBusinessesRequest() {
-        mNavigationDrawerFragment.openDrawer();
+        //TODO: open businesses fragment
     }
 
 }

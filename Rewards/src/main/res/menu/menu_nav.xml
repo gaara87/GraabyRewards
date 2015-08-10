@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <group android:checkableBehavior="single">
+        <item
+            android:id="@+id/drawer_profile"
+            android:checked="true"
+            android:icon="@drawable/nav_profile"
+            android:title="@string/title_profile" />
+
+        <item
+            android:id="@+id/drawer_market"
+            android:icon="@drawable/nav_market"
+            android:title="@string/title_marketplace" />
+
+        <item
+            android:id="@+id/drawer_business"
+            android:icon="@drawable/nav_business"
+            android:title="@string/title_businesses" />
+
+        <item
+            android:id="@+id/drawer_feeds"
+            android:icon="@drawable/nav_feeds"
+            android:title="@string/title_activity_feed" />
+
+        <item
+            android:id="@+id/drawer_contacts"
+            android:icon="@drawable/nav_contacts"
+            android:title="@string/title_contacts" />
+
+        <item
+            android:id="@+id/drawer_settings"
+            android:icon="@drawable/nav_settings"
+            android:title="@string/title_activity_settings">
+            <menu>
+                <item
+                    android:id="@+id/drawer_favourite"
+                    android:title="Feedback" />
+            </menu>
+        </item>
+    </group>
+</menu>

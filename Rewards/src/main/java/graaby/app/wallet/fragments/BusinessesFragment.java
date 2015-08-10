@@ -48,6 +48,8 @@ import javax.inject.Inject;
 import butterknife.Bind;
 import butterknife.ButterKnife;
 import de.greenrobot.event.EventBus;
+import de.greenrobot.event.Subscribe;
+import graaby.app.wallet.BuildConfig;
 import graaby.app.wallet.GraabyApplication;
 import graaby.app.wallet.MainActivity;
 import graaby.app.wallet.R;
@@ -254,7 +256,7 @@ public class BusinessesFragment extends BaseFragment
             }
         } else {
             Toast.makeText(getActivity(), "Unable to load map", Toast.LENGTH_SHORT).show();
-            Crashlytics.log(Log.ERROR, TAG, "Unable to load map");
+            if (BuildConfig.USE_CRASHLYTICS) Crashlytics.log(Log.ERROR, TAG, "Unable to load map");
         }
     }
 
@@ -321,7 +323,8 @@ public class BusinessesFragment extends BaseFragment
 
     @Override
     public void onConnectionFailed(ConnectionResult connectionResult) {
-        Crashlytics.log(Log.ERROR, TAG, "Failed to connect to google api client, connection result error code:- " + connectionResult.getErrorCode());
+        if (BuildConfig.USE_CRASHLYTICS)
+            Crashlytics.log(Log.ERROR, TAG, "Failed to connect to google api client, connection result error code:- " + connectionResult.getErrorCode());
     }
 
     private void prepareLocationRequest() {
@@ -369,7 +372,8 @@ public class BusinessesFragment extends BaseFragment
                     case LocationSettingsStatusCodes.SETTINGS_CHANGE_UNAVAILABLE:
                         // Location settings are not satisfied. However, we have no way to fix the
                         // settings so we won't show the dialog.
-                        Crashlytics.log("Location Settings N/A! WTH?");
+                        if (BuildConfig.USE_CRASHLYTICS)
+                            Crashlytics.log("Location Settings N/A! WTH?");
                         break;
                 }
             }
@@ -400,7 +404,8 @@ public class BusinessesFragment extends BaseFragment
 
     }
 
-    public void onEvent(LocationEvents.LocationEnabled event) {
+    @Subscribe
+    public void handle(LocationEvents.LocationEnabled event) {
         getLastKnownWithRequest();
     }
 }

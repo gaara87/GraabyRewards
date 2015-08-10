@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="172dp"
+    android:background="@drawable/ic_beam_bg"
+    android:paddingLeft="16dp"
+    android:paddingStart="16dp"
+    android:paddingTop="@dimen/fab_border_width"
+    android:theme="@style/ThemeOverlay.AppCompat.Dark"
+    tools:showIn="@layout/fragment_navigation_drawer">
+
+    <de.hdodenhof.circleimageview.CircleImageView
+        android:id="@+id/navigation_drawer_profile_photo"
+        android:layout_width="64dp"
+        android:layout_height="64dp"
+        android:layout_marginBottom="24dp"
+        android:layout_marginTop="8dp"
+        android:src="@color/turquoise"
+        app:border_color="@android:color/white"
+        app:border_width="1dp" />
+
+    <TextView
+        android:id="@+id/navigation_drawer_name"
+        style="@style/TextAppearance.AppCompat.Body2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_above="@+id/navigation_drawer_email"
+        android:textColor="@android:color/white"
+        tools:text="Akash" />
+
+    <TextView
+        android:id="@+id/navigation_drawer_email"
+        style="@style/TextAppearance.AppCompat.Body1"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_marginBottom="16dp"
+        android:textColor="@android:color/white"
+        tools:text="akash@graaby.com" />
+</RelativeLayout>
