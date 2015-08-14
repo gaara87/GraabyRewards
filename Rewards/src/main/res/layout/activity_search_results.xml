@@ -23,7 +23,7 @@
             android:layout_height="match_parent"
             android:dividerHeight="@dimen/globalPadding8" />
 
-        <TextView
+        <android.support.v7.widget.AppCompatTextView
             android:id="@android:id/empty"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"

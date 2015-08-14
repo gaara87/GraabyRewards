@@ -28,7 +28,7 @@
                 app:border_color="@color/wisteria"
                 app:border_width="1dp" />
 
-            <TextView
+            <android.support.v7.widget.AppCompatTextView
                 android:id="@+id/item_businessAddressTextView"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -49,7 +49,7 @@
                     android:layout_width="fill_parent"
                     android:layout_height="fill_parent">
 
-                    <TextView
+                    <android.support.v7.widget.AppCompatTextView
                         style="@style/TextAppearance.AppCompat.Subhead"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
@@ -62,7 +62,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content">
 
-                    <TextView
+                    <android.support.v7.widget.AppCompatTextView
                         android:id="@+id/business_points"
                         style="@style/Graaby.Theme.TextAppearance.Stat.Number"
                         android:layout_width="wrap_content"
@@ -72,7 +72,7 @@
                         android:drawableRight="@drawable/ic_point"
                         android:hint="@string/hint_placeholder" />
 
-                    <TextView
+                    <android.support.v7.widget.AppCompatTextView
                         android:id="@+id/business_followers"
                         style="@style/Graaby.Theme.TextAppearance.Stat.Number"
                         android:layout_width="wrap_content"
@@ -83,7 +83,7 @@
                         android:hint="@string/hint_placeholder" />
 
 
-                    <TextView
+                    <android.support.v7.widget.AppCompatTextView
                         android:id="@+id/business_checkins"
                         style="@style/Graaby.Theme.TextAppearance.Stat.Number"
                         android:layout_width="wrap_content"
@@ -98,19 +98,19 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content">
 
-                    <TextView
+                    <android.support.v7.widget.AppCompatTextView
                         style="@style/Graaby.Theme.TextAppearance.Stat.Caption"
                         android:layout_width="wrap_content"
                         android:layout_height="match_parent"
                         android:text="Points Given" />
 
-                    <TextView
+                    <android.support.v7.widget.AppCompatTextView
                         style="@style/Graaby.Theme.TextAppearance.Stat.Caption"
                         android:layout_width="wrap_content"
                         android:layout_height="match_parent"
                         android:text="Followers" />
 
-                    <TextView
+                    <android.support.v7.widget.AppCompatTextView
                         style="@style/Graaby.Theme.TextAppearance.Stat.Caption"
                         android:layout_width="wrap_content"
                         android:layout_height="match_parent"
@@ -122,7 +122,7 @@
                     android:layout_height="fill_parent"
                     android:layout_marginTop="@dimen/global16">
 
-                    <TextView
+                    <android.support.v7.widget.AppCompatTextView
                         style="@style/TextAppearance.AppCompat.Subhead"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
@@ -136,7 +136,7 @@
                     android:layout_height="wrap_content">
 
 
-                    <TextView
+                    <android.support.v7.widget.AppCompatTextView
                         android:id="@+id/points_earned_textView"
                         style="@style/Graaby.Theme.TextAppearance.Stat.Number"
                         android:layout_width="wrap_content"
@@ -147,7 +147,7 @@
                         android:hint="@string/hint_placeholder" />
 
 
-                    <TextView
+                    <android.support.v7.widget.AppCompatTextView
                         android:id="@+id/profile_total_savings_textView"
                         style="@style/Graaby.Theme.TextAppearance.Stat.Number"
                         android:layout_width="wrap_content"
@@ -157,7 +157,7 @@
                         android:drawableRight="@drawable/ic_savings"
                         android:hint="@string/hint_placeholder" />
 
-                    <TextView
+                    <android.support.v7.widget.AppCompatTextView
                         android:id="@+id/profile_checkins_textview"
                         style="@style/Graaby.Theme.TextAppearance.Stat.Number"
                         android:layout_width="wrap_content"
@@ -172,19 +172,19 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content">
 
-                    <TextView
+                    <android.support.v7.widget.AppCompatTextView
                         style="@style/Graaby.Theme.TextAppearance.Stat.Caption"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="Earned" />
 
-                    <TextView
+                    <android.support.v7.widget.AppCompatTextView
                         style="@style/Graaby.Theme.TextAppearance.Stat.Caption"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="Savings" />
 
-                    <TextView
+                    <android.support.v7.widget.AppCompatTextView
                         style="@style/Graaby.Theme.TextAppearance.Stat.Caption"
                         android:layout_width="wrap_content"
                         android:layout_height="match_parent"

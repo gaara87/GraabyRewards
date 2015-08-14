@@ -45,19 +45,19 @@
                         android:orientation="vertical"
                         android:padding="@dimen/globalPadding8">
 
-                        <TextView
+                        <android.support.v7.widget.AppCompatTextView
                             android:id="@+id/item_valueTextView"
                             android:layout_width="wrap_content"
                             android:layout_height="match_parent"
                             android:textIsSelectable="false" />
 
-                        <TextView
+                        <android.support.v7.widget.AppCompatTextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_marginTop="@dimen/global8"
                             android:text="at" />
 
-                        <TextView
+                        <android.support.v7.widget.AppCompatTextView
                             android:id="@+id/item_businessNameTextView"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
@@ -68,13 +68,13 @@
                             android:gravity="center"
                             android:textAppearance="@style/TextAppearance.AppCompat.Subhead" />
 
-                        <TextView
+                        <android.support.v7.widget.AppCompatTextView
                             android:id="@+id/item_discount_for"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_marginTop="@dimen/global8"/>
 
-                        <TextView
+                        <android.support.v7.widget.AppCompatTextView
                             android:id="@+id/item_costTextView"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
@@ -84,7 +84,7 @@
                             android:gravity="center_vertical"
                             android:textAppearance="@style/TextAppearance.AppCompat.Headline" />
 
-                        <TextView
+                        <android.support.v7.widget.AppCompatTextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:text=" Graaby Points"
@@ -112,7 +112,7 @@
                         android:layout_marginStart="@dimen/activity_horizontal_margin"
                         android:orientation="vertical">
 
-                        <TextView
+                        <android.support.v7.widget.AppCompatTextView
                             android:id="@+id/item_expiry_textView"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
@@ -124,7 +124,7 @@
 
                         <include layout="@layout/include_divider" />
 
-                        <TextView
+                        <android.support.v7.widget.AppCompatTextView
                             android:id="@+id/item_id_textView"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
@@ -135,7 +135,7 @@
 
                         <include layout="@layout/include_divider" />
 
-                        <TextView
+                        <android.support.v7.widget.AppCompatTextView
                             android:id="@+id/item_details_textView"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
@@ -147,7 +147,7 @@
 
                         <include layout="@layout/include_divider" />
 
-                        <TextView
+                        <android.support.v7.widget.AppCompatTextView
                             android:id="@+id/item_terms_textView"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"

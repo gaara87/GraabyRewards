@@ -29,6 +29,7 @@ import java.io.IOException;
 import javax.inject.Inject;
 
 import butterknife.Bind;
+import butterknife.ButterKnife;
 import dagger.Lazy;
 import de.greenrobot.event.EventBus;
 import de.greenrobot.event.Subscribe;
@@ -129,23 +130,27 @@ public class MainActivity extends BaseAppCompatActivity
 
     private void initialize() {
 
+        ButterKnife.bind(this);
         GraabyOutletDiscoveryService.setupLocationService(this);
         registerGCM();
+        setupToolbar();
+        setupDrawerLayout();
 
+        initialized = true;
+    }
+
+    private void setupToolbar() {
         mToolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(mToolbar);
         final ActionBar actionBar = getSupportActionBar();
 
         if (actionBar != null) {
 //            use to set custom home indicator
-//            actionBar.setHomeAsUpIndicator(R.drawable.ic_menu_black_24dp);
+            actionBar.setHomeAsUpIndicator(R.drawable.ic_menu_white_24dp);
             actionBar.setDisplayHomeAsUpEnabled(true);
         }
         mTitle = getTitle();
 
-        setupDrawerLayout();
-
-        initialized = true;
     }
 
     private void setupDrawerLayout() {

@@ -150,7 +150,6 @@ dependencies {
     compile 'de.greenrobot:eventbus:3.0.0-beta1'
     provided 'de.greenrobot:eventbus-annotation-processor:3.0.0-beta1'
     compile 'io.reactivex:rxandroid:1.0.0'
-    compile 'com.rengwuxian.materialedittext:library:2.1.4'
     apt 'com.bluelinelabs:logansquare-compiler:1.1.0'
     compile 'com.bluelinelabs:logansquare:1.1.0'
     compile 'com.github.bumptech.glide:glide:3.6.1'

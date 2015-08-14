@@ -27,13 +27,13 @@
             tools:listitem="@layout/item_grid_market" />
 
         <ProgressBar
+            android:id="@+id/progressBar"
             style="?android:attr/progressBarStyleLarge"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:id="@+id/progressBar"
             android:layout_gravity="center_horizontal" />
 
-        <TextView
+        <android.support.v7.widget.AppCompatTextView
             android:id="@android:id/empty"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"

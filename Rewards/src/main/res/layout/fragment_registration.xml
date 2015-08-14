@@ -1,9 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:paddingTop="@dimen/global16">
+    android:layout_height="match_parent">
 
     <LinearLayout
         android:id="@+id/register_status"
@@ -20,7 +18,7 @@
             android:layout_height="wrap_content"
             android:layout_marginBottom="8dp" />
 
-        <TextView
+        <android.support.v7.widget.AppCompatTextView
             android:id="@+id/verification_message"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -40,23 +38,24 @@
             android:layout_height="wrap_content"
             android:orientation="vertical">
 
-            <Button
+            <android.support.v7.widget.AppCompatButton
                 android:id="@+id/about_graaby"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
                 android:layout_marginBottom="@dimen/global16"
-                android:background="@color/belizehole"
                 android:paddingLeft="@dimen/global8"
                 android:paddingRight="@dimen/global8"
-                android:text="@string/about_graaby_button" />
+                android:text="@string/about_graaby_button"
+                android:textAllCaps="true"
+                android:theme="@style/GraabyTheme2.Button.Neutral" />
 
-            <Spinner
+            <android.support.v7.widget.AppCompatSpinner
                 android:id="@+id/emails_spinner"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content" />
 
-            <TextView
+            <android.support.v7.widget.AppCompatTextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:hint="Primary e-mail for this account"
@@ -67,22 +66,23 @@
                 android:layout_height="wrap_content"
                 android:orientation="horizontal">
 
-                <com.rengwuxian.materialedittext.MaterialEditText
-                    android:id="@+id/password"
-                    style="@style/SuccessEditText"
+                <android.support.design.widget.TextInputLayout
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:hint="@string/register_prompt_password"
-                    android:imeOptions="flagNavigateNext"
-                    android:inputType="textPassword"
-                    android:maxLength="15"
-                    android:maxLines="1"
-                    android:nextFocusForward="@+id/login_first_name"
-                    android:singleLine="true"
-                    app:met_floatingLabelText="Password"
-                    app:met_helperText="More complicated = more security"
-                    app:met_maxCharacters="15" />
+                    android:layout_weight="1">
+
+                    <android.support.v7.widget.AppCompatEditText
+                        android:id="@+id/password"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:hint="@string/register_prompt_password"
+                        android:imeOptions="flagNavigateNext"
+                        android:inputType="textPassword"
+                        android:maxLength="15"
+                        android:maxLines="1"
+                        android:nextFocusForward="@+id/login_first_name"
+                        android:singleLine="true" />
+                </android.support.design.widget.TextInputLayout>
 
                 <android.support.v7.widget.SwitchCompat
                     android:id="@+id/password_switch"
@@ -90,8 +90,6 @@
                     android:layout_height="wrap_content"
                     android:drawableLeft="@drawable/ic_visibility_off"
                     android:drawableStart="@drawable/ic_visibility_off" />
-
-
             </LinearLayout>
 
             <LinearLayout
@@ -99,35 +97,42 @@
                 android:layout_height="wrap_content"
                 android:orientation="horizontal">
 
-                <com.rengwuxian.materialedittext.MaterialEditText
-                    android:id="@+id/login_first_name"
-                    style="@style/SuccessEditText"
+                <android.support.design.widget.TextInputLayout
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_marginRight="@dimen/globalPadding8"
-                    android:layout_weight="1"
-                    android:hint="First name"
-                    android:maxEms="15"
-                    android:maxLength="15"
-                    android:nextFocusDown="@+id/login_last_name"
-                    android:nextFocusForward="@+id/login_last_name"
-                    android:nextFocusRight="@+id/login_last_name"
-                    android:singleLine="true"
-                    app:met_maxCharacters="15" />
+                    android:layout_weight="1">
 
-                <com.rengwuxian.materialedittext.MaterialEditText
-                    android:id="@+id/login_last_name"
-                    style="@style/SuccessEditText"
+                    <android.support.v7.widget.AppCompatEditText
+                        android:id="@+id/login_first_name"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:hint="First name"
+                        android:maxEms="15"
+                        android:maxLength="15"
+                        android:nextFocusDown="@+id/login_last_name"
+                        android:nextFocusForward="@+id/login_last_name"
+                        android:nextFocusRight="@+id/login_last_name"
+                        android:singleLine="true" />
+                </android.support.design.widget.TextInputLayout>
+
+                <android.support.design.widget.TextInputLayout
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="@dimen/globalPadding8"
                     android:layout_weight="1"
-                    android:hint="Last name"
-                    android:maxEms="15"
-                    android:maxLength="15"
-                    android:nextFocusForward="@+id/phone"
-                    android:singleLine="true"
-                    app:met_maxCharacters="15" />
+                    android:hint="Last name">
+
+                    <android.support.v7.widget.AppCompatEditText
+                        android:id="@+id/login_last_name"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:hint="Last name"
+                        android:maxEms="15"
+                        android:maxLength="15"
+                        android:nextFocusForward="@+id/phone"
+                        android:singleLine="true" />
+                </android.support.design.widget.TextInputLayout>
             </LinearLayout>
 
             <LinearLayout
@@ -135,34 +140,37 @@
                 android:layout_height="wrap_content"
                 android:orientation="horizontal">
 
-                <TextView
+                <android.support.v7.widget.AppCompatTextView
                     android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
+                    android:layout_height="match_parent"
+                    android:gravity="center_vertical"
                     android:paddingEnd="@dimen/globalPadding8"
                     android:paddingRight="@dimen/globalPadding8"
                     android:text="+91" />
 
-                <com.rengwuxian.materialedittext.MaterialEditText
-                    android:id="@+id/phone"
-                    style="@style/SuccessEditText"
+                <android.support.design.widget.TextInputLayout
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:hint="Your mobile phone number"
-                    android:inputType="phone"
-                    android:maxLength="10"
-                    android:singleLine="true"
-                    app:met_floatingLabelText="Phone number"
-                    app:met_helperText="Increase your account security"
-                    app:met_maxCharacters="10" />
+                    android:layout_height="wrap_content">
+
+                    <android.support.v7.widget.AppCompatEditText
+                        android:id="@+id/phone"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:hint="Your phone number"
+                        android:inputType="phone"
+                        android:maxLength="10"
+                        android:singleLine="true" />
+                </android.support.design.widget.TextInputLayout>
             </LinearLayout>
 
-            <Button
+            <android.support.v7.widget.AppCompatButton
                 android:id="@+id/register_button"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="16dp"
-                android:background="@color/emarald"
-                android:text="REGISTER" />
+                android:text="REGISTER"
+                android:textAllCaps="true"
+                android:theme="@style/GraabyTheme2.Button.Success" />
 
         </LinearLayout>
     </ScrollView>

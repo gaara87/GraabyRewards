@@ -20,20 +20,20 @@
             android:scaleType="centerCrop"
             android:src="@drawable/default_business_profile_image" />
 
-        <TextView
+        <android.support.v7.widget.AppCompatTextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center_horizontal"
             android:text="sent you"
             android:textAppearance="?android:attr/textAppearanceSmall" />
 
-        <TextView
+        <android.support.v7.widget.AppCompatTextView
             android:id="@+id/points_textView"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center_horizontal" />
 
-        <TextView
+        <android.support.v7.widget.AppCompatTextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center_horizontal"

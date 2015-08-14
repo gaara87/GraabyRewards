@@ -33,7 +33,7 @@
                     android:layout_marginTop="@dimen/globalPadding8"
                     android:src="@drawable/login_logo" />
 
-                <TextView
+                <android.support.v7.widget.AppCompatTextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginBottom="@dimen/globalPadding8"
@@ -41,7 +41,7 @@
                     android:text="A Universal Rewards Program"
                     android:textAppearance="?android:attr/textAppearanceLarge" />
 
-                <TextView
+                <android.support.v7.widget.AppCompatTextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
@@ -51,7 +51,7 @@
                     android:text="Get instant and flat discounts whenever you visit our partnered businesses"
                     android:textAppearance="?android:attr/textAppearanceMedium" />
 
-                <TextView
+                <android.support.v7.widget.AppCompatTextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
@@ -61,7 +61,7 @@
                     android:text="Discover &amp; obtain amazing rewards from the businesses you love and visit often"
                     android:textAppearance="?android:attr/textAppearanceMedium" />
 
-                <TextView
+                <android.support.v7.widget.AppCompatTextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginBottom="@dimen/globalPadding8"
@@ -70,7 +70,7 @@
                     android:text="Find &amp; follow Graaby Businesses"
                     android:textAppearance="?android:attr/textAppearanceMedium" />
 
-                <TextView
+                <android.support.v7.widget.AppCompatTextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center_vertical"
@@ -91,17 +91,17 @@
                 android:layout_height="wrap_content"
                 android:orientation="vertical">
 
-                <TextView
+                <android.support.v7.widget.AppCompatTextView
                     style="@style/OnboardingItem"
                     android:drawableLeft="@drawable/onboard_1"
                     android:text="Swipe the left edge to access the navigation drawer" />
 
-                <TextView
+                <android.support.v7.widget.AppCompatTextView
                     style="@style/OnboardingItem"
                     android:drawableLeft="@drawable/onboard_2"
                     android:text="Use the profile screen to get a quick snapshot of the discounts you own and track your activities" />
 
-                <TextView
+                <android.support.v7.widget.AppCompatTextView
                     style="@style/OnboardingItem"
                     android:drawableLeft="@drawable/onboard_3"
                     android:text="Select the voucher or coupon from the marketplace and easily buy it with one click" />
@@ -118,17 +118,17 @@
                 android:layout_height="wrap_content"
                 android:orientation="vertical">
 
-                <TextView
+                <android.support.v7.widget.AppCompatTextView
                     style="@style/OnboardingItem"
                     android:drawableLeft="@drawable/onboard_4"
                     android:text="Find Graaby businesses around your current location or search for a specific one" />
 
-                <TextView
+                <android.support.v7.widget.AppCompatTextView
                     style="@style/OnboardingItem"
                     android:drawableLeft="@drawable/onboard_5"
                     android:text="Connect your social accounts and share points with your contacts quickly" />
 
-                <TextView
+                <android.support.v7.widget.AppCompatTextView
                     style="@style/OnboardingItem"
                     android:gravity="center"
                     android:paddingTop="@dimen/global16"

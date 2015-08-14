@@ -27,14 +27,16 @@
             android:icon="@drawable/nav_contacts"
             android:title="@string/title_contacts" />
 
-        <item
-            android:id="@+id/drawer_settings"
-            android:icon="@drawable/nav_settings"
-            android:title="@string/title_activity_settings">
+        <item android:title="Help">
             <menu>
                 <item
                     android:id="@+id/drawer_favourite"
                     android:title="Feedback" />
+
+                <item
+                    android:id="@+id/drawer_settings"
+                    android:icon="@drawable/nav_settings"
+                    android:title="@string/title_activity_settings" />
             </menu>
         </item>
     </group>

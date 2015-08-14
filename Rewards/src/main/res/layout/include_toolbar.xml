@@ -4,4 +4,5 @@
     style="@style/GraabyToolbar"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:theme="@style/Graaby.Theme.Toolbar" />
+    android:minHeight="?attr/actionBarSize"
+    android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar" />

@@ -22,7 +22,7 @@
     android:paddingRight="?listPreferredItemPaddingEnd"
     android:paddingStart="?listPreferredItemPaddingStart">
 
-    <TextView
+    <android.support.v7.widget.AppCompatTextView
         android:id="@android:id/text1"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -34,7 +34,7 @@
         android:textAppearance="@style/TextAppearance.AppCompat.Body2" />
 
 
-    <TextView
+    <android.support.v7.widget.AppCompatTextView
         android:id="@android:id/text2"
         android:layout_width="40dp"
         android:layout_height="40dp"
@@ -47,7 +47,7 @@
         android:gravity="center"
         android:textAppearance="@style/TextAppearance.AppCompat.Title.Inverse" />
 
-    <TextView
+    <android.support.v7.widget.AppCompatTextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignEnd="@android:id/text2"

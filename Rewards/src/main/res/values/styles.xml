@@ -87,8 +87,34 @@
         <!--<item name="suggestionRowLayout">...</item>-->
     </style>
 
-    <style name="SuccessEditText">
-        <item name="met_floatingLabel">highlight</item>
-        <item name="met_primaryColor">@color/emarald</item>
+    <style name="GraabyTheme2.Button" parent="Base.Widget.AppCompat.Button" />
+
+    <style name="GraabyTheme2.Button.Borderless" parent="@style/Base.Widget.AppCompat.Button.Borderless" />
+
+    <style name="GraabyTheme2.Button.Success">
+        <item name="colorButtonNormal">@color/emarald</item>
+        <item name="android:textColorPrimary">@android:color/white</item>
     </style>
+
+    <style name="GraabyTheme2.Button.Alert">
+        <item name="colorButtonNormal">@color/alizarin</item>
+        <item name="android:textColorPrimary">@android:color/white</item>
+    </style>
+
+    <style name="GraabyTheme2.Button.Neutral">
+        <item name="colorButtonNormal">@color/belizehole</item>
+        <item name="android:textColorPrimary">@android:color/white</item>
+    </style>
+
+    <style name="GraabyTheme2.Button.Borderless.Neutral">
+        <item name="android:buttonStyle">?android:attr/borderlessButtonStyle</item>
+        <item name="android:textColor">@color/belizehole</item>
+    </style>
+
+    <style name="GraabyTheme2.Button.Borderless.Dark">
+        <item name="android:buttonStyle">?android:attr/borderlessButtonStyle</item>
+        <item name="android:textColor">@color/asbestos</item>
+    </style>
+
+
 </resources>

@@ -7,6 +7,7 @@ import android.app.Activity;
 import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
+import android.support.v7.widget.AppCompatSpinner;
 import android.support.v7.widget.SwitchCompat;
 import android.text.method.PasswordTransformationMethod;
 import android.view.LayoutInflater;
@@ -15,14 +16,12 @@ import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.CompoundButton;
 import android.widget.EditText;
-import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.mobsandgeeks.saripaar.ValidationError;
 import com.mobsandgeeks.saripaar.Validator;
 import com.mobsandgeeks.saripaar.annotation.Min;
-import com.mobsandgeeks.saripaar.annotation.Order;
 import com.mobsandgeeks.saripaar.annotation.Password;
 import com.mobsandgeeks.saripaar.annotation.Pattern;
 
@@ -45,25 +44,21 @@ import graaby.app.wallet.util.CacheSubscriber;
 public class RegistrationFragment extends BaseFragment implements Validator.ValidationListener, CompoundButton.OnCheckedChangeListener {
 
     @Bind(R.id.emails_spinner)
-    Spinner mSpinner;
+    AppCompatSpinner mSpinner;
 
-    @Order(value = 1)
-    @Password(min = 6, scheme = Password.Scheme.ANY, message = "Minimum 6 characters")
+    @Password(scheme = Password.Scheme.ALPHA_NUMERIC_MIXED_CASE_SYMBOLS, message = "Minimum 6 characters")
     @Bind(R.id.password)
     EditText mPasswordView;
 
-    @Order(value = 2)
     @Min(value = 3, message = "Minimum 3 characters")
     @Bind(R.id.login_first_name)
     EditText mFirstNameView;
 
-    @Order(value = 4)
     @Min(value = 3, message = "Minimum 3 characters")
     @Bind(R.id.login_last_name)
     EditText mLastNameView;
 
     @Bind(R.id.phone)
-    @Order(value = 5)
     @Pattern(regex = "(\\d{10}|\\d{0})", message = "10 digit number only")
     EditText mPhoneNumber;
 
@@ -90,7 +85,6 @@ public class RegistrationFragment extends BaseFragment implements Validator.Vali
         super.onCreate(savedInstanceState);
         mValidator = new Validator(this);
         mValidator.setValidationListener(this);
-        mValidator.setValidationMode(Validator.Mode.IMMEDIATE);
     }
 
     @Override

@@ -14,6 +14,8 @@
     <string name="title_activity_my_cpn_vcr">"My"</string>
     <string name="title_activity_slide">Graaby</string>
     <string name="title_activity_business_details">Business Details</string>
+    <string name="title_login">Login</string>
+    <string name="title_register">Register</string>
 
     <string name="market_value_hint">Discount Value</string>
     <string name="Rs">Rs.</string>
@@ -79,7 +81,6 @@
     <string name="profile_stat_contacts">Contacts</string>
     <string name="profile_recent_activity">Your recent activity</string>
     <string name="profile_stat_name_savings">Savings(Rs)</string>
-    <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="dialog_tag_explanation"><b>Why do I need the Graaby Tag?</b>\n\n
     &#8226; The Graaby Tag is a NFC powered tag which will help in identifying you uniquely &amp; securely\n
     &#8226; You require it collect the rewards and easily redeem them at any Graaby Outlets\n\n

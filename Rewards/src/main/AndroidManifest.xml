@@ -38,8 +38,7 @@
         android:name=".GraabyApplication"
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
-        android:label="@string/app_name"
-        android:theme="@style/Graaby.Theme">
+        android:label="@string/app_name">
         <meta-data
             android:name="VERSION"
             android:value="1" />
@@ -50,7 +49,8 @@
         <activity
             android:name=".MainActivity"
             android:label="@string/app_name"
-            android:launchMode="singleTop">
+            android:launchMode="singleTop"
+            android:theme="@style/GraabyTheme2">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -71,7 +71,7 @@
             android:name=".activities.DiscountItemDetailsActivity"
             android:label=""
             android:parentActivityName=".MainActivity"
-            android:theme="@style/Graaby.Theme.DiscountItemDetails">
+            android:theme="@style/GraabyTheme2.DiscountItemDetails">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".MainActivity" />
@@ -81,7 +81,7 @@
             android:icon="@drawable/nav_market"
             android:label="@string/title_activity_my_cpn_vcr"
             android:parentActivityName=".MainActivity"
-            android:theme="@style/Graaby.Theme.Market">
+            android:theme="@style/GraabyTheme2.Market">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".MainActivity" />
@@ -89,10 +89,10 @@
         <activity
             android:name=".activities.BusinessDetailsActivity"
             android:label=""
-            android:theme="@style/Graaby.Theme.Business" />
+            android:theme="@style/GraabyTheme2.Business" />
         <activity
             android:name=".auth.UserLoginActivity"
-            android:theme="@style/LoginTheme"
+            android:theme="@style/GraabyTheme2.Login"
             android:windowSoftInputMode="adjustResize|stateHidden" />
         <activity
             android:name=".activities.OnboardingActivity"
@@ -146,7 +146,7 @@
             android:name=".activities.SearchResultsActivity"
             android:launchMode="singleTop"
             android:parentActivityName=".MainActivity"
-            android:theme="@style/Graaby.Theme.Search">
+            android:theme="@style/GraabyTheme2.Search">
             <intent-filter>
                 <action android:name="android.intent.action.SEARCH" />
             </intent-filter>
@@ -161,7 +161,7 @@
         <activity
             android:name=".activities.BrandDetailsActivity"
             android:label="@string/title_activity_brand_details"
-            android:theme="@style/Graaby.Theme.Business" />
+            android:theme="@style/GraabyTheme2.Business" />
 
         <provider
             android:name=".models.android.GraabySearchSuggestionsProvider"
@@ -171,7 +171,7 @@
             android:name=".activities.PointReceivedActivity"
             android:label="@string/title_activity_point_received"
             android:parentActivityName=".MainActivity"
-            android:theme="@style/Graaby.Theme.Point">
+            android:theme="@style/GraabyTheme2.Point">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".MainActivity" />
@@ -180,7 +180,7 @@
             android:name=".activities.ExtraInfoActivity"
             android:label="@string/title_activity_extra_info"
             android:parentActivityName=".MainActivity"
-            android:theme="@style/Graaby.Theme.Base">
+            android:theme="@style/GraabyTheme2">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".MainActivity" />
@@ -225,7 +225,7 @@
             android:name=".activities.FeedActivity"
             android:label="@string/title_activity_feed"
             android:parentActivityName=".MainActivity"
-            android:theme="@style/Graaby.Theme.Point">
+            android:theme="@style/GraabyTheme2.Point">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="graaby.app.wallet.MainActivity" />

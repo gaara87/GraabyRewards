@@ -13,7 +13,7 @@
             android:layout_height="wrap_content"
             android:orientation="vertical">
 
-            <TextView
+            <android.support.v7.widget.AppCompatTextView
                 android:id="@+id/points_textView"
                 style="@style/Graaby.Theme.TextAppearance.Display3.Inverse"
                 android:layout_width="wrap_content"
@@ -27,7 +27,7 @@
                 android:textColor="@android:color/white"
                 tools:text="8264" />
 
-            <TextView
+            <android.support.v7.widget.AppCompatTextView
                 style="@style/Graaby.Theme.TextAppearance.Stat.Caption.Inverse"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -54,7 +54,7 @@
             android:layout_weight="1"
             android:orientation="vertical">
 
-            <TextView
+            <android.support.v7.widget.AppCompatTextView
                 android:id="@+id/profile_checkins_textview"
                 style="@style/Graaby.Theme.TextAppearance.Stat.Number.Invserse"
                 android:layout_width="wrap_content"
@@ -65,7 +65,7 @@
                 android:hint="@string/hint_placeholder"
                 tools:text="400" />
 
-            <TextView
+            <android.support.v7.widget.AppCompatTextView
                 android:id="@+id/textView5"
                 style="@style/Graaby.Theme.TextAppearance.Stat.Caption.Inverse"
                 android:layout_width="wrap_content"
@@ -80,7 +80,7 @@
             android:layout_weight="1"
             android:orientation="vertical">
 
-            <TextView
+            <android.support.v7.widget.AppCompatTextView
                 android:id="@+id/profile_connections_textview"
                 style="@style/Graaby.Theme.TextAppearance.Stat.Number.Invserse"
                 android:layout_width="wrap_content"
@@ -92,7 +92,7 @@
                 tools:text="54" />
 
 
-            <TextView
+            <android.support.v7.widget.AppCompatTextView
                 style="@style/Graaby.Theme.TextAppearance.Stat.Caption.Inverse"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -107,7 +107,7 @@
             android:orientation="vertical">
 
 
-            <TextView
+            <android.support.v7.widget.AppCompatTextView
                 android:id="@+id/profile_total_savings_textView"
                 style="@style/Graaby.Theme.TextAppearance.Stat.Number.Invserse"
                 android:layout_width="wrap_content"
@@ -118,7 +118,7 @@
                 android:hint="@string/hint_placeholder"
                 tools:text="40174" />
 
-            <TextView
+            <android.support.v7.widget.AppCompatTextView
                 style="@style/Graaby.Theme.TextAppearance.Stat.Caption.Inverse"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -133,7 +133,7 @@
             android:layout_weight="1"
             android:orientation="vertical">
 
-            <TextView
+            <android.support.v7.widget.AppCompatTextView
                 android:id="@+id/profile_following_textview"
                 style="@style/Graaby.Theme.TextAppearance.Stat.Number.Invserse"
                 android:layout_width="wrap_content"
@@ -145,7 +145,7 @@
                 tools:text="25" />
 
 
-            <TextView
+            <android.support.v7.widget.AppCompatTextView
                 style="@style/Graaby.Theme.TextAppearance.Stat.Caption.Inverse"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"

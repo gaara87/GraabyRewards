@@ -19,20 +19,20 @@
             android:layout_marginTop="@dimen/activity_vertical_margin"
             android:orientation="vertical">
 
-            <TextView
+            <android.support.v7.widget.AppCompatTextView
                 style="@style/TextAppearance.AppCompat.Headline"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="Registration incomplete" />
 
-            <TextView
+            <android.support.v7.widget.AppCompatTextView
                 style="@style/TextAppearance.AppCompat.Subhead"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="@dimen/global16"
                 android:text="Looks like we don't have your information" />
 
-            <TextView
+            <android.support.v7.widget.AppCompatTextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Select your date of birth:" />
@@ -47,7 +47,7 @@
                 android:datePickerMode="spinner"
                 android:endYear="2005" />
 
-            <TextView
+            <android.support.v7.widget.AppCompatTextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/global16"

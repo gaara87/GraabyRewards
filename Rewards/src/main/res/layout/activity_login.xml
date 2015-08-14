@@ -1,28 +1,47 @@
-<merge>
+<merge xmlns:app="http://schemas.android.com/apk/res-auto">
 
-    <android.support.v4.view.ViewPager xmlns:android="http://schemas.android.com/apk/res/android"
+
+    <android.support.design.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
         xmlns:tools="http://schemas.android.com/tools"
-        android:id="@+id/pager"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:paddingLeft="@dimen/global16"
-        android:paddingRight="@dimen/global16"
-        android:paddingTop="@dimen/global16"
-        tools:context=".LoginActivity">
+        android:layout_height="match_parent">
 
-        <fragment
-            android:id="@+id/login_frag"
-            android:name="graaby.app.wallet.fragments.LoginFragment"
+        <android.support.design.widget.AppBarLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:fitsSystemWindows="true">
+
+            <android.support.design.widget.TabLayout
+                android:id="@+id/tabs"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:tabMode="fixed" />
+        </android.support.design.widget.AppBarLayout>
+
+        <android.support.v4.view.ViewPager
+            android:id="@+id/pager"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            tools:layout="@layout/fragment_login" />
+            android:paddingLeft="@dimen/globalPadding8"
+            android:paddingRight="@dimen/globalPadding8"
+            android:paddingTop="@dimen/globalPadding8"
+            app:layout_behavior="@string/appbar_scrolling_view_behavior"
+            tools:context=".LoginActivity">
 
-        <fragment
-            android:id="@+id/register_frag"
-            android:name="graaby.app.wallet.fragments.RegistrationFragment"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            tools:layout="@layout/fragment_registration" />
+            <fragment
+                android:id="@+id/login_frag"
+                android:name="graaby.app.wallet.fragments.LoginFragment"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                tools:layout="@layout/fragment_login" />
 
-    </android.support.v4.view.ViewPager>
+            <fragment
+                android:id="@+id/register_frag"
+                android:name="graaby.app.wallet.fragments.RegistrationFragment"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                tools:layout="@layout/fragment_registration" />
+
+        </android.support.v4.view.ViewPager>
+    </android.support.design.widget.CoordinatorLayout>
 </merge>

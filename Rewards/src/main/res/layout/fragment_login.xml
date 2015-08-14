@@ -1,8 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:paddingTop="@dimen/global16">
+    android:layout_height="match_parent">
 
     <LinearLayout
         android:id="@+id/login_status"
@@ -19,7 +18,7 @@
             android:layout_height="wrap_content"
             android:layout_marginBottom="8dp" />
 
-        <TextView
+        <android.support.v7.widget.AppCompatTextView
             android:id="@+id/verification_message"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -49,52 +48,67 @@
                 android:layout_marginLeft="-15dp"
                 android:src="@drawable/login_logo" />
 
-            <com.rengwuxian.materialedittext.MaterialAutoCompleteTextView
-                android:id="@+id/emails_spinner"
-                style="@style/SuccessEditText"
+            <android.support.design.widget.TextInputLayout
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:hint="E-mail"
-                android:inputType="textEmailAddress" />
+                android:layout_height="wrap_content">
 
-            <com.rengwuxian.materialedittext.MaterialEditText
-                android:id="@+id/password"
-                style="@style/SuccessEditText"
+                <android.support.v7.widget.AppCompatAutoCompleteTextView
+                    android:id="@+id/emails_spinner"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="E-mail"
+                    android:inputType="textEmailAddress" />
+            </android.support.design.widget.TextInputLayout>
+
+
+            <android.support.design.widget.TextInputLayout
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:hint="@string/prompt_password"
-                android:imeActionId="697"
-                android:imeActionLabel="@string/action_login_short"
-                android:imeOptions="actionUnspecified"
-                android:inputType="textPassword"
-                android:maxLines="1"
-                android:singleLine="true" />
+                android:layout_height="wrap_content">
 
-            <Button
+                <android.support.v7.widget.AppCompatEditText
+                    android:id="@+id/password"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="@string/prompt_password"
+                    android:imeActionId="697"
+                    android:imeActionLabel="@string/action_login_short"
+                    android:imeOptions="actionUnspecified"
+                    android:inputType="textPassword"
+                    android:maxLines="1"
+                    android:singleLine="true" />
+            </android.support.design.widget.TextInputLayout>
+
+            <android.support.v7.widget.AppCompatButton
                 android:id="@+id/sign_in_button"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
                 android:layout_marginTop="@dimen/global16"
-                android:text="@string/action_login_short" />
+                android:text="@string/action_login_short"
+                android:textAllCaps="true"
+                android:theme="@style/GraabyTheme2.Button.Success" />
 
-            <Button
+            <android.support.v7.widget.AppCompatButton
                 android:id="@+id/new_user_register"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_horizontal"
                 android:layout_marginTop="@dimen/global16"
-                android:text="@string/login_register_here" />
+                android:text="@string/login_register_here"
+                android:textAllCaps="true"
+                android:theme="@style/GraabyTheme2.Button.Borderless.Neutral" />
 
-            <Button
+            <android.support.v7.widget.AppCompatButton
                 android:id="@+id/forgot_password"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_horizontal"
                 android:layout_marginBottom="@dimen/global16"
-                android:text="@string/login_forgot_pwd" />
+                android:text="@string/login_forgot_pwd"
+                android:textAllCaps="true"
+                android:theme="@style/GraabyTheme2.Button.Borderless.Dark" />
 
-            <TextView
+            <android.support.v7.widget.AppCompatTextView
                 android:id="@+id/agreement"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"

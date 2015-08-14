@@ -13,7 +13,7 @@
         android:orientation="vertical">
 
 
-        <TextView
+        <android.support.v7.widget.AppCompatTextView
             android:id="@+id/discount_item_discountValue"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -26,7 +26,7 @@
             android:paddingTop="@dimen/globalPadding8"
             android:textAppearance="@style/TextAppearance.AppCompat.Headline" />
 
-        <TextView
+        <android.support.v7.widget.AppCompatTextView
             android:id="@+id/discount_item_business_name_textView"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -57,14 +57,14 @@
                 android:layout_weight="1"
                 android:orientation="vertical">
 
-                <TextView
+                <android.support.v7.widget.AppCompatTextView
                     android:id="@+id/discount_item_cost"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:gravity="center"
                     android:textAppearance="@style/TextAppearance.AppCompat.Subhead" />
 
-                <TextView
+                <android.support.v7.widget.AppCompatTextView
                     android:id="@+id/discount_item_count"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"

@@ -9,7 +9,7 @@
         android:layout_centerInParent="true"
         android:src="@drawable/business_map_pointer" />
 
-    <TextView
+    <android.support.v7.widget.AppCompatTextView
         android:id="@+id/item_businessNameTextView"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"

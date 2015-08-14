@@ -5,6 +5,7 @@ import android.accounts.AccountManager;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.design.widget.TabLayout;
 import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.view.View;
@@ -28,7 +29,7 @@ import graaby.app.wallet.fragments.RegistrationFragment;
  * well.
  */
 public class UserLoginActivity extends AccountAuthenticatorActivity implements
-        RegistrationFragment.OnRegistrationListener, LoginFragment.LoginInterface {
+        RegistrationFragment.OnRegistrationListener, LoginFragment.LoginInterface, TabLayout.OnTabSelectedListener {
 
     final public static String ACCOUNT_TYPE = BuildConfig.ACCOUNT_AUTHENTICATOR;
     final public static String AUTHTOKEN_TYPE = "graaby.app.wallet";
@@ -36,6 +37,8 @@ public class UserLoginActivity extends AccountAuthenticatorActivity implements
     final private static String TAG = "UserLoginActivity";
     @Bind(R.id.pager)
     ViewPager mPager;
+    @Bind(R.id.tabs)
+    TabLayout mTabLayout;
 
 
     // UI references.
@@ -58,7 +61,10 @@ public class UserLoginActivity extends AccountAuthenticatorActivity implements
         setContentView(R.layout.activity_login);
         ButterKnife.bind(this);
 
+
         mPager.setAdapter(new UserLoginPagerAdapter());
+        mTabLayout.setupWithViewPager(mPager);
+        mTabLayout.setOnTabSelectedListener(this);
 
         AccountManager acm = AccountManager.get(this);
         Account[] accounts = acm
@@ -97,6 +103,21 @@ public class UserLoginActivity extends AccountAuthenticatorActivity implements
         fragment.loginAfterRegistering(email, password);
     }
 
+    @Override
+    public void onTabSelected(TabLayout.Tab tab) {
+        mPager.setCurrentItem(tab.getPosition());
+    }
+
+    @Override
+    public void onTabUnselected(TabLayout.Tab tab) {
+
+    }
+
+    @Override
+    public void onTabReselected(TabLayout.Tab tab) {
+
+    }
+
     private class UserLoginPagerAdapter extends PagerAdapter {
 
         @Override
@@ -106,6 +127,17 @@ public class UserLoginActivity extends AccountAuthenticatorActivity implements
                     return findViewById(R.id.login_frag);
                 case 1:
                     return findViewById(R.id.register_frag);
+            }
+            return null;
+        }
+
+        @Override
+        public CharSequence getPageTitle(int position) {
+            switch (position) {
+                case 0:
+                    return getString(R.string.title_login);
+                case 1:
+                    return getString(R.string.title_register);
             }
             return null;
         }

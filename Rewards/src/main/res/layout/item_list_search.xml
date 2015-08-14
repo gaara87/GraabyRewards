@@ -8,7 +8,7 @@
     android:paddingBottom="@dimen/globalPadding8"
     android:paddingTop="@dimen/globalPadding8">
 
-    <TextView
+    <android.support.v7.widget.AppCompatTextView
         android:id="@+id/item_businessNameTextView"
         style="@style/TextAppearance.AppCompat.Medium"
         android:layout_width="wrap_content"
@@ -17,7 +17,7 @@
         android:gravity="center_vertical"
         tools:text="Search result business Title" />
 
-    <TextView
+    <android.support.v7.widget.AppCompatTextView
         android:id="@+id/item_businessAddressTextView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
