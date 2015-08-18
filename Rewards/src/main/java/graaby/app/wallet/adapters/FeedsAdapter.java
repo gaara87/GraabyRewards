@@ -1,15 +1,17 @@
 package graaby.app.wallet.adapters;
 
-import android.app.Activity;
+import android.support.v7.widget.RecyclerView;
 import android.text.format.DateUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
+
+import java.util.ArrayList;
+import java.util.List;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
@@ -21,26 +23,19 @@ import graaby.app.wallet.util.ActivityType;
  * Created by gaara on 11/4/14.
  * Make some impeccable shyte
  */
-public class FeedsAdapter extends ArrayAdapter<FeedsResponse.NewsFeed> {
+public class FeedsAdapter extends RecyclerView.Adapter<FeedsAdapter.ViewHolder> {
 
-    private LayoutInflater inflater;
+    private final ArrayList<FeedsResponse.NewsFeed> feeds = new ArrayList<>();
 
-    public FeedsAdapter(Activity activity) {
-        super(activity, R.layout.fragment_feeds);
-        inflater = LayoutInflater.from(getContext());
+    @Override
+    public ViewHolder onCreateViewHolder(ViewGroup viewGroup, int i) {
+        View v = LayoutInflater.from(viewGroup.getContext()).inflate(R.layout.item_list_feed, viewGroup, false);
+        return new ViewHolder(v);
     }
 
     @Override
-    public View getView(int position, View convertView, ViewGroup parent) {
-        ViewHolder holder;
-        if (convertView != null) {
-            holder = (ViewHolder) convertView.getTag();
-        } else {
-            convertView = inflater.inflate(R.layout.item_list_feed, null, false);
-            holder = new ViewHolder(convertView);
-            convertView.setTag(holder);
-        }
-        FeedsResponse.NewsFeed node = getItem(position);
+    public void onBindViewHolder(ViewHolder holder, int i) {
+        FeedsResponse.NewsFeed node = feeds.get(i);
 
         holder.mContent.setText(node.newsContent);
         holder.mName.setText(node.newsSource);
@@ -49,13 +44,24 @@ public class FeedsAdapter extends ArrayAdapter<FeedsResponse.NewsFeed> {
                 System.currentTimeMillis(),
                 DateUtils.MINUTE_IN_MILLIS).toString();
         holder.mTstamp.setText(timestamp);
-        Glide.with(getContext())
+        Glide.with(holder.mPic.getContext())
                 .load(node.pictureURL)
                 .placeholder(R.drawable.chatter_icon)
                 .into(holder.mPic);
         holder.mIcon.setImageResource(ActivityType.getDrawableResourceIDForActivity(node.type));
+    }
 
-        return convertView;
+    @Override
+    public int getItemCount() {
+        return feeds.size();
+    }
+
+    public void clear() {
+        feeds.clear();
+    }
+
+    public void addAll(List<FeedsResponse.NewsFeed> feedsList) {
+        feeds.addAll(feedsList);
     }
 
     /**
@@ -64,7 +70,7 @@ public class FeedsAdapter extends ArrayAdapter<FeedsResponse.NewsFeed> {
      *
      * @author ButterKnifeZelezny, plugin for Android Studio by Inmite Developers (http://inmite.github.io)
      */
-    static class ViewHolder {
+    public static class ViewHolder extends RecyclerView.ViewHolder {
         @Bind(R.id.pic)
         ImageView mPic;
         @Bind(R.id.feed_type)
@@ -77,6 +83,7 @@ public class FeedsAdapter extends ArrayAdapter<FeedsResponse.NewsFeed> {
         TextView mTstamp;
 
         ViewHolder(View view) {
+            super(view);
             ButterKnife.bind(this, view);
         }
     }

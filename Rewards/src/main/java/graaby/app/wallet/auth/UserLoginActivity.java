@@ -99,7 +99,7 @@ public class UserLoginActivity extends AccountAuthenticatorActivity implements
     @Override
     public void onRegistrationComplete(String email, String password) {
         mPager.setCurrentItem(0, true);
-        LoginFragment fragment = (LoginFragment) getSupportFragmentManager().findFragmentById(R.id.login_frag);
+        LoginFragment fragment = (LoginFragment) getSupportFragmentManager().findFragmentById(R.id.frag_login);
         fragment.loginAfterRegistering(email, password);
     }
 
@@ -124,9 +124,9 @@ public class UserLoginActivity extends AccountAuthenticatorActivity implements
         public Object instantiateItem(ViewGroup container, int position) {
             switch (position) {
                 case 0:
-                    return findViewById(R.id.login_frag);
+                    return findViewById(R.id.frag_login);
                 case 1:
-                    return findViewById(R.id.register_frag);
+                    return findViewById(R.id.frag_register);
             }
             return null;
         }

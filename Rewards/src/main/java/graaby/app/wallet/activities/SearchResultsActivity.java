@@ -21,10 +21,8 @@ import java.io.IOException;
 
 import javax.inject.Inject;
 
-import de.greenrobot.event.EventBus;
 import graaby.app.wallet.R;
 import graaby.app.wallet.adapters.SearchResultsAdapter;
-import graaby.app.wallet.events.ToolbarEvents;
 import graaby.app.wallet.models.android.GraabySearchSuggestionsProvider;
 import graaby.app.wallet.models.retrofit.SearchRequest;
 import graaby.app.wallet.models.retrofit.SearchResponse;
@@ -58,11 +56,6 @@ public class SearchResultsActivity extends BaseAppCompatActivity
         mQueryString = mQueryString == null ? "" : mQueryString;
 
         collapseFlag = intent.getBooleanExtra(Helper.KEY_TYPE, false);
-
-        if (collapseFlag)
-            EventBus.getDefault().postSticky(new ToolbarEvents(R.color.sunflower, R.color.sunflower_darker));
-        else
-            EventBus.getDefault().postSticky(new ToolbarEvents(R.color.wisteria, R.color.wisteria_darker));
 
         SwipeRefreshLayout mSwipeRefreshLayout = (SwipeRefreshLayout) findViewById(R.id.swiperefresh);
         mSwipeRefreshLayout.setEnabled(Boolean.FALSE);

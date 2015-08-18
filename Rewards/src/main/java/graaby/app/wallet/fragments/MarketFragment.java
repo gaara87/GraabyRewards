@@ -4,6 +4,8 @@ import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.v7.widget.GridLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -11,9 +13,6 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AdapterView;
-import android.widget.AdapterView.OnItemClickListener;
-import android.widget.GridView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
@@ -25,7 +24,6 @@ import javax.inject.Inject;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
-import graaby.app.wallet.MainActivity;
 import graaby.app.wallet.R;
 import graaby.app.wallet.activities.DiscountItemDetailsActivity;
 import graaby.app.wallet.activities.SearchResultsActivity;
@@ -38,17 +36,17 @@ import graaby.app.wallet.models.retrofit.MarketResponse;
 import graaby.app.wallet.network.services.MarketService;
 import graaby.app.wallet.util.CacheSubscriber;
 import graaby.app.wallet.util.DiscountItemType;
-import graaby.app.wallet.util.EndlessScrollListener;
+import graaby.app.wallet.util.EndlessRecyclerOnScrollListener;
 import graaby.app.wallet.util.Helper;
-import graaby.app.wallet.widgets.MultiSwipeRefreshLayout;
 import rx.Observable;
 import rx.Subscription;
 
-public class MarketFragment extends BaseFragment implements OnItemClickListener {
+public class MarketFragment extends BaseFragment implements MarketAdapter.MarketItemClickListener {
 
     public final static String SEARCHABLE_PARAMETER = "searchable";
-    @Bind(R.id.grid)
-    GridView mGrid;
+    public static final String TAG = MarketFragment.class.toString();
+    @Bind(R.id.recycler)
+    RecyclerView mGridRecyclerView;
     @Bind(android.R.id.empty)
     TextView mEmpty;
     @Bind(R.id.progressBar)
@@ -58,8 +56,7 @@ public class MarketFragment extends BaseFragment implements OnItemClickListener 
     MarketService mMarketService;
     private DiscountItemType whatType;
     private MarketAdapter adapter;
-    private Boolean areTheseMyDiscountItems;
-    private Activity mActivity;
+    private boolean areTheseMyDiscountItems = false;
     private Integer mBrandID = Helper.DEFAULT_NON_BRAND_RELATED;
     private int mCurrentPage;
 
@@ -75,17 +72,6 @@ public class MarketFragment extends BaseFragment implements OnItemClickListener 
     }
 
     @Override
-    public void onAttach(Activity activity) {
-        super.onAttach(activity);
-
-        mActivity = activity;
-
-        if (activity.getClass() == MainActivity.class)
-            ((MainActivity) activity).onSectionAttached(
-                    getArguments().getInt(Helper.ARG_SECTION_NUMBER));
-    }
-
-    @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         if (getArguments() != null) {
@@ -95,29 +81,11 @@ public class MarketFragment extends BaseFragment implements OnItemClickListener 
             areTheseMyDiscountItems = getArguments().getBoolean(Helper.MY_DISCOUNT_ITEMS_FLAG, Boolean.FALSE);
             mBrandID = getArguments().getInt(Helper.BRAND_ID_BUNDLE_KEY, Helper.DEFAULT_NON_BRAND_RELATED);
         }
-        adapter = new MarketAdapter(mActivity, areTheseMyDiscountItems);
-        if (getArguments().getBoolean(SEARCHABLE_PARAMETER, Boolean.FALSE)) {
+        adapter = new MarketAdapter(getActivity(), areTheseMyDiscountItems, this);
+        if (getArguments() != null && getArguments().getBoolean(SEARCHABLE_PARAMETER, Boolean.FALSE)) {
             this.setHasOptionsMenu(Boolean.TRUE);
         }
         sendRequest();
-    }
-
-    @Override
-    public void onResume() {
-        super.onResume();
-        if (areTheseMyDiscountItems) {
-            switch (whatType) {
-                case COUPONS:
-                    setToolbarColors(R.color.peterriver, R.color.belizehole);
-                    break;
-                case VOUCHERS:
-                    setToolbarColors(R.color.sunflower, R.color.sunflower_darker);
-                    break;
-            }
-        } else {
-            if (mBrandID == Helper.DEFAULT_NON_BRAND_RELATED)
-                setToolbarColors(R.color.sunflower, R.color.sunflower_darker);
-        }
     }
 
     @Override
@@ -127,29 +95,30 @@ public class MarketFragment extends BaseFragment implements OnItemClickListener 
         ButterKnife.bind(this, v);
         setSwipeRefreshColors(R.color.sunflower, R.color.nephritis, R.color.peterriver, R.color.pumpkin);
         mSwipeRefresh.setEnabled(false);
-        mGrid.setOnItemClickListener(this);
-        mGrid.setEmptyView(mProgress);
+        mGridRecyclerView.setLayoutManager(new GridLayoutManager(getActivity(), getResources().getInteger(R.integer.grid_columns)));
+        mGridRecyclerView.setHasFixedSize(true);
+        mGridRecyclerView.setAdapter(adapter);
         return v;
     }
 
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
-        ((MultiSwipeRefreshLayout) mSwipeRefresh).setSwipeableChildren(R.id.grid, android.R.id.empty);
-        mGrid.setAdapter(adapter);
-        mGrid.setOnScrollListener(new EndlessScrollListener(0, -1) {
+        mGridRecyclerView.addOnScrollListener(new EndlessRecyclerOnScrollListener((GridLayoutManager) mGridRecyclerView.getLayoutManager()) {
             @Override
-            public void onLoadMore(int page, int totalItemsCount) {
-                Log.d("Load More", "Page : " + page + "ItemCount : " + totalItemsCount);
+            public void onLoadMore(int page) {
+                Log.d("Load More", "Page : " + page);
                 mCurrentPage = page;
                 sendRequest();
             }
+
         });
+
         super.onViewCreated(view, savedInstanceState);
     }
 
     @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
-        if (areTheseMyDiscountItems.equals(Boolean.FALSE)) {
+        if (!areTheseMyDiscountItems) {
             inflater.inflate(R.menu.menu_fragment_market, menu);
         }
         super.onCreateOptionsMenu(menu, inflater);
@@ -159,7 +128,7 @@ public class MarketFragment extends BaseFragment implements OnItemClickListener 
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case R.id.action_search:
-                Intent intent = new Intent(mActivity, SearchResultsActivity.class);
+                Intent intent = new Intent(getActivity(), SearchResultsActivity.class);
                 intent.putExtra(Helper.KEY_TYPE, SearchResultsActivity.SEARCH_COLLAPSE);
                 startActivity(intent);
                 return true;
@@ -173,7 +142,6 @@ public class MarketFragment extends BaseFragment implements OnItemClickListener 
     public void onDestroyView() {
         super.onDestroyView();
         ButterKnife.unbind(this);
-        mActivity = null;
     }
 
     @Override
@@ -212,7 +180,8 @@ public class MarketFragment extends BaseFragment implements OnItemClickListener 
                             }
                             adapter.addAll(result.items);
                         } else if (mCurrentPage == 0) {
-                            mGrid.setEmptyView(mEmpty);
+                            mEmpty.setVisibility(View.VISIBLE);
+                            mGridRecyclerView.setVisibility(View.GONE);
                             mProgress.setVisibility(View.GONE);
                         }
                         adapter.notifyDataSetChanged();
@@ -224,27 +193,27 @@ public class MarketFragment extends BaseFragment implements OnItemClickListener 
     }
 
     @Override
-    public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == 66 && resultCode == Activity.RESULT_OK) {
+            sendRequest();
+        }
+    }
+
+    @Override
+    public void onMarketItemClick(int position) {
+        DiscountItemDetailsResponse marketDiscountItem = adapter.getItem(position);
         Intent intent = new Intent();
         try {
-            DiscountItemDetailsResponse marketDiscountItem = adapter.getItem(i);
             intent.putExtra(Helper.INTENT_CONTAINER_INFO, LoganSquare.serialize(marketDiscountItem));
 
             if (whatType != null)
                 intent.putExtra(Helper.KEY_TYPE, whatType);
             intent.putExtra(Helper.MY_DISCOUNT_ITEMS_FLAG, areTheseMyDiscountItems);
-            intent.setClass(mActivity, DiscountItemDetailsActivity.class);
+            intent.setClass(getActivity(), DiscountItemDetailsActivity.class);
             startActivityForResult(intent, 66);
         } catch (IOException e) {
             e.printStackTrace();
-        }
-    }
-
-    @Override
-    public void onActivityResult(int requestCode, int resultCode, Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-        if (requestCode == 66 && resultCode == Activity.RESULT_OK) {
-            sendRequest();
         }
     }
 }

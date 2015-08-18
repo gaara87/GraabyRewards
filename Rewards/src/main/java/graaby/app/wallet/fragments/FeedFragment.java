@@ -3,41 +3,43 @@ package graaby.app.wallet.fragments;
 import android.app.Activity;
 import android.os.Bundle;
 import android.support.v4.widget.SwipeRefreshLayout;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ListView;
 
 import javax.inject.Inject;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
 import graaby.app.wallet.GraabyApplication;
-import graaby.app.wallet.MainActivity;
 import graaby.app.wallet.R;
 import graaby.app.wallet.adapters.FeedsAdapter;
 import graaby.app.wallet.models.retrofit.FeedsResponse;
 import graaby.app.wallet.network.services.FeedService;
 import graaby.app.wallet.util.CacheSubscriber;
-import graaby.app.wallet.util.EndlessScrollListener;
+import graaby.app.wallet.util.EndlessRecyclerOnScrollListener;
 import graaby.app.wallet.util.Helper;
 
 public class FeedFragment extends BaseFragment implements SwipeRefreshLayout.OnRefreshListener {
 
-    @Bind(android.R.id.list)
-    ListView mList;
+    public static final String TAG = FeedFragment.class.toString();
+    @Bind(R.id.recycler)
+    RecyclerView mList;
     @Inject
     FeedService mFeedService;
     private FeedsAdapter mAdapter;
     private int mCurrentPage = 0;
 
+    public static FeedFragment newInstance() {
+        return new FeedFragment();
+    }
+
     @Override
     public void onAttach(Activity activity) {
         super.onAttach(activity);
-        if (activity instanceof MainActivity)
-        ((MainActivity) activity).onSectionAttached(
-                getArguments().getInt(Helper.ARG_SECTION_NUMBER));
     }
 
     @Override
@@ -51,8 +53,10 @@ public class FeedFragment extends BaseFragment implements SwipeRefreshLayout.OnR
                              Bundle savedInstanceState) {
         View v = super.onCreateView(inflater, container, savedInstanceState, R.layout.fragment_feeds);
         ButterKnife.bind(this, v);
-        mSwipeRefresh.setColorSchemeResources(R.color.alizarin, R.color.pomegranate, R.color.wisteria, R.color.peterriver);
-        mAdapter = new FeedsAdapter(getActivity());
+        setSwipeRefreshColors(R.color.alizarin, R.color.pomegranate, R.color.wisteria, R.color.peterriver);
+        mList.setLayoutManager(new LinearLayoutManager(mList.getContext()));
+        mAdapter = new FeedsAdapter();
+        mList.setHasFixedSize(true);
         mList.setAdapter(mAdapter);
         return v;
     }
@@ -60,10 +64,10 @@ public class FeedFragment extends BaseFragment implements SwipeRefreshLayout.OnR
     @Override
     public void onViewCreated(View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        mList.setOnScrollListener(new EndlessScrollListener(0, -1) {
+        mList.addOnScrollListener(new EndlessRecyclerOnScrollListener((LinearLayoutManager) mList.getLayoutManager()) {
             @Override
-            public void onLoadMore(int page, int totalItemsCount) {
-                Log.d("Load More", "Page : " + page + "ItemCount : " + totalItemsCount);
+            public void onLoadMore(int page) {
+                Log.d("Load More", "Page : " + page);
                 mCurrentPage = page;
                 sendRequest();
             }
@@ -77,16 +81,10 @@ public class FeedFragment extends BaseFragment implements SwipeRefreshLayout.OnR
     }
 
     @Override
-    public void onResume() {
-        super.onResume();
-        setToolbarColors(R.color.pomegranate, R.color.pomegranate_dark);
-    }
-
-    @Override
     protected void sendRequest() {
         mFeedService.getUserFeeds(mCurrentPage, Helper.PAGE_SIZE)
                 .compose(this.<FeedsResponse>applySchedulers())
-                .subscribe(new CacheSubscriber<FeedsResponse>(getActivity(), mSwipeRefresh) {
+                .subscribe(new CacheSubscriber<FeedsResponse>(getActivity()) {
                     @Override
                     public void onSuccess(FeedsResponse result) {
                         if (mCurrentPage == 0)

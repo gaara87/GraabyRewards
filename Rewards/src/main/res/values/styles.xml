@@ -3,7 +3,6 @@
 
     <style name="GraabyToolbar" parent="Widget.AppCompat.Toolbar">
         <item name="android:background">?colorPrimary</item>
-        <item name="android:minHeight">?attr/actionBarSize</item>
         <item name="contentInsetStart">0dp</item>
         <item name="contentInsetEnd">0dp</item>
         <item name="popupTheme">@style/ThemeOverlay.AppCompat.Light</item>

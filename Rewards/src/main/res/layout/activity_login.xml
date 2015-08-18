@@ -15,6 +15,7 @@
                 android:id="@+id/tabs"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                app:layout_scrollFlags="scroll|enterAlways"
                 app:tabMode="fixed" />
         </android.support.design.widget.AppBarLayout>
 
@@ -29,14 +30,14 @@
             tools:context=".LoginActivity">
 
             <fragment
-                android:id="@+id/login_frag"
+                android:id="@+id/frag_login"
                 android:name="graaby.app.wallet.fragments.LoginFragment"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 tools:layout="@layout/fragment_login" />
 
             <fragment
-                android:id="@+id/register_frag"
+                android:id="@+id/frag_register"
                 android:name="graaby.app.wallet.fragments.RegistrationFragment"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"

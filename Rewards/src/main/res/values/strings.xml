@@ -87,7 +87,7 @@
     <b>You can buy the Graaby Tag from any one of the Graaby Powered Outlets and Partnered Businesses</b>\n<i>(Find them in the Business section)</i></string>
     <string name="about_graaby_button">WHAT IS GRAABY REWARDS?</string>
     <string name="agreement">Usage of this app implies\nacknowledgement and agreement to the \n<b><a href="http://www.graaby.com/privacy.html">Privacy Policy</a></b> and <b><a href="http://www.graaby.com/terms.html">Terms &amp; Conditions</a></b></string>
-    <string name="menu_action_search_business">Search Businesses</string>
+    <string name="menu_action_search">Search</string>
     <string name="tab_title_outlet_detail">INFO</string>
     <string name="tab_title_punch">PUNCHCARD</string>
     <string name="tab_title_marketplace">MARKETPLACE</string>

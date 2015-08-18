@@ -1,12 +1,15 @@
 package graaby.app.wallet.adapters;
 
 import android.content.Context;
+import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ArrayAdapter;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+
+import java.util.ArrayList;
+import java.util.List;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
@@ -21,33 +24,32 @@ import graaby.app.wallet.models.retrofit.DiscountItemDetailsResponse;
  */
 
 
-public class MarketAdapter extends ArrayAdapter<DiscountItemDetailsResponse> {
+public class MarketAdapter extends RecyclerView.Adapter<MarketAdapter.ViewHolder> {
 
-    private final Context mContext;
-    private LayoutInflater inflater;
+    protected final ArrayList<DiscountItemDetailsResponse> mItems = new ArrayList<>();
+    private final String punchValueString;
+    private final String marketItemsLeftString;
+    private final MarketItemClickListener marketItemClickListener;
     private Boolean myDiscountItems = Boolean.FALSE;
     private String rupeeSymbol;
 
-    public MarketAdapter(Context context, Boolean areTheseMyDiscountItems) {
-        super(context, R.layout.item_grid_market,
-                R.id.discount_item_discountValue);
-        mContext = context;
-        rupeeSymbol = context.getString(R.string.Rs);
-        inflater = LayoutInflater.from(context);
+    public MarketAdapter(Context context, boolean areTheseMyDiscountItems, MarketItemClickListener listener) {
+        marketItemClickListener = listener;
         myDiscountItems = areTheseMyDiscountItems;
+        rupeeSymbol = context.getString(R.string.Rs);
+        punchValueString = context.getString(R.string.market_item_punch_value);
+        marketItemsLeftString = context.getString(R.string.market_items_left);
     }
 
     @Override
-    public View getView(int position, View convertView, ViewGroup parent) {
-        ViewHolder holder;
-        if (convertView != null) {
-            holder = (ViewHolder) convertView.getTag();
-        } else {
-            convertView = inflater.inflate(R.layout.item_grid_market, parent, false);
-            holder = new ViewHolder(convertView);
-            convertView.setTag(holder);
-        }
-        DiscountItemDetailsResponse item = getItem(position);
+    public ViewHolder onCreateViewHolder(ViewGroup viewGroup, int i) {
+        View v = LayoutInflater.from(viewGroup.getContext()).inflate(R.layout.item_grid_market, viewGroup, false);
+        return new ViewHolder(v, marketItemClickListener);
+    }
+
+    @Override
+    public void onBindViewHolder(ViewHolder holder, int i) {
+        DiscountItemDetailsResponse item = mItems.get(i);
 
         int discountItemResourceId = -1;
         String finalDiscountValue = "";
@@ -63,7 +65,7 @@ public class MarketAdapter extends ArrayAdapter<DiscountItemDetailsResponse> {
                 break;
             case PUNCH:
                 discountItemResourceId = R.drawable.punch_nopadding;
-                finalDiscountValue = mContext.getString(R.string.market_item_punch_value);
+                finalDiscountValue = punchValueString;
                 break;
         }
         holder.mDiscountItemDiscountValue.setCompoundDrawablesWithIntrinsicBounds(
@@ -75,16 +77,35 @@ public class MarketAdapter extends ArrayAdapter<DiscountItemDetailsResponse> {
             holder.mDiscountItemCost.setText(item.costOfDI);
 
             holder.mDiscountItemCount.setText(String.format(
-                    mContext.getString(R.string.market_items_left),
+                    marketItemsLeftString,
                     item.leftOverCount));
         } else {
             holder.mDiscountItemCostContainer.setVisibility(View.GONE);
         }
-
-        return convertView;
     }
 
-    static class ViewHolder {
+    @Override
+    public int getItemCount() {
+        return mItems.size();
+    }
+
+    public void addAll(List<DiscountItemDetailsResponse> items) {
+        mItems.addAll(items);
+    }
+
+    public void clear() {
+        mItems.clear();
+    }
+
+    public DiscountItemDetailsResponse getItem(int position) {
+        return mItems.get(position);
+    }
+
+    public interface MarketItemClickListener {
+        void onMarketItemClick(int position);
+    }
+
+    public static class ViewHolder extends RecyclerView.ViewHolder {
         @Bind(R.id.discount_item_discountValue)
         TextView mDiscountItemDiscountValue;
         @Bind(R.id.discount_item_business_name_textView)
@@ -96,9 +117,15 @@ public class MarketAdapter extends ArrayAdapter<DiscountItemDetailsResponse> {
         @Bind(R.id.discount_item_cost_container)
         LinearLayout mDiscountItemCostContainer;
 
-        ViewHolder(View view) {
+        ViewHolder(View view, MarketItemClickListener listener) {
+            super(view);
             ButterKnife.bind(this, view);
+//            if (listener != null)
+//                view.setOnClickListener(v -> {
+//                    listener.onMarketItemClick(ViewHolder.this.getAdapterPosition());
+//                });
         }
     }
+
 
 }

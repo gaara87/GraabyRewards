@@ -3,15 +3,13 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/swiperefresh"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    tools:context=".fragments.ContactsFragment">
 
-    <GridView
-        android:id="@+id/grid"
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/recycler"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:horizontalSpacing="@dimen/global8"
-        android:numColumns="@integer/grid_columns"
-        android:padding="@dimen/globalPadding8"
-        android:verticalSpacing="@dimen/global8"
+        android:padding="4dp"
         tools:listitem="@layout/item_grid_contacts" />
 </android.support.v4.widget.SwipeRefreshLayout>

@@ -199,3 +199,9 @@
 -keep class com.crashlytics.** { *; }
 -dontwarn com.crashlytics.**
 #crashlytics
+
+#design support lib
+-keep class android.support.design.widget.** { *; }
+-keep interface android.support.design.widget.** { *; }
+-dontwarn android.support.design.**
+#design support lib

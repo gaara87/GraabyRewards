@@ -9,6 +9,8 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.provider.ContactsContract;
 import android.support.v4.view.MenuItemCompat;
+import android.support.v7.widget.GridLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.ShareActionProvider;
 import android.telephony.PhoneNumberUtils;
 import android.text.TextUtils;
@@ -18,49 +20,44 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ArrayAdapter;
-import android.widget.Button;
 import android.widget.EditText;
-import android.widget.GridView;
-import android.widget.ImageView;
-import android.widget.TextView;
 import android.widget.Toast;
-
-import com.bumptech.glide.Glide;
 
 import javax.inject.Inject;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
 import graaby.app.wallet.GraabyApplication;
-import graaby.app.wallet.MainActivity;
 import graaby.app.wallet.R;
+import graaby.app.wallet.adapters.ContactsAdapter;
 import graaby.app.wallet.models.retrofit.AddContactRequest;
 import graaby.app.wallet.models.retrofit.BaseResponse;
 import graaby.app.wallet.models.retrofit.ContactsResponse;
 import graaby.app.wallet.models.retrofit.SendPointsRequest;
 import graaby.app.wallet.network.services.ContactService;
 import graaby.app.wallet.util.CacheSubscriber;
-import graaby.app.wallet.util.Helper;
 
 /**
  * Created by gaara on 1/6/14.
  */
 public class ContactsFragment extends BaseFragment implements DialogInterface.OnClickListener, View.OnClickListener {
 
-    @Bind(R.id.grid)
-    GridView mGrid;
+    public static final String TAG = ContactsFragment.class.toString();
+    @Bind(R.id.recycler)
+    RecyclerView mGridRecycler;
     @Inject
     ContactService mContactService;
     private ContactsAdapter mAdapter;
     private AlertDialog sendPointsDialog;
     private Integer contactIDToSendPointsTo = -1;
 
+    public static ContactsFragment newInstance() {
+        return new ContactsFragment();
+    }
+
     @Override
     public void onAttach(Activity activity) {
         super.onAttach(activity);
-        ((MainActivity) activity).onSectionAttached(
-                getArguments().getInt(Helper.ARG_SECTION_NUMBER));
     }
 
     @Override
@@ -81,9 +78,11 @@ public class ContactsFragment extends BaseFragment implements DialogInterface.On
                              Bundle savedInstanceState) {
         View v = super.onCreateView(inflater, container, savedInstanceState, R.layout.fragment_contacts);
         ButterKnife.bind(this, v);
-        mAdapter = new ContactsAdapter(getActivity());
-        mSwipeRefresh.setColorSchemeResources(R.color.belizehole, R.color.pomegranate, R.color.orange, R.color.peterriver);
-        mGrid.setAdapter(mAdapter);
+        setSwipeRefreshColors(R.color.belizehole, R.color.pomegranate, R.color.orange, R.color.peterriver);
+        mAdapter = new ContactsAdapter();
+        mGridRecycler.setHasFixedSize(true);
+        mGridRecycler.setLayoutManager(new GridLayoutManager(getActivity(), getResources().getInteger(R.integer.grid_columns)));
+        mGridRecycler.setAdapter(mAdapter);
         return v;
     }
 
@@ -100,12 +99,6 @@ public class ContactsFragment extends BaseFragment implements DialogInterface.On
         Intent sendIntent = getIntent();
         mShareActionProvider.setShareIntent(sendIntent);
         super.onCreateOptionsMenu(menu, inflater);
-    }
-
-    @Override
-    public void onResume() {
-        super.onResume();
-        setToolbarColors(R.color.belizehole, R.color.belizehole_darker);
     }
 
     private Intent getIntent() {
@@ -231,65 +224,5 @@ public class ContactsFragment extends BaseFragment implements DialogInterface.On
     public void onClick(View v) {
         contactIDToSendPointsTo = (Integer) v.getTag();
         sendPointsDialog.show();
-    }
-
-    static class ViewHolder {
-        @Bind(R.id.contacts_userProfilePicImageView)
-        ImageView contactPic;
-        @Bind(R.id.contacts_usertextView)
-        TextView contactName;
-        @Bind(R.id.contacts_points)
-        TextView contactPoints;
-        @Bind(R.id.share_points)
-        Button sharePoints;
-
-        ViewHolder(View view) {
-            ButterKnife.bind(this, view);
-        }
-    }
-
-    private class ContactsAdapter extends ArrayAdapter<ContactsResponse.ContactDetail> {
-
-        private LayoutInflater inflater;
-
-        public ContactsAdapter(Activity activity) {
-            super(activity, R.layout.fragment_contacts);
-            inflater = LayoutInflater.from(activity);
-        }
-
-        @Override
-        public View getView(int position, View convertView, ViewGroup parent) {
-            ViewHolder holder;
-            if (convertView != null) {
-                holder = (ViewHolder) convertView.getTag();
-            } else {
-                convertView = inflater.inflate(R.layout.item_grid_contacts, null, false);
-                holder = new ViewHolder(convertView);
-                convertView.setTag(holder);
-            }
-            ContactsResponse.ContactDetail node = getItem(position);
-
-            holder.contactName.setText(node.contactName);
-
-            Glide.with(getContext())
-                    .load(node.pictureURL)
-                    .placeholder(R.drawable.ic_connections)
-                    .into(holder.contactPic);
-
-            holder.contactPoints.setText(node.graabyPoints + " Graaby Points");
-
-            holder.sharePoints.setOnClickListener(ContactsFragment.this);
-            holder.sharePoints.setTag(node.contactID);
-
-
-            return convertView;
-        }
-
-        /**
-         * This class contains all butterknife-injected Views & Layouts from layout file 'item_grid_contacts.xml'
-         * for easy to all layout elements.
-         *
-         * @author ButterKnifeZelezny, plugin for Android Studio by Avast Developers (http://github.com/avast)
-         */
     }
 }

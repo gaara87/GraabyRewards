@@ -6,12 +6,16 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.provider.SearchRecentSuggestions;
 import android.support.design.widget.NavigationView;
+import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
+import android.support.v4.graphics.drawable.DrawableCompat;
 import android.support.v4.view.GravityCompat;
+import android.support.v4.view.ViewPager;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBar;
 import android.support.v7.widget.Toolbar;
@@ -36,13 +40,11 @@ import de.greenrobot.event.Subscribe;
 import de.hdodenhof.circleimageview.CircleImageView;
 import graaby.app.wallet.activities.BaseAppCompatActivity;
 import graaby.app.wallet.activities.SettingsActivity;
+import graaby.app.wallet.adapters.HomePagerAdapter;
 import graaby.app.wallet.auth.UserAuthenticationHandler;
 import graaby.app.wallet.events.LocationEvents;
 import graaby.app.wallet.events.ProfileEvents;
 import graaby.app.wallet.fragments.BusinessesFragment;
-import graaby.app.wallet.fragments.ContactsFragment;
-import graaby.app.wallet.fragments.FeedFragment;
-import graaby.app.wallet.fragments.MarketFragment;
 import graaby.app.wallet.fragments.ProfileFragment;
 import graaby.app.wallet.models.android.GraabySearchSuggestionsProvider;
 import graaby.app.wallet.models.realm.ProfileDAO;
@@ -56,7 +58,7 @@ import rx.Subscriber;
 import rx.schedulers.Schedulers;
 
 public class MainActivity extends BaseAppCompatActivity
-        implements ProfileFragment.ViewBusinessesListener, UserAuthenticationHandler.OnUserAuthentication {
+        implements ProfileFragment.ViewBusinessesListener, UserAuthenticationHandler.OnUserAuthentication, TabLayout.OnTabSelectedListener {
 
     public static final String PROPERTY_REG_ID = "registration_id";
     private static final String PROPERTY_APP_VERSION = "appVersion";
@@ -74,6 +76,11 @@ public class MainActivity extends BaseAppCompatActivity
     TextView navigationDrawerName;
     @Bind(R.id.navigation_drawer_email)
     TextView navigationDrawerEmail;
+
+    @Bind(R.id.pager)
+    ViewPager mPager;
+    @Bind(R.id.tabs)
+    TabLayout mTabLayout;
     /**
      * Used to store the last screen title. For use in {@link #restoreActionBar()}.
      */
@@ -129,14 +136,43 @@ public class MainActivity extends BaseAppCompatActivity
     }
 
     private void initialize() {
-
         ButterKnife.bind(this);
         GraabyOutletDiscoveryService.setupLocationService(this);
         registerGCM();
         setupToolbar();
+        setupTabLayout();
         setupDrawerLayout();
 
         initialized = true;
+    }
+
+    private void setupTabLayout() {
+        mPager.setAdapter(new HomePagerAdapter(getSupportFragmentManager(), this));
+        mPager.setOffscreenPageLimit(1);
+        mTabLayout.setupWithViewPager(mPager);
+        mTabLayout.setOnTabSelectedListener(this);
+        for (int i = 0; i < mTabLayout.getTabCount(); i++) {
+            int drawableResourceID = 0;
+            switch (i) {
+                case 0:
+                    drawableResourceID = R.drawable.nav_market;
+                    break;
+                case 1:
+                    drawableResourceID = R.drawable.nav_business;
+                    break;
+                case 2:
+                    drawableResourceID = R.drawable.nav_feeds;
+                    break;
+                case 3:
+                    drawableResourceID = R.drawable.nav_contacts;
+            }
+            if (mTabLayout != null && drawableResourceID != 0) {
+                Drawable drawable = getResources().getDrawable(drawableResourceID, getTheme());
+                drawable = DrawableCompat.wrap(drawable);
+                DrawableCompat.setTint(drawable.mutate(), getResources().getColor(android.R.color.white));
+                mTabLayout.getTabAt(i).setIcon(drawable);
+            }
+        }
     }
 
     private void setupToolbar() {
@@ -174,19 +210,6 @@ public class MainActivity extends BaseAppCompatActivity
                 case R.id.drawer_profile:
                     placeHolderFragment = new ProfileFragment();
                     break;
-                case R.id.drawer_market:
-                    placeHolderFragment = new MarketFragment();
-                    args.putBoolean(MarketFragment.SEARCHABLE_PARAMETER, true);
-                    break;
-                case R.id.drawer_business:
-                    placeHolderFragment = new BusinessesFragment();
-                    break;
-                case R.id.drawer_feeds:
-                    placeHolderFragment = new FeedFragment();
-                    break;
-                case R.id.drawer_contacts:
-                    placeHolderFragment = new ContactsFragment();
-                    break;
                 case R.id.drawer_settings:
                     Intent intent = new Intent(MainActivity.this, SettingsActivity.class);
                     MainActivity.this.startActivityForResult(intent, 10);
@@ -206,28 +229,6 @@ public class MainActivity extends BaseAppCompatActivity
             mDrawerLayout.closeDrawers();
             return true;
         });
-    }
-
-
-    public void onSectionAttached(int number) {
-        switch (number) {
-            case R.id.drawer_profile:
-                mTitle = getString(R.string.title_profile);
-                break;
-            case R.id.drawer_market:
-                mTitle = getString(R.string.title_marketplace);
-                break;
-            case R.id.drawer_business:
-                mTitle = getString(R.string.title_businesses);
-                break;
-            case R.id.drawer_feeds:
-                mTitle = getString(R.string.title_feed);
-                break;
-            case R.id.drawer_contacts:
-                mTitle = getString(R.string.title_contacts);
-                break;
-        }
-
     }
 
     public void restoreActionBar() {
@@ -293,7 +294,7 @@ public class MainActivity extends BaseAppCompatActivity
                 mDrawerLayout.openDrawer(GravityCompat.START);
                 return true;
             case R.id.action_menu_item_nfc_toggle:
-            startActivity(new Intent(android.provider.Settings.ACTION_WIRELESS_SETTINGS));
+                startActivity(new Intent(android.provider.Settings.ACTION_WIRELESS_SETTINGS));
                 return true;
             case R.id.action_menu_item_clear_search:
                 SearchRecentSuggestions suggestions = new SearchRecentSuggestions(this,
@@ -459,6 +460,22 @@ public class MainActivity extends BaseAppCompatActivity
     @Override
     public void onViewBusinessesRequest() {
         //TODO: open businesses fragment
+    }
+
+    @Override
+    public void onTabSelected(TabLayout.Tab tab) {
+        mPager.setCurrentItem(tab.getPosition());
+        getSupportActionBar().setTitle(((HomePagerAdapter) mPager.getAdapter()).getTitle(tab.getPosition()));
+    }
+
+    @Override
+    public void onTabUnselected(TabLayout.Tab tab) {
+
+    }
+
+    @Override
+    public void onTabReselected(TabLayout.Tab tab) {
+
     }
 
 }

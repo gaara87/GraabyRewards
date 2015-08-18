@@ -7,26 +7,6 @@
             android:icon="@drawable/nav_profile"
             android:title="@string/title_profile" />
 
-        <item
-            android:id="@+id/drawer_market"
-            android:icon="@drawable/nav_market"
-            android:title="@string/title_marketplace" />
-
-        <item
-            android:id="@+id/drawer_business"
-            android:icon="@drawable/nav_business"
-            android:title="@string/title_businesses" />
-
-        <item
-            android:id="@+id/drawer_feeds"
-            android:icon="@drawable/nav_feeds"
-            android:title="@string/title_activity_feed" />
-
-        <item
-            android:id="@+id/drawer_contacts"
-            android:icon="@drawable/nav_contacts"
-            android:title="@string/title_contacts" />
-
         <item android:title="Help">
             <menu>
                 <item

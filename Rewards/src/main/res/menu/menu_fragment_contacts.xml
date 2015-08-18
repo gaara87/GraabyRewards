@@ -6,16 +6,14 @@
     <item
         android:id="@+id/action_menu_item_add_contact"
         android:icon="@drawable/ic_action_contact_add"
-        android:showAsAction="always"
         android:title="Add contact"
-        app:showAsAction="always" />
+        app:showAsAction="never" />
 
     <item
         android:id="@+id/menu_item_share"
         android:icon="@drawable/ic_action_share"
-        android:showAsAction="ifRoom"
         android:title="Share"
         app:actionProviderClass="android.support.v7.widget.ShareActionProvider"
-        app:showAsAction="ifRoom" />
+        app:showAsAction="never" />
 
 </menu>

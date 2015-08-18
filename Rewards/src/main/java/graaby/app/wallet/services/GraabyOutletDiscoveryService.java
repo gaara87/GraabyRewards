@@ -28,6 +28,7 @@ import javax.inject.Inject;
 
 import de.greenrobot.event.EventBus;
 import de.greenrobot.event.Subscribe;
+import de.greenrobot.event.ThreadMode;
 import graaby.app.wallet.BuildConfig;
 import graaby.app.wallet.GraabyApplication;
 import graaby.app.wallet.R;
@@ -161,7 +162,8 @@ public class GraabyOutletDiscoveryService extends Service implements GoogleApiCl
             Crashlytics.log(Log.ERROR, TAG, "Failed to connect to google api client, connection result error code:- " + connectionResult.getErrorCode());
     }
 
-    public void onEventBackgroundThread(LocationEvents.SendUpdate event) {
+    @Subscribe(threadMode = ThreadMode.BackgroundThread)
+    public void handle(LocationEvents.SendUpdate event) {
         Log.d(TAG, "Received event from broadcast receiver");
 
         if (mGoogleAPIClient != null && mGoogleAPIClient.isConnected()) {

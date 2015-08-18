@@ -18,7 +18,6 @@ import butterknife.ButterKnife;
 import butterknife.OnClick;
 import de.greenrobot.event.EventBus;
 import graaby.app.wallet.GraabyApplication;
-import graaby.app.wallet.MainActivity;
 import graaby.app.wallet.R;
 import graaby.app.wallet.activities.MarketActivity;
 import graaby.app.wallet.events.ProfileEvents;
@@ -58,8 +57,6 @@ public class ProfileFragment extends BaseFragment {
     public void onAttach(Activity activity) {
         super.onAttach(activity);
         mCallback = (ViewBusinessesListener) activity;
-        ((MainActivity) activity).onSectionAttached(
-                getArguments().getInt(Helper.ARG_SECTION_NUMBER));
     }
 
     @Override

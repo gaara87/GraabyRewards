@@ -18,9 +18,7 @@ import com.crashlytics.android.Crashlytics;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.common.api.PendingResult;
-import com.google.android.gms.common.api.ResultCallback;
 import com.google.android.gms.common.api.Status;
-import com.google.android.gms.location.LocationListener;
 import com.google.android.gms.location.LocationRequest;
 import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.location.LocationSettingsRequest;
@@ -51,7 +49,6 @@ import de.greenrobot.event.EventBus;
 import de.greenrobot.event.Subscribe;
 import graaby.app.wallet.BuildConfig;
 import graaby.app.wallet.GraabyApplication;
-import graaby.app.wallet.MainActivity;
 import graaby.app.wallet.R;
 import graaby.app.wallet.activities.SearchResultsActivity;
 import graaby.app.wallet.events.LocationEvents;
@@ -71,7 +68,7 @@ public class BusinessesFragment extends BaseFragment
         implements ClusterManager.OnClusterItemInfoWindowClickListener<BusinessMarker>,
         GoogleMap.OnMapLoadedCallback, GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener {
     public static final int REQUEST_CHECK_SETTINGS = 4013;
-    private static final String TAG = BusinessesFragment.class.toString();
+    public static final String TAG = BusinessesFragment.class.toString();
     GoogleMap mMap;
     @Inject
     BusinessService mBusinessService;
@@ -87,6 +84,10 @@ public class BusinessesFragment extends BaseFragment
     private GoogleApiClient mGoogleAPIClient;
 
 
+    public static BusinessesFragment newInstance() {
+        return new BusinessesFragment();
+    }
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -96,10 +97,8 @@ public class BusinessesFragment extends BaseFragment
     @Override
     public void onAttach(Activity activity) {
         super.onAttach(activity);
-        if (activity.getClass() == MainActivity.class)
-            ((MainActivity) activity).onSectionAttached(
-                    getArguments().getInt(Helper.ARG_SECTION_NUMBER));
-        mBrandId = getArguments().getInt(Helper.BRAND_ID_BUNDLE_KEY, Helper.DEFAULT_NON_BRAND_RELATED);
+        if (getArguments() != null)
+            mBrandId = getArguments().getInt(Helper.BRAND_ID_BUNDLE_KEY, Helper.DEFAULT_NON_BRAND_RELATED);
         setupLocationEnabler(activity);
     }
 
@@ -213,9 +212,10 @@ public class BusinessesFragment extends BaseFragment
 
     @Override
     public void onPrepareOptionsMenu(Menu menu) {
-        if (mBrandId != Helper.DEFAULT_NON_BRAND_RELATED) {
-            menu.findItem(R.id.action_search).setVisible(false);
-        }
+        if (!isVisible())
+            if (mBrandId != Helper.DEFAULT_NON_BRAND_RELATED) {
+                menu.findItem(R.id.action_search).setVisible(false);
+            }
         super.onPrepareOptionsMenu(menu);
     }
 
@@ -277,7 +277,6 @@ public class BusinessesFragment extends BaseFragment
     @Override
     public void onResume() {
         super.onResume();
-        setToolbarColors(R.color.wisteria, R.color.wisteria_darker);
         if (mapView != null)
             mapView.onResume();
     }
@@ -345,37 +344,34 @@ public class BusinessesFragment extends BaseFragment
     private void checkLocationSettings(LocationSettingsRequest.Builder builder) {
         PendingResult<LocationSettingsResult> result =
                 LocationServices.SettingsApi.checkLocationSettings(mGoogleAPIClient, builder.build());
-        result.setResultCallback(new ResultCallback<LocationSettingsResult>() {
-            @Override
-            public void onResult(LocationSettingsResult locationSettingsResult) {
-                final Status status = locationSettingsResult.getStatus();
+        result.setResultCallback(locationSettingsResult -> {
+            final Status status = locationSettingsResult.getStatus();
 //                final LocationSettingsStates locationSettingsStates = locationSettingsResult.getLocationSettingsStates();
-                switch (status.getStatusCode()) {
-                    case LocationSettingsStatusCodes.SUCCESS:
-                        // All location settings are satisfied. The client can initialize location
-                        // requests here.
-                        getLastKnownWithRequest();
-                        break;
-                    case LocationSettingsStatusCodes.RESOLUTION_REQUIRED:
-                        // Location settings are not satisfied. But could be fixed by showing the user
-                        // a dialog.
-                        try {
-                            // Show the dialog by calling startResolutionForResult(),
-                            // and check the result in onActivityResult().
-                            status.startResolutionForResult(
-                                    getActivity(),
-                                    REQUEST_CHECK_SETTINGS);
-                        } catch (IntentSender.SendIntentException e) {
-                            // Ignore the error.
-                        }
-                        break;
-                    case LocationSettingsStatusCodes.SETTINGS_CHANGE_UNAVAILABLE:
-                        // Location settings are not satisfied. However, we have no way to fix the
-                        // settings so we won't show the dialog.
-                        if (BuildConfig.USE_CRASHLYTICS)
-                            Crashlytics.log("Location Settings N/A! WTH?");
-                        break;
-                }
+            switch (status.getStatusCode()) {
+                case LocationSettingsStatusCodes.SUCCESS:
+                    // All location settings are satisfied. The client can initialize location
+                    // requests here.
+                    getLastKnownWithRequest();
+                    break;
+                case LocationSettingsStatusCodes.RESOLUTION_REQUIRED:
+                    // Location settings are not satisfied. But could be fixed by showing the user
+                    // a dialog.
+                    try {
+                        // Show the dialog by calling startResolutionForResult(),
+                        // and check the result in onActivityResult().
+                        status.startResolutionForResult(
+                                getActivity(),
+                                REQUEST_CHECK_SETTINGS);
+                    } catch (IntentSender.SendIntentException e) {
+                        // Ignore the error.
+                    }
+                    break;
+                case LocationSettingsStatusCodes.SETTINGS_CHANGE_UNAVAILABLE:
+                    // Location settings are not satisfied. However, we have no way to fix the
+                    // settings so we won't show the dialog.
+                    if (BuildConfig.USE_CRASHLYTICS)
+                        Crashlytics.log("Location Settings N/A! WTH?");
+                    break;
             }
         });
     }
@@ -391,14 +387,11 @@ public class BusinessesFragment extends BaseFragment
             LocationServices.FusedLocationApi
                     .requestLocationUpdates(mGoogleAPIClient
                             , getLocationRequest()
-                            , new LocationListener() {
-                        @Override
-                        public void onLocationChanged(Location location) {
-                            mLatLng = new LatLng(location.getLatitude(), location.getLongitude());
-                            moveMapCamera();
-                            sendRequest();
-                            Log.d(TAG, "New location:-" + mLatLng.latitude + "," + mLatLng.longitude);
-                        }
+                            , location -> {
+                        mLatLng = new LatLng(location.getLatitude(), location.getLongitude());
+                        moveMapCamera();
+                        sendRequest();
+                        Log.d(TAG, "New location:-" + mLatLng.latitude + "," + mLatLng.longitude);
                     });
         }
 
