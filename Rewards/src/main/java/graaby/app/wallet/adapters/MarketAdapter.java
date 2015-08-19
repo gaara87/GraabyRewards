@@ -120,10 +120,10 @@ public class MarketAdapter extends RecyclerView.Adapter<MarketAdapter.ViewHolder
         ViewHolder(View view, MarketItemClickListener listener) {
             super(view);
             ButterKnife.bind(this, view);
-//            if (listener != null)
-//                view.setOnClickListener(v -> {
-//                    listener.onMarketItemClick(ViewHolder.this.getAdapterPosition());
-//                });
+            if (listener != null)
+                view.setOnClickListener(v -> {
+                    listener.onMarketItemClick(ViewHolder.this.getAdapterPosition());
+                });
         }
     }
 

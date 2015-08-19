@@ -79,6 +79,7 @@ public class ContactsFragment extends BaseFragment implements DialogInterface.On
         View v = super.onCreateView(inflater, container, savedInstanceState, R.layout.fragment_contacts);
         ButterKnife.bind(this, v);
         setSwipeRefreshColors(R.color.belizehole, R.color.pomegranate, R.color.orange, R.color.peterriver);
+        mSwipeRefresh.setEnabled(false);
         mAdapter = new ContactsAdapter();
         mGridRecycler.setHasFixedSize(true);
         mGridRecycler.setLayoutManager(new GridLayoutManager(getActivity(), getResources().getInteger(R.integer.grid_columns)));

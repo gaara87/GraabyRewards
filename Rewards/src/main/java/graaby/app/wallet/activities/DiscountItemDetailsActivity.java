@@ -2,6 +2,7 @@ package graaby.app.wallet.activities;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.design.widget.CollapsingToolbarLayout;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.text.TextUtils;
@@ -34,7 +35,6 @@ import graaby.app.wallet.models.retrofit.DiscountItemDetailsResponse;
 import graaby.app.wallet.network.services.MarketService;
 import graaby.app.wallet.util.CacheSubscriber;
 import graaby.app.wallet.util.Helper;
-import graaby.app.wallet.widgets.MultiSwipeRefreshLayout;
 import rx.Observable;
 import rx.Subscription;
 import rx.android.schedulers.AndroidSchedulers;
@@ -43,6 +43,8 @@ import rx.schedulers.Schedulers;
 public class DiscountItemDetailsActivity extends BaseAppCompatActivity implements
         SwipeRefreshLayout.OnRefreshListener, View.OnClickListener {
 
+    @Bind(R.id.collapsing_toolbar)
+    CollapsingToolbarLayout collapsingToolbarLayout;
     @Bind(R.id.item_businessPicImageView)
     ImageView mItemBusinessPicImageView;
     @Bind(R.id.item_businessNameTextView)
@@ -63,8 +65,7 @@ public class DiscountItemDetailsActivity extends BaseAppCompatActivity implement
     TextView mItemFor;
     @Bind(R.id.grab_it_button)
     FloatingActionButton mGrabItButton;
-    @Bind(R.id.swiperefresh)
-    MultiSwipeRefreshLayout mSwiperefresh;
+
     @Inject
     MarketService marketService;
     private Boolean isItemGraabed = Boolean.FALSE;
@@ -73,14 +74,17 @@ public class DiscountItemDetailsActivity extends BaseAppCompatActivity implement
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_discount_item_details);
+        setContentView(R.layout.activity_discount_item);
         ButterKnife.bind(this);
 
         EventBus.getDefault().register(this);
 
-        mSwiperefresh.setOnRefreshListener(this);
-        mSwiperefresh.setColorSchemeResources(R.color.sunflower, R.color.nephritis, R.color.peterriver, R.color.pumpkin);
-        mSwiperefresh.setSwipeableChildren(R.id.scrollview);
+        collapsingToolbarLayout.setExpandedTitleColor(getResources().getColor(android.R.color.transparent));
+        collapsingToolbarLayout.setTitle(getString(R.string.title_activity_discount_item_details));
+//        mSwiperefresh.setOnRefreshListener(this);
+//        mSwiperefresh.setColorSchemeResources(R.color.sunflower, R.color.nephritis, R.color.peterriver, R.color.pumpkin);
+
+//        mSwiperefresh.setSwipeableChildren(R.id.scrollview);
         try {
             mDiscountItem = LoganSquare.parse(getIntent().getExtras().getString(
                     Helper.INTENT_CONTAINER_INFO), DiscountItemDetailsResponse.class);
@@ -117,7 +121,7 @@ public class DiscountItemDetailsActivity extends BaseAppCompatActivity implement
         }
         Subscription sub = observable.subscribeOn(Schedulers.newThread())
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(new CacheSubscriber<DiscountItemDetailsResponse>(this, mSwiperefresh, true) {
+                .subscribe(new CacheSubscriber<DiscountItemDetailsResponse>(this) {
                     @Override
                     public void onFail(Throwable e) {
                         resetButtonState();
@@ -189,7 +193,7 @@ public class DiscountItemDetailsActivity extends BaseAppCompatActivity implement
         marketService.buyDiscountItem(mDiscountItem)
                 .subscribeOn(Schedulers.newThread())
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(new CacheSubscriber<BaseResponse>(this, mSwiperefresh, true) {
+                .subscribe(new CacheSubscriber<BaseResponse>(this) {
                                @Override
                                public void onFail(Throwable e) {
                                    Toast.makeText(DiscountItemDetailsActivity.this, "Unable to acquire the item", Toast.LENGTH_SHORT).show();

@@ -69,7 +69,7 @@
         </activity>
         <activity
             android:name=".activities.DiscountItemDetailsActivity"
-            android:label=""
+            android:label="Discount Details"
             android:parentActivityName=".MainActivity"
             android:theme="@style/GraabyTheme2.DiscountItemDetails">
             <meta-data
@@ -127,6 +127,9 @@
         <meta-data
             android:name="com.facebook.sdk.ApplicationId"
             android:value="@string/fb_app_id" />
+        <meta-data
+            android:name="com.crashlytics.ApiKey"
+            android:value="fae7d2973350643d19450c2a7894cc1f6e92f97c" />
 
         <receiver
             android:name=".receivers.GcmBroadcastReceiver"
