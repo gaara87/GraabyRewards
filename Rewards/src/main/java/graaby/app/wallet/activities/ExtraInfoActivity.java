@@ -15,10 +15,10 @@ import butterknife.Bind;
 import butterknife.ButterKnife;
 import graaby.app.wallet.GraabyApplication;
 import graaby.app.wallet.R;
+import graaby.app.wallet.gcm.GraabyGCMListenerService;
 import graaby.app.wallet.models.retrofit.BaseResponse;
 import graaby.app.wallet.models.retrofit.ExtraInfoRequest;
 import graaby.app.wallet.network.services.SettingsService;
-import graaby.app.wallet.services.GcmIntentService;
 import graaby.app.wallet.util.CacheSubscriber;
 import rx.android.schedulers.AndroidSchedulers;
 import rx.schedulers.Schedulers;
@@ -44,7 +44,7 @@ public class ExtraInfoActivity extends BaseAppCompatActivity implements Calendar
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        if (!getIntent().getAction().equals(GcmIntentService.NOTIFICATION_ACTION_INFO)) {
+        if (!getIntent().getAction().equals(GraabyGCMListenerService.NOTIFICATION_ACTION_INFO)) {
             finish();
         } else {
             setContentView(R.layout.activity_extra_info);

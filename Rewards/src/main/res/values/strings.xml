@@ -117,4 +117,7 @@
     <string name="service_name">Graaby Rewards Card</string>
     <string name="service_card_title">Graaby Card</string>
 
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+
 </resources>

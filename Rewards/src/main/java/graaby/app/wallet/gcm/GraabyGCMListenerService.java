@@ -14,10 +14,9 @@
  * limitations under the License.
  */
 
-package graaby.app.wallet.services;
+package graaby.app.wallet.gcm;
 
 import android.app.Activity;
-import android.app.IntentService;
 import android.app.Notification;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
@@ -33,7 +32,7 @@ import android.support.v4.app.NotificationCompat;
 import android.support.v4.app.TaskStackBuilder;
 import android.text.TextUtils;
 
-import com.google.android.gms.gcm.GoogleCloudMessaging;
+import com.google.android.gms.gcm.GcmListenerService;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -45,7 +44,6 @@ import graaby.app.wallet.activities.ExtraInfoActivity;
 import graaby.app.wallet.activities.FeedActivity;
 import graaby.app.wallet.activities.MarketActivity;
 import graaby.app.wallet.activities.PointReceivedActivity;
-import graaby.app.wallet.receivers.GcmBroadcastReceiver;
 import graaby.app.wallet.receivers.GraabyBroadcastReceiver;
 import graaby.app.wallet.util.Helper;
 import graaby.app.wallet.util.NotificationType;
@@ -57,7 +55,7 @@ import graaby.app.wallet.util.NotificationType;
  * service is finished, it calls {@code completeWakefulIntent()} to release the
  * wake lock.
  */
-public class GcmIntentService extends IntentService {
+public class GraabyGCMListenerService extends GcmListenerService {
     public static final String NOTIFICATION_ACTION_POINTS = "action_points_transfer";
     public static final String NOTIFICATION_ACTION_TX = "action_points_reward";
     public static final String NOTIFICATION_ACTION_INFO = "action_info";
@@ -72,30 +70,24 @@ public class GcmIntentService extends IntentService {
 
     private static Random random = new Random();
 
-    public GcmIntentService() {
-        super("GcmIntentService");
-
-
+    public GraabyGCMListenerService() {
     }
 
+    /**
+     * Called when message is received.
+     *
+     * @param from SenderID of the sender.
+     * @param data Data bundle containing message data as key/value pairs.
+     *             For Set of keys use data.keySet().
+     */
+    // [START receive_message]
     @Override
-    protected void onHandleIntent(Intent intent) {
-        Bundle extras = intent.getExtras();
-        GoogleCloudMessaging gcm = GoogleCloudMessaging.getInstance(this);
-        String messageType = gcm.getMessageType(intent);
+    public void onMessageReceived(String from, Bundle data) {
 
-        if (!extras.isEmpty()) {  // has effect of unparcelling Bundle
-            if (GoogleCloudMessaging.MESSAGE_TYPE_SEND_ERROR.equals(messageType)) {
-                sendNotification("Send error: " + extras.toString());
-            } else if (GoogleCloudMessaging.MESSAGE_TYPE_DELETED.equals(messageType)) {
-                sendNotification("Deleted messages on server: " + extras.toString());
-                // If it's a regular GCM message, do some work.
-            } else if (GoogleCloudMessaging.MESSAGE_TYPE_MESSAGE.equals(messageType)) {
-                sendNotification(extras.getString(getString(R.string.field_gcm_data)));
-            }
+        //TODO: Identify the format in which the message appears
+        if (!data.isEmpty()) {  // has effect of unparcelling Bundle
+            sendNotification(data.getString(getString(R.string.field_gcm_data)));
         }
-        // Release the wake lock provided by the WakefulBroadcastReceiver.
-        GcmBroadcastReceiver.completeWakefulIntent(intent);
     }
 
     // Put the message into a notification and post it.

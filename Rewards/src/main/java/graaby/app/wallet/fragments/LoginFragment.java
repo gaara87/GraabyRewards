@@ -11,6 +11,7 @@ import android.content.Intent;
 import android.nfc.NfcAdapter;
 import android.os.Build;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.support.annotation.Nullable;
 import android.text.TextUtils;
 import android.text.method.LinkMovementMethod;
@@ -41,9 +42,9 @@ import butterknife.OnClick;
 import graaby.app.wallet.BuildConfig;
 import graaby.app.wallet.GraabyApplication;
 import graaby.app.wallet.GraabyNDEFCore;
-import graaby.app.wallet.MainActivity;
 import graaby.app.wallet.R;
 import graaby.app.wallet.auth.UserLoginActivity;
+import graaby.app.wallet.gcm.RegistrationIntentService;
 import graaby.app.wallet.models.retrofit.BaseResponse;
 import graaby.app.wallet.models.retrofit.ForgotPasswordRequest;
 import graaby.app.wallet.models.retrofit.UserCredentials;
@@ -224,7 +225,7 @@ public class LoginFragment extends BaseFragment {
 
                                 GraabyNDEFCore.saveNfcData(getActivity(), userCredentialsResponse.core);
 
-                                MainActivity.getGcmPreferences(getActivity()).edit().clear();
+                                PreferenceManager.getDefaultSharedPreferences(getActivity()).edit().remove(RegistrationIntentService.SENT_TOKEN_TO_SERVER).apply();
 
                                 Intent intent = new Intent();
                                 intent.putExtra(AccountManager.KEY_ACCOUNT_NAME, mEmail);

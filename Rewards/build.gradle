@@ -8,8 +8,10 @@ buildscript {
     }
 }
 apply plugin: 'com.android.application'
+apply plugin: 'com.android.databinding'
 apply plugin: 'io.fabric'
 apply plugin: 'me.tatarka.retrolambda'
+apply plugin: 'com.google.gms.google-services'
 
 repositories {
     mavenCentral()

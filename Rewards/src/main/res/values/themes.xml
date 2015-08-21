@@ -15,7 +15,6 @@
         <item name="listPreferredItemPaddingEnd">16dp</item>
         <item name="listPreferredItemPaddingStart">16dp</item>
         <item name="primaryBackgroundLight">@android:color/white</item>
-
         <item name="colorPrimary">@color/graaby_light_blue</item>
         <item name="colorPrimaryDark">@color/graaby_dark_blue</item>
         <item name="colorAccent">@color/emarald</item>

@@ -5,7 +5,7 @@ import android.os.Bundle;
 import graaby.app.wallet.R;
 import graaby.app.wallet.fragments.PointReceivedFromContactFragment;
 import graaby.app.wallet.fragments.PointReceivedFromTransactionFragment;
-import graaby.app.wallet.services.GcmIntentService;
+import graaby.app.wallet.gcm.GraabyGCMListenerService;
 
 public class PointReceivedActivity extends BaseAppCompatActivity {
 
@@ -16,7 +16,7 @@ public class PointReceivedActivity extends BaseAppCompatActivity {
         if (savedInstanceState == null) {
             String notyAction = getIntent().getAction();
             switch (notyAction) {
-                case GcmIntentService.NOTIFICATION_ACTION_POINTS: {
+                case GraabyGCMListenerService.NOTIFICATION_ACTION_POINTS: {
                     PointReceivedFromContactFragment frag = new PointReceivedFromContactFragment();
                     frag.setArguments(getIntent().getExtras());
                     getSupportFragmentManager().beginTransaction()
@@ -24,7 +24,7 @@ public class PointReceivedActivity extends BaseAppCompatActivity {
                             .commit();
                     break;
                 }
-                case GcmIntentService.NOTIFICATION_ACTION_TX: {
+                case GraabyGCMListenerService.NOTIFICATION_ACTION_TX: {
                     PointReceivedFromTransactionFragment frag = new PointReceivedFromTransactionFragment();
                     frag.setArguments(getIntent().getExtras());
                     getSupportFragmentManager().beginTransaction()

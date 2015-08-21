@@ -13,8 +13,8 @@ import java.io.IOException;
 import de.greenrobot.event.EventBus;
 import graaby.app.wallet.R;
 import graaby.app.wallet.fragments.MarketFragment;
+import graaby.app.wallet.gcm.GraabyGCMListenerService;
 import graaby.app.wallet.models.retrofit.OutletDetail;
-import graaby.app.wallet.services.GcmIntentService;
 import graaby.app.wallet.util.DiscountItemType;
 import graaby.app.wallet.util.Helper;
 
@@ -34,7 +34,7 @@ public class MarketActivity extends BaseAppCompatActivity {
             try {
                 OutletDetail outlet = LoganSquare.parse(info, OutletDetail.class);
                 getSupportActionBar().setTitle(outlet.businessName);
-                if (getIntent().getAction() != null && getIntent().getAction().equals(GcmIntentService.NOTIFICATION_ACTION_NEW_DISCOUNT)) {
+                if (getIntent().getAction() != null && getIntent().getAction().equals(GraabyGCMListenerService.NOTIFICATION_ACTION_NEW_DISCOUNT)) {
                     getSupportActionBar().setTitle(outlet.outletName);
                 }
                 args.putInt(Helper.BRAND_ID_BUNDLE_KEY, outlet.businessID);

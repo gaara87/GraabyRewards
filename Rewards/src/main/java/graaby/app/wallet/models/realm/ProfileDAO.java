@@ -10,22 +10,28 @@ public class ProfileDAO extends RealmObject {
 
     private String fullName;
     private String pictureURL;
+    private String currentPoints;
 
     @PrimaryKey
     private String email;
 
 
     public ProfileDAO() {
+        this.fullName = "";
+        this.email = "";
+        currentPoints = "0";
     }
 
     public ProfileDAO(String email) {
         this.fullName = "";
         this.email = email;
+        currentPoints = "0";
     }
 
     public ProfileDAO(String name, String email) {
         this.fullName = name;
         this.email = email;
+        currentPoints = "0";
     }
 
     public String getFullName() {
@@ -51,4 +57,13 @@ public class ProfileDAO extends RealmObject {
     public void setPictureURL(String pictureURL) {
         this.pictureURL = pictureURL;
     }
+
+    public String getCurrentPoints() {
+        return currentPoints;
+    }
+
+    public void setCurrentPoints(String currentPoints) {
+        this.currentPoints = currentPoints;
+    }
+
 }

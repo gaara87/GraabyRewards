@@ -33,8 +33,8 @@ import graaby.app.wallet.BuildConfig;
 import graaby.app.wallet.GraabyApplication;
 import graaby.app.wallet.R;
 import graaby.app.wallet.database.ORMService;
+import graaby.app.wallet.events.AuthEvents;
 import graaby.app.wallet.events.LocationEvents;
-import graaby.app.wallet.events.ProfileEvents;
 import graaby.app.wallet.models.realm.OutletDAO;
 import graaby.app.wallet.models.retrofit.BaseResponse;
 import graaby.app.wallet.models.retrofit.LocationUpdateRequest;
@@ -176,7 +176,7 @@ public class GraabyOutletDiscoveryService extends Service implements GoogleApiCl
     }
 
     @Subscribe
-    public void handle(ProfileEvents.LoggedOutEvent event) {
+    public void handle(AuthEvents.LoggedOutEvent event) {
         AlarmManager alarmManager = (AlarmManager) getSystemService(Context.ALARM_SERVICE);
         PendingIntent pendingIntent = PendingIntent.getBroadcast(this, UpdateLocationBroadcastReceiver.REQUEST_CODE, new Intent(this, UpdateLocationBroadcastReceiver.class), 0);
         alarmManager.cancel(pendingIntent);

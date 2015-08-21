@@ -19,9 +19,4 @@ public class ProfileEvents {
         }
     }
 
-    public static class LoginSuccessfulEvent {
-    }
-
-    public static class LoggedOutEvent {
-    }
 }

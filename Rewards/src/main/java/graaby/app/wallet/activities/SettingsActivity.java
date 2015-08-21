@@ -2,10 +2,6 @@ package graaby.app.wallet.activities;
 
 import android.accounts.Account;
 import android.accounts.AccountManager;
-import android.accounts.AccountManagerCallback;
-import android.accounts.AccountManagerFuture;
-import android.accounts.AuthenticatorException;
-import android.accounts.OperationCanceledException;
 import android.annotation.TargetApi;
 import android.app.AlertDialog;
 import android.content.ActivityNotFoundException;
@@ -29,7 +25,6 @@ import android.text.TextUtils;
 import android.view.MenuItem;
 import android.widget.Toast;
 
-import java.io.IOException;
 import java.util.List;
 
 import javax.inject.Inject;
@@ -38,7 +33,7 @@ import de.greenrobot.event.EventBus;
 import graaby.app.wallet.GraabyApplication;
 import graaby.app.wallet.R;
 import graaby.app.wallet.auth.UserLoginActivity;
-import graaby.app.wallet.events.ProfileEvents;
+import graaby.app.wallet.events.AuthEvents;
 import graaby.app.wallet.models.retrofit.BaseResponse;
 import graaby.app.wallet.models.retrofit.EmptyJson;
 import graaby.app.wallet.network.services.SettingsService;
@@ -51,7 +46,7 @@ import rx.schedulers.Schedulers;
  * handset devices, settings are presented as a single list. On tablets,
  * settings are split by category, with category headers shown to the left of
  * the list of settings.
- * <p/>
+ * <p>
  * See <a href="http://developer.android.com/design/patterns/settings.html">
  * Android Design: Settings</a> for design guidelines and the <a
  * href="http://developer.android.com/guide/topics/ui/settings.html">Settings
@@ -267,28 +262,8 @@ public class SettingsActivity extends PreferenceActivity {
 
                                             @Override
                                             public void onSuccess(BaseResponse result) {
-                                                acm.removeAccount(accounts[0], new AccountManagerCallback<Boolean>() {
-                                                    @Override
-                                                    public void run(AccountManagerFuture<Boolean> future) {
-                                                        if (future.isDone()) {
-                                                            try {
-                                                                if (future.getResult()) {
-                                                                    EventBus.getDefault().post(new ProfileEvents.LoggedOutEvent());
-                                                                    Toast.makeText(SettingsActivity.this, "Logged out successfully", Toast.LENGTH_SHORT).show();
-                                                                    setResult(RESULT_OK);
-                                                                    SettingsActivity.this.finish();
-                                                                }
-                                                            } catch (OperationCanceledException e) {
-                                                                e.printStackTrace();
-                                                            } catch (IOException e) {
-                                                                e.printStackTrace();
-                                                            } catch (AuthenticatorException e) {
-                                                                e.printStackTrace();
-                                                            }
-                                                        }
-                                                    }
-                                                }, null);
-
+                                                EventBus.getDefault().postSticky(new AuthEvents.LoggedOutEvent(AuthEvents.LoggedOutEvent.TYPE.REMOVE));
+                                                SettingsActivity.this.finish();
                                             }
                                         });
                             }

@@ -131,19 +131,38 @@
             android:name="com.crashlytics.ApiKey"
             android:value="fae7d2973350643d19450c2a7894cc1f6e92f97c" />
 
+        <!-- Google Library Receiver to handle Message sent from GCM Server -->
         <receiver
-            android:name=".receivers.GcmBroadcastReceiver"
+            android:name="com.google.android.gms.gcm.GcmReceiver"
             android:permission="com.google.android.c2dm.permission.SEND">
             <intent-filter>
-
-                <!-- Receives the actual messages. -->
+                <!-- For supporting Pre KITKAT Devices -->
+                <action android:name="com.google.android.c2dm.intent.REGISTRATION" />
+                <!-- needs permission to receive messages from GCM -->
                 <action android:name="com.google.android.c2dm.intent.RECEIVE" />
-
                 <category android:name="graaby.app.wallet" />
             </intent-filter>
         </receiver>
 
-        <service android:name=".services.GcmIntentService" />
+        <service
+            android:name=".gcm.GraabyGCMListenerService"
+            android:exported="false">
+            <intent-filter>
+                <action android:name="com.google.android.c2dm.intent.RECEIVE" />
+            </intent-filter>
+        </service>
+
+        <service
+            android:name=".gcm.GraabyInstanceIDListenerService"
+            android:exported="false">
+            <intent-filter>
+                <action android:name="com.google.android.gms.iid.InstanceID" />
+            </intent-filter>
+        </service>
+
+        <service
+            android:name=".gcm.RegistrationIntentService"
+            android:exported="false" />
 
         <activity
             android:name=".activities.SearchResultsActivity"
@@ -249,6 +268,32 @@
                 android:resource="@xml/aid_list" />
         </service>
         <!-- END_INCLUDE(CardEmulationManifest) -->
+
+        <!-- Used for Google Play Store Campaign Measurement-->
+        <service android:name="com.google.android.gms.analytics.CampaignTrackingService" />
+        <receiver
+            android:name="com.google.android.gms.analytics.CampaignTrackingReceiver"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="com.android.vending.INSTALL_REFERRER" />
+            </intent-filter>
+        </receiver>
+        <!-- Optionally, register AnalyticsReceiver and AnalyticsService to support background
+      dispatching on non-Google Play devices -->
+        <receiver
+            android:name="com.google.android.gms.analytics.AnalyticsReceiver"
+            android:enabled="true">
+            <intent-filter>
+                <action android:name="com.google.android.gms.analytics.ANALYTICS_DISPATCH" />
+            </intent-filter>
+        </receiver>
+        <service
+            android:name="com.google.android.gms.analytics.AnalyticsService"
+            android:enabled="true"
+            android:exported="false" />
+        <meta-data
+            android:name="com.google.android.gms.analytics.globalConfigResource"
+            android:resource="@xml/analytics" />
     </application>
 
 </manifest>

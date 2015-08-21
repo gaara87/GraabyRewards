@@ -52,4 +52,10 @@
         app:headerLayout="@layout/nav_header"
         app:menu="@menu/menu_nav" />
 
+    <!--<fragment-->
+    <!--android:id="@+id/navigation"-->
+    <!--android:name="graaby.app.wallet.fragments.NavigationFragment"-->
+    <!--android:layout_width="wrap_content"-->
+    <!--android:layout_height="wrap_content" />-->
+
 </android.support.v4.widget.DrawerLayout>

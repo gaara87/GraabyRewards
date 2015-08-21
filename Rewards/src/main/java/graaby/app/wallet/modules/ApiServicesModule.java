@@ -25,6 +25,7 @@ import graaby.app.wallet.fragments.ContactsFragment;
 import graaby.app.wallet.fragments.FeedFragment;
 import graaby.app.wallet.fragments.LoginFragment;
 import graaby.app.wallet.fragments.MarketFragment;
+import graaby.app.wallet.fragments.NavigationFragment;
 import graaby.app.wallet.fragments.PointReceivedFromContactFragment;
 import graaby.app.wallet.fragments.PointReceivedFromTransactionFragment;
 import graaby.app.wallet.fragments.ProfileFragment;
@@ -54,6 +55,7 @@ import retrofit.RestAdapter;
                 BusinessesFragment.class,
                 BusinessDetailFragment.class,
                 ContactsFragment.class,
+                NavigationFragment.class,
                 DiscountItemDetailsActivity.class,
                 SearchResultsActivity.class,
                 SettingsActivity.class,

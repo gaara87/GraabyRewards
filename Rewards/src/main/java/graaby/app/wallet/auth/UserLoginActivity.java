@@ -4,6 +4,7 @@ import android.accounts.Account;
 import android.accounts.AccountManager;
 import android.content.Context;
 import android.content.Intent;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.design.widget.TabLayout;
 import android.support.v4.view.PagerAdapter;
@@ -20,7 +21,7 @@ import de.greenrobot.event.EventBus;
 import graaby.app.wallet.BuildConfig;
 import graaby.app.wallet.R;
 import graaby.app.wallet.activities.AccountAuthenticatorActivity;
-import graaby.app.wallet.events.ProfileEvents;
+import graaby.app.wallet.events.AuthEvents;
 import graaby.app.wallet.fragments.LoginFragment;
 import graaby.app.wallet.fragments.RegistrationFragment;
 
@@ -72,7 +73,11 @@ public class UserLoginActivity extends AccountAuthenticatorActivity implements
 
         if (accounts.length != 0) {
             if (getIntent().hasExtra("update")) {
-                acm.removeAccount(accounts[0], null, null);
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP_MR1) {
+                    acm.removeAccount(accounts[0], this, null, null);
+                } else {
+                    acm.removeAccount(accounts[0], null, null);
+                }
             } else {
                 Toast.makeText(this, "Only 1 account allowed", Toast.LENGTH_LONG)
                         .show();
@@ -85,7 +90,7 @@ public class UserLoginActivity extends AccountAuthenticatorActivity implements
 
     @Override
     public void onLoginSuccessful(Intent intent) {
-        EventBus.getDefault().postSticky(new ProfileEvents.LoginSuccessfulEvent());
+        EventBus.getDefault().postSticky(new AuthEvents.LoginSuccessfulEvent());
         setAccountAuthenticatorResult(intent.getExtras());
         setResult(RESULT_OK, intent);
         finish();

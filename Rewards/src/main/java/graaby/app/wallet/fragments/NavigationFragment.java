@@ -1,0 +1,144 @@
+package graaby.app.wallet.fragments;
+
+import android.content.Intent;
+import android.os.Bundle;
+import android.support.design.widget.NavigationView;
+import android.support.v4.app.Fragment;
+import android.view.MenuItem;
+import android.widget.TextView;
+
+import com.bumptech.glide.Glide;
+
+import javax.inject.Inject;
+
+import butterknife.Bind;
+import butterknife.ButterKnife;
+import de.greenrobot.event.EventBus;
+import de.greenrobot.event.Subscribe;
+import de.hdodenhof.circleimageview.CircleImageView;
+import graaby.app.wallet.GraabyApplication;
+import graaby.app.wallet.R;
+import graaby.app.wallet.activities.SettingsActivity;
+import graaby.app.wallet.events.AuthEvents;
+import graaby.app.wallet.events.ProfileEvents;
+import graaby.app.wallet.models.realm.ProfileDAO;
+import graaby.app.wallet.models.retrofit.ProfileResponse;
+import graaby.app.wallet.network.services.ProfileService;
+import graaby.app.wallet.util.CacheSubscriber;
+import rx.Subscription;
+
+/**
+ * A simple {@link Fragment} subclass.
+ * Activities that contain this fragment must implement the
+ */
+public class NavigationFragment extends BaseFragment implements NavigationView.OnNavigationItemSelectedListener {
+    @Bind(R.id.navigation_drawer_profile_photo)
+    CircleImageView navigationDrawerProfilePhoto;
+    @Bind(R.id.navigation_drawer_name)
+    TextView navigationDrawerName;
+    @Bind(R.id.navigation_drawer_email)
+    TextView navigationDrawerEmail;
+    @Bind(R.id.navigation_drawer_points)
+    TextView navigationDrawerPoints;
+
+    @Inject
+    ProfileService mProfileService;
+
+    public NavigationFragment() {
+        // Required empty public constructor
+    }
+
+    public static NavigationFragment newInstance() {
+        return new NavigationFragment();
+    }
+
+    @Override
+    protected void sendRequest() {
+        Subscription subscriber = mProfileService.getProfileInfo()
+                .compose(this.<ProfileResponse>applySchedulers())
+                .subscribe(new CacheSubscriber<ProfileResponse>(getActivity(), mSwipeRefresh) {
+                    @Override
+                    public void onSuccess(ProfileResponse result) {
+                        GraabyApplication.getORMDbService().updateProfileInfo(result.userBiography.name, result.userBiography.profilePicURL, result.pointStatistics.currentPointBalance);
+                        ProfileDAO profile = GraabyApplication.getORMDbService().getProfileInfo();
+                        if (profile != null) {
+                            navigationDrawerName.setText(profile.getFullName());
+                            navigationDrawerEmail.setText(profile.getEmail());
+                            navigationDrawerPoints.setText(profile.getCurrentPoints());
+                            Glide.with(navigationDrawerProfilePhoto.getContext())
+                                    .load(profile.getPictureURL())
+                                    .crossFade()
+                                    .into(navigationDrawerProfilePhoto);
+                        }
+                    }
+                });
+
+        mCompositeSubscriptions.add(subscriber);
+    }
+
+    @Override
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        EventBus.getDefault().register(this);
+    }
+
+    public void attachNavigationView(NavigationView view) {
+        // Inflate the layout for this fragment
+        ButterKnife.bind(this, view);
+        ProfileDAO profile = GraabyApplication.getORMDbService().getProfileInfo();
+        if (profile != null) {
+            navigationDrawerName.setText(profile.getFullName());
+            navigationDrawerEmail.setText(profile.getEmail());
+            navigationDrawerPoints.setText(profile.getCurrentPoints());
+            Glide.with(navigationDrawerProfilePhoto.getContext())
+                    .load(profile.getPictureURL())
+                    .crossFade()
+                    .into(navigationDrawerProfilePhoto);
+        }
+        view.setNavigationItemSelectedListener(this);
+    }
+
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+        if (EventBus.getDefault().isRegistered(this))
+            EventBus.getDefault().unregister(this);
+        ButterKnife.unbind(this);
+    }
+
+    @Subscribe(sticky = true)
+    public void handle(ProfileEvents.NameUpdatedEvent event) {
+        ProfileDAO profile = GraabyApplication.getORMDbService().getProfileInfo();
+        if (profile != null) {
+            navigationDrawerName.setText(profile.getFullName());
+            navigationDrawerEmail.setText(profile.getEmail());
+            navigationDrawerPoints.setText(profile.getCurrentPoints());
+        }
+    }
+
+    @Subscribe(sticky = true)
+    public void handle(ProfileEvents.PictureUpdatedEvent event) {
+        Glide.with(navigationDrawerProfilePhoto.getContext())
+                .load(event.getImageURL())
+                .crossFade()
+                .into(navigationDrawerProfilePhoto);
+    }
+
+    @Subscribe(sticky = true)
+    public void handle(AuthEvents.SessionAuthenticatedEvent event) {
+        sendRequest();
+    }
+
+    @Override
+    public boolean onNavigationItemSelected(MenuItem menuItem) {
+        switch (menuItem.getItemId()) {
+            case R.id.drawer_profile:
+                break;
+            case R.id.drawer_settings:
+                Intent intent = new Intent(getActivity(), SettingsActivity.class);
+                getActivity().startActivityForResult(intent, 10);
+                return true;
+        }
+        return true;
+    }
+}

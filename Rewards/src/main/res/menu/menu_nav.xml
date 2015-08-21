@@ -3,9 +3,18 @@
     <group android:checkableBehavior="single">
         <item
             android:id="@+id/drawer_profile"
-            android:checked="true"
             android:icon="@drawable/nav_profile"
             android:title="@string/title_profile" />
+
+        <item
+            android:id="@+id/drawer_my_vouchers"
+            android:icon="@drawable/voucher_withpadding"
+            android:title="My Vouchers" />
+
+        <item
+            android:id="@+id/drawer_my_coupons"
+            android:icon="@drawable/coupon_withpadding"
+            android:title="My Coupons" />
 
         <item android:title="Help">
             <menu>

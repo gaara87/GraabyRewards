@@ -21,7 +21,7 @@ public interface ProfileService {
     Observable<ProfileResponse> getProfileInfo();
 
     @POST("/gcm")
-    Observable<BaseResponse> registerGCM(@Body GCMInfo gcmInfo);
+    BaseResponse registerGCM(@Body GCMInfo gcmInfo);
 
     @GET("/user-info")
     Observable<UserCredentialsResponse.NFCData> getNFCInfo();

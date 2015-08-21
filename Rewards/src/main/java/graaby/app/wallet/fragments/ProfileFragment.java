@@ -132,7 +132,7 @@ public class ProfileFragment extends BaseFragment {
 
     private void refreshDetails(ProfileResponse profile) {
         if (profile.userBiography != null) {
-            GraabyApplication.getORMDbService().updateProfileInfo(profile.userBiography.name, profile.userBiography.profilePicURL);
+            GraabyApplication.getORMDbService().updateProfileInfo(profile.userBiography.name, profile.userBiography.profilePicURL, profile.pointStatistics.currentPointBalance);
             EventBus.getDefault().postSticky(new ProfileEvents.NameUpdatedEvent());
             EventBus.getDefault().postSticky(new ProfileEvents.PictureUpdatedEvent(profile.userBiography.profilePicURL));
 

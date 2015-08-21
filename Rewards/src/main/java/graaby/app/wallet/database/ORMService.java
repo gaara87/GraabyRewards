@@ -4,12 +4,17 @@ import android.content.Context;
 
 import java.util.List;
 
+import graaby.app.wallet.GraabyApplication;
+import graaby.app.wallet.auth.UserAuthenticationHandler;
 import graaby.app.wallet.models.realm.OutletDAO;
 import graaby.app.wallet.models.realm.ProfileDAO;
 import graaby.app.wallet.models.retrofit.OutletDetail;
 import io.realm.Realm;
+import io.realm.RealmConfiguration;
 import io.realm.RealmResults;
 import io.realm.exceptions.RealmMigrationNeededException;
+import io.realm.internal.ColumnType;
+import io.realm.internal.Table;
 
 /**
  * Created by Akash on 3/9/15.
@@ -20,28 +25,25 @@ public class ORMService {
 
     public ORMService(Context context) {
         try {
-            realmer = Realm.getInstance(context, REALM_FILE);
+            Realm.setDefaultConfiguration(new RealmConfiguration.Builder(context)
+                    .name(REALM_FILE)
+                    .schemaVersion(2)
+                    .migration((realm, version) -> {
+                        if (version == 1) {
+                            Table profileTable = realm.getTable(ProfileDAO.class);
+                            long columnIndex = profileTable.addColumn(ColumnType.STRING, "currentPoints");
+                            for (int i = 0; i < profileTable.size(); i++) {
+                                profileTable.setString(columnIndex, i, "0");
+                            }
+                            version++;
+                        }
+                        realmer = realm;
+                        return version;
+                    }).build());
+
+            realmer = Realm.getInstance(context);
         } catch (RealmMigrationNeededException rmne) {
-            Realm.deleteRealmFile(context, REALM_FILE);
-//            Realm.migrateRealmAtPath(REALM_FILE, new RealmMigration() {
-//                @Override
-//                public long execute(Realm realm, long version) {
-//                    if (version == 0) {
-//                        Table outletDAOtype = realm.getTable(OutletDAO.class);
-//                        long bidIndex = outletDAOtype.addColumn(ColumnType.INTEGER, "bID");
-//                        for (int i = 0; i < outletDAOtype.size(); i++) {
-//                            outletDAOtype.setLong(bidIndex, i, 0);
-//                        }
-//                        version++;
-//                    }
-//
-//                    if (version == 1) {
-//
-//                    }
-//                    realmer = realm;
-//                    return version;
-//                }
-//            });
+            Realm.deleteRealm(Realm.getDefaultInstance().getConfiguration());
         }
     }
 
@@ -62,13 +64,16 @@ public class ORMService {
         return realmer.where(ProfileDAO.class).findFirst();
     }
 
-    public void updateProfileInfo(String name, String profilePicURL) {
+    public void updateProfileInfo(String name, String profilePicURL, String points) {
         realmer.beginTransaction();
         ProfileDAO profile = realmer.where(ProfileDAO.class).findFirst();
-        if (profile != null) {
-            profile.setFullName(name);
-            profile.setPictureURL(profilePicURL);
+        if (profile == null) {
+            profile = new ProfileDAO(GraabyApplication.getOG().get(UserAuthenticationHandler.class).getAccountEmail());
         }
+        profile.setFullName(name);
+        profile.setPictureURL(profilePicURL);
+        profile.setCurrentPoints(points);
+        realmer.copyToRealmOrUpdate(profile);
         realmer.commitTransaction();
     }
 
