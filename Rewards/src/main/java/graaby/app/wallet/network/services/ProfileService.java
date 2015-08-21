@@ -2,6 +2,7 @@ package graaby.app.wallet.network.services;
 
 import graaby.app.wallet.models.retrofit.BaseResponse;
 import graaby.app.wallet.models.retrofit.GCMInfo;
+import graaby.app.wallet.models.retrofit.ProfileNavResponse;
 import graaby.app.wallet.models.retrofit.ProfileResponse;
 import graaby.app.wallet.models.retrofit.UserCredentialsResponse;
 import retrofit.http.Body;
@@ -25,4 +26,7 @@ public interface ProfileService {
 
     @GET("/user-info")
     Observable<UserCredentialsResponse.NFCData> getNFCInfo();
+
+    @GET("/profile")
+    Observable<ProfileNavResponse> getProfileNavInfo();
 }

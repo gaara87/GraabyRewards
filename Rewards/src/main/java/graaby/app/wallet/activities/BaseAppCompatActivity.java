@@ -40,6 +40,7 @@ import rx.subscriptions.CompositeSubscription;
  * Created by Akash on 3/3/15.
  */
 public class BaseAppCompatActivity extends AppCompatActivity {
+    private static boolean isExecutingLogoutProcess = false;
     protected Toolbar mToolbar;
     protected CompositeSubscription mCompositeSubscriptions;
     @Inject
@@ -111,49 +112,55 @@ public class BaseAppCompatActivity extends AppCompatActivity {
 
     @Subscribe(sticky = true)
     public void handle(AuthEvents.LoggedOutEvent event) {
-        final AccountManager acm = AccountManager.get(this);
-        final Account[] accounts = acm
-                .getAccountsByType(UserLoginActivity.ACCOUNT_TYPE);
+        EventBus.getDefault().removeStickyEvent(AuthEvents.LoggedOutEvent.class);
+        if (!isExecutingLogoutProcess) {
+            isExecutingLogoutProcess = true;
+            final AccountManager acm = AccountManager.get(this);
+            final Account[] accounts = acm
+                    .getAccountsByType(UserLoginActivity.ACCOUNT_TYPE);
 
-        switch (event.typeOfEvent) {
-            case UPDATE:
-                if (accounts.length != 0) {
-                    try {
-                        InstanceID.getInstance(this).deleteInstanceID();
-                    } catch (IOException e) {
-                        e.printStackTrace();
-                    }
-                    acm.updateCredentials(accounts[0], UserLoginActivity.AUTHTOKEN_TYPE, null, this, future -> {
-                        if (future.isDone()) {
-                            try {
-                                authHandler.initFromFuture(future);
-                            } catch (OperationCanceledException | IOException | AuthenticatorException e) {
-                                e.printStackTrace();
-                            }
+            switch (event.typeOfEvent) {
+                case UPDATE:
+                    if (accounts.length != 0) {
+                        try {
+                            InstanceID.getInstance(this).deleteInstanceID();
+                        } catch (IOException e) {
+                            e.printStackTrace();
                         }
-                    }, null);
-                }
-                break;
-            case REMOVE:
-                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP_MR1) {
-                    if (acm.removeAccountExplicitly(accounts[0])) {
-                        finishLogoutProcess();
-                    }
-                } else {
-                    acm.removeAccount(accounts[0], future -> {
-                        if (future.isDone()) {
-                            try {
-                                if (future.getResult() != null) {
-                                    finishLogoutProcess();
+                        acm.updateCredentials(accounts[0], UserLoginActivity.AUTHTOKEN_TYPE, null, this, future -> {
+                            if (future.isDone()) {
+                                try {
+                                    authHandler.initFromFuture(future);
+                                } catch (OperationCanceledException | IOException | AuthenticatorException e) {
+                                    e.printStackTrace();
+                                    isExecutingLogoutProcess = false;
                                 }
-                            } catch (OperationCanceledException | IOException | AuthenticatorException e) {
-                                e.printStackTrace();
                             }
-
+                        }, null);
+                    }
+                    break;
+                case REMOVE:
+                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP_MR1) {
+                        if (acm.removeAccountExplicitly(accounts[0])) {
+                            finishLogoutProcess();
                         }
-                    }, null);
-                }
-                break;
+                    } else {
+                        acm.removeAccount(accounts[0], future -> {
+                            if (future.isDone()) {
+                                try {
+                                    if (future.getResult() != null) {
+                                        finishLogoutProcess();
+                                    }
+                                } catch (OperationCanceledException | IOException | AuthenticatorException e) {
+                                    e.printStackTrace();
+                                    isExecutingLogoutProcess = false;
+                                }
+
+                            }
+                        }, null);
+                    }
+                    break;
+            }
         }
     }
 
@@ -164,6 +171,7 @@ public class BaseAppCompatActivity extends AppCompatActivity {
         intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
         startActivity(intent);
         finish();
+        isExecutingLogoutProcess = false;
     }
 
     private void setNDEFForBeam() {

@@ -22,7 +22,7 @@ import graaby.app.wallet.activities.SettingsActivity;
 import graaby.app.wallet.events.AuthEvents;
 import graaby.app.wallet.events.ProfileEvents;
 import graaby.app.wallet.models.realm.ProfileDAO;
-import graaby.app.wallet.models.retrofit.ProfileResponse;
+import graaby.app.wallet.models.retrofit.ProfileNavResponse;
 import graaby.app.wallet.network.services.ProfileService;
 import graaby.app.wallet.util.CacheSubscriber;
 import rx.Subscription;
@@ -54,12 +54,12 @@ public class NavigationFragment extends BaseFragment implements NavigationView.O
 
     @Override
     protected void sendRequest() {
-        Subscription subscriber = mProfileService.getProfileInfo()
-                .compose(this.<ProfileResponse>applySchedulers())
-                .subscribe(new CacheSubscriber<ProfileResponse>(getActivity(), mSwipeRefresh) {
+        Subscription subscriber = mProfileService.getProfileNavInfo()
+                .compose(this.<ProfileNavResponse>applySchedulers())
+                .subscribe(new CacheSubscriber<ProfileNavResponse>(getActivity(), mSwipeRefresh) {
                     @Override
-                    public void onSuccess(ProfileResponse result) {
-                        GraabyApplication.getORMDbService().updateProfileInfo(result.userBiography.name, result.userBiography.profilePicURL, result.pointStatistics.currentPointBalance);
+                    public void onSuccess(ProfileNavResponse result) {
+                        GraabyApplication.getORMDbService().updateProfileInfo(result.userFullName, result.profilePictureURL, result.currentPoints);
                         ProfileDAO profile = GraabyApplication.getORMDbService().getProfileInfo();
                         if (profile != null) {
                             navigationDrawerName.setText(profile.getFullName());
