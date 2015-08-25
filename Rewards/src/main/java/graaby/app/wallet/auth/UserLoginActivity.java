@@ -20,10 +20,10 @@ import butterknife.ButterKnife;
 import de.greenrobot.event.EventBus;
 import graaby.app.wallet.BuildConfig;
 import graaby.app.wallet.R;
-import graaby.app.wallet.activities.AccountAuthenticatorActivity;
 import graaby.app.wallet.events.AuthEvents;
-import graaby.app.wallet.fragments.LoginFragment;
-import graaby.app.wallet.fragments.RegistrationFragment;
+import graaby.app.wallet.ui.activities.AccountAuthenticatorActivity;
+import graaby.app.wallet.ui.fragments.LoginFragment;
+import graaby.app.wallet.ui.fragments.RegistrationFragment;
 
 /**
  * Activity which displays a login screen to the user, offering registration as

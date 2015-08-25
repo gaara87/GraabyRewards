@@ -7,7 +7,7 @@
 
     <include layout="@layout/include_toolbar" />
 
-    <graaby.app.wallet.widgets.SlidingTabLayout
+    <graaby.app.wallet.ui.widgets.SlidingTabLayout
         android:id="@+id/tabs"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -17,5 +17,5 @@
         android:id="@+id/pager"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        tools:context="graaby.app.wallet.activities.BusinessDetailsActivity" />
+        tools:context="graaby.app.wallet.ui.activities.BusinessDetailsActivity" />
 </LinearLayout>

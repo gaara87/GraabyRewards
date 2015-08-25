@@ -3,16 +3,18 @@ package graaby.app.wallet;
 import android.app.Application;
 
 import com.crashlytics.android.Crashlytics;
+import com.github.anrwatchdog.ANRWatchDog;
 import com.google.android.gms.common.api.PendingResult;
 import com.google.android.gms.tagmanager.ContainerHolder;
 import com.google.android.gms.tagmanager.TagManager;
 
-import dagger.ObjectGraph;
-import graaby.app.wallet.auth.UserAuthenticationHandler;
-import graaby.app.wallet.database.ORMService;
-import graaby.app.wallet.modules.AndroidModule;
-import graaby.app.wallet.modules.ApiServicesModule;
-import graaby.app.wallet.modules.RetrofitModule;
+import graaby.app.wallet.dagger.components.ApiServicesComponent;
+import graaby.app.wallet.dagger.components.DaggerApiServicesComponent;
+import graaby.app.wallet.dagger.components.DaggerGraabyAppComponent;
+import graaby.app.wallet.dagger.components.DaggerOpenApiServicesComponent;
+import graaby.app.wallet.dagger.components.GraabyAppComponent;
+import graaby.app.wallet.dagger.components.OpenApiServicesComponent;
+import graaby.app.wallet.dagger.modules.AndroidModule;
 import io.fabric.sdk.android.Fabric;
 
 /**
@@ -20,28 +22,24 @@ import io.fabric.sdk.android.Fabric;
  * Make some impeccable shyte
  */
 public class GraabyApplication extends Application {
-    private static ObjectGraph graph;
     private static ContainerHolder containerHolder;
-
-    public static ORMService getORMDbService() {
-        return graph.get(ORMService.class);
-    }
+    private static GraabyApplication application;
+    private GraabyAppComponent mComponent;
+    private ApiServicesComponent mApiComp;
+    private OpenApiServicesComponent mOpenApiComp;
 
     public static ContainerHolder getContainerHolder() {
         return containerHolder;
     }
 
-    public static ObjectGraph getOG() {
-        return graph;
-    }
-
-    public static void inject(Object object) {
-        graph.inject(object);
+    public static GraabyApplication getApplication() {
+        return application;
     }
 
     @Override
     public void onCreate() {
         super.onCreate();
+        application = this;
         PendingResult<ContainerHolder> pendingResult = TagManager.getInstance(this).loadContainerPreferNonDefault(getString(R.string.gtm_tag_id), R.raw.gtm);
         pendingResult.setResultCallback(containerHolder1 -> {
             containerHolder = containerHolder1;
@@ -49,15 +47,33 @@ public class GraabyApplication extends Application {
         });
         TagManager.getInstance(this).setVerboseLoggingEnabled(true);
 
-        graph = ObjectGraph.create(new AndroidModule(this));
-        graph.injectStatics();
+        setupDaggerGraph();
 
-        graph = graph.plus(new ApiServicesModule()).plus(new RetrofitModule());
+        mComponent.userAuthenticationHandler().login(this);
 
-        UserAuthenticationHandler authHandler = graph.get(UserAuthenticationHandler.class);
-        authHandler.login(this);
         if (BuildConfig.USE_CRASHLYTICS) {
             Fabric.with(this, new Crashlytics());
         }
+        if (!BuildConfig.DEBUG) {
+            new ANRWatchDog().start();
+        }
+    }
+
+    public GraabyAppComponent getComponent() {
+        return mComponent;
+    }
+
+    public ApiServicesComponent getApiComponent() {
+        return mApiComp;
+    }
+
+    public OpenApiServicesComponent getOpenApiComponent() {
+        return mOpenApiComp;
+    }
+
+    private void setupDaggerGraph() {
+        mComponent = DaggerGraabyAppComponent.builder().androidModule(new AndroidModule(this)).build();
+        mOpenApiComp = DaggerOpenApiServicesComponent.builder().graabyAppComponent(mComponent).build();
+        mApiComp = DaggerApiServicesComponent.builder().graabyAppComponent(mComponent).build();
     }
 }

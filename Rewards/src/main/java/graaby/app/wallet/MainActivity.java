@@ -21,32 +21,25 @@ import android.widget.Toast;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GooglePlayServicesUtil;
 
-import javax.inject.Inject;
-
 import butterknife.Bind;
 import butterknife.ButterKnife;
-import dagger.Lazy;
 import de.greenrobot.event.EventBus;
-import graaby.app.wallet.activities.BaseAppCompatActivity;
-import graaby.app.wallet.adapters.HomePagerAdapter;
 import graaby.app.wallet.auth.UserAuthenticationHandler;
 import graaby.app.wallet.events.LocationEvents;
-import graaby.app.wallet.fragments.BusinessesFragment;
-import graaby.app.wallet.fragments.NavigationFragment;
-import graaby.app.wallet.fragments.ProfileFragment;
 import graaby.app.wallet.gcm.RegistrationIntentService;
 import graaby.app.wallet.models.android.GraabySearchSuggestionsProvider;
-import graaby.app.wallet.network.services.ProfileService;
 import graaby.app.wallet.services.GraabyOutletDiscoveryService;
+import graaby.app.wallet.ui.activities.BaseAppCompatActivity;
+import graaby.app.wallet.ui.adapters.HomePagerAdapter;
+import graaby.app.wallet.ui.fragments.BusinessesFragment;
+import graaby.app.wallet.ui.fragments.NavigationFragment;
+import graaby.app.wallet.ui.fragments.ProfileFragment;
 
 public class MainActivity extends BaseAppCompatActivity
         implements ProfileFragment.ViewBusinessesListener, UserAuthenticationHandler.OnUserAuthentication, TabLayout.OnTabSelectedListener {
 
     private static final int PLAY_SERVICES_RESOLUTION_REQUEST = 9000;
     private static final String TAG = MainActivity.class.toString();
-    @Inject
-    Lazy<ProfileService> mProfileService;
-
     @Bind(R.id.pager)
     ViewPager mPager;
     @Bind(R.id.tabs)
@@ -64,17 +57,12 @@ public class MainActivity extends BaseAppCompatActivity
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main_wallet);
-        setNavigationView();
         authHandler.loginOrAddAccount(this, this);
     }
 
-    private void setNavigationView() {
-        NavigationFragment navFrag = (NavigationFragment) getSupportFragmentManager().findFragmentByTag("nav");
-        if (navFrag == null) {
-            navFrag = NavigationFragment.newInstance();
-            getSupportFragmentManager().beginTransaction().add(navFrag, "nav").commit();
-        }
-        navFrag.attachNavigationView((NavigationView) findViewById(R.id.navigation_view));
+    @Override
+    protected void setupInjections() {
+
     }
 
     @Override
@@ -92,6 +80,7 @@ public class MainActivity extends BaseAppCompatActivity
     }
 
     private void initialize() {
+        setNavigationView();
         ButterKnife.bind(this);
         GraabyOutletDiscoveryService.setupLocationService(this);
         registerGCM();
@@ -100,6 +89,16 @@ public class MainActivity extends BaseAppCompatActivity
         setupDrawerLayout();
 
         initialized = true;
+    }
+
+    private void setNavigationView() {
+        NavigationFragment navFrag = (NavigationFragment) getSupportFragmentManager().findFragmentByTag("nav");
+        if (navFrag == null) {
+            navFrag = NavigationFragment.newInstance();
+            getSupportFragmentManager().beginTransaction().add(navFrag, "nav").commit();
+            getSupportFragmentManager().executePendingTransactions();
+        }
+        navFrag.attachNavigationView((NavigationView) findViewById(R.id.navigation_view));
     }
 
     private void registerGCM() {

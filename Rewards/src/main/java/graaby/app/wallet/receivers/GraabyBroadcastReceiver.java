@@ -34,7 +34,7 @@ public class GraabyBroadcastReceiver extends BroadcastReceiver {
 
     @Override
     public void onReceive(final Context context, final Intent intent) {
-        GraabyApplication.inject(this);
+        ((GraabyApplication) context.getApplicationContext()).getApiComponent().inject(this);
         if (intent.getAction().equals(ACTION_THANK)) {
             {
                 NotificationManager mNotificationManager = (NotificationManager)

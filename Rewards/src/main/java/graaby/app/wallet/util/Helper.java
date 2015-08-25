@@ -14,8 +14,8 @@ import com.google.android.gms.common.GooglePlayServicesUtil;
 import java.io.IOException;
 
 import graaby.app.wallet.BuildConfig;
-import graaby.app.wallet.activities.BusinessDetailsActivity;
 import graaby.app.wallet.models.retrofit.OutletDetail;
+import graaby.app.wallet.ui.activities.BusinessDetailsActivity;
 
 public class Helper {
 

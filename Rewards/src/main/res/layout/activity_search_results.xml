@@ -3,7 +3,7 @@
     android:id="@+id/swiperefresh"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="graaby.app.wallet.activities.SearchResultsActivity">
+    tools:context="graaby.app.wallet.ui.activities.SearchResultsActivity">
 
     <LinearLayout
         android:layout_width="match_parent"

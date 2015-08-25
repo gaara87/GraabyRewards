@@ -40,11 +40,11 @@ import org.json.JSONObject;
 import java.util.Random;
 
 import graaby.app.wallet.R;
-import graaby.app.wallet.activities.ExtraInfoActivity;
-import graaby.app.wallet.activities.FeedActivity;
-import graaby.app.wallet.activities.MarketActivity;
-import graaby.app.wallet.activities.PointReceivedActivity;
 import graaby.app.wallet.receivers.GraabyBroadcastReceiver;
+import graaby.app.wallet.ui.activities.ExtraInfoActivity;
+import graaby.app.wallet.ui.activities.FeedActivity;
+import graaby.app.wallet.ui.activities.MarketActivity;
+import graaby.app.wallet.ui.activities.PointReceivedActivity;
 import graaby.app.wallet.util.Helper;
 import graaby.app.wallet.util.NotificationType;
 

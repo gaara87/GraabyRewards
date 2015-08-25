@@ -31,14 +31,14 @@
 
             <fragment
                 android:id="@+id/frag_login"
-                android:name="graaby.app.wallet.fragments.LoginFragment"
+                android:name="graaby.app.wallet.ui.fragments.LoginFragment"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 tools:layout="@layout/fragment_login" />
 
             <fragment
                 android:id="@+id/frag_register"
-                android:name="graaby.app.wallet.fragments.RegistrationFragment"
+                android:name="graaby.app.wallet.ui.fragments.RegistrationFragment"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 tools:layout="@layout/fragment_registration" />

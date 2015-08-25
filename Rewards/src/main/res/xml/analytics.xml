@@ -14,32 +14,33 @@
 
     <!--screen names-->
     <!--fragments-->
-    <screenName name="graaby.app.wallet.fragments.ProfileFragment">Profile</screenName>
-    <screenName name="graaby.app.wallet.fragments.MarketFragment">Marketplace</screenName>
-    <screenName name="graaby.app.wallet.fragments.BusinessesFragment">Businesses map</screenName>
-    <screenName name="graaby.app.wallet.fragments.FeedFragment">Feeds</screenName>
-    <screenName name="graaby.app.wallet.fragments.ContactsFragment">Contacts</screenName>
-    <screenName name="graaby.app.wallet.fragments.BusinessDetailFragment">Business info</screenName>
-    <screenName name="graaby.app.wallet.fragments.RewardDetailsFragment">Business reward details
+    <screenName name="graaby.app.wallet.ui.fragments.ProfileFragment">Profile</screenName>
+    <screenName name="graaby.app.wallet.ui.fragments.MarketFragment">Marketplace</screenName>
+    <screenName name="graaby.app.wallet.ui.fragments.BusinessesFragment">Businesses map</screenName>
+    <screenName name="graaby.app.wallet.ui.fragments.FeedFragment">Feeds</screenName>
+    <screenName name="graaby.app.wallet.ui.fragments.ContactsFragment">Contacts</screenName>
+    <screenName name="graaby.app.wallet.ui.fragments.BusinessDetailFragment">Business info
     </screenName>
-    <screenName name="graaby.app.wallet.fragments.LoginFragment">Login</screenName>
-    <screenName name="graaby.app.wallet.fragments.RegistrationFragment">Registration</screenName>
-    <screenName name="graaby.app.wallet.fragments.PointReceivedFromContactFragment">Points shared
+    <screenName name="graaby.app.wallet.ui.fragments.RewardDetailsFragment">Business reward details
     </screenName>
-    <screenName name="graaby.app.wallet.fragments.PointReceivedFromTransactionFragment">Points
+    <screenName name="graaby.app.wallet.ui.fragments.LoginFragment">Login</screenName>
+    <screenName name="graaby.app.wallet.ui.fragments.RegistrationFragment">Registration</screenName>
+    <screenName name="graaby.app.wallet.ui.fragments.PointReceivedFromContactFragment">Points shared
+    </screenName>
+    <screenName name="graaby.app.wallet.ui.fragments.PointReceivedFromTransactionFragment">Points
         earned
     </screenName>
     <!--activities-->
-    <screenName name="graaby.app.wallet.activities.BusinessDetailsActivity">Business details
+    <screenName name="graaby.app.wallet.ui.activities.BusinessDetailsActivity">Business details
     </screenName>
-    <screenName name="graaby.app.wallet.activities.BrandDetailsActivity">Brand map</screenName>
-    <screenName name="graaby.app.wallet.activities.DiscountItemDetailsActivity">Discount item
+    <screenName name="graaby.app.wallet.ui.activities.BrandDetailsActivity">Brand map</screenName>
+    <screenName name="graaby.app.wallet.ui.activities.DiscountItemDetailsActivity">Discount item
         details
     </screenName>
-    <screenName name="graaby.app.wallet.activities.SearchResultsActivity">Search</screenName>
-    <screenName name="graaby.app.wallet.activities.SettingsActivity">Settings</screenName>
-    <screenName name="graaby.app.wallet.activities.OnboardingActivity">Onboarding</screenName>
-    <screenName name="graaby.app.wallet.activities.FeedActivity">Feeds activity</screenName>
+    <screenName name="graaby.app.wallet.ui.activities.SearchResultsActivity">Search</screenName>
+    <screenName name="graaby.app.wallet.ui.activities.SettingsActivity">Settings</screenName>
+    <screenName name="graaby.app.wallet.ui.activities.OnboardingActivity">Onboarding</screenName>
+    <screenName name="graaby.app.wallet.ui.activities.FeedActivity">Feeds activity</screenName>
 
 
 </resources>

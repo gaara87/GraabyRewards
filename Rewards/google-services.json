@@ -1,0 +1,51 @@
+{
+  "project_info": {
+    "project_id": "graaby.com:graaby-rewards",
+    "project_number": "416705827603",
+    "name": "Graaby Rewards App"
+  },
+  "client": [
+    {
+      "client_info": {
+        "client_id": "android:graaby.app.wallet",
+        "client_type": 1,
+        "android_client_info": {
+          "package_name": "graaby.app.wallet"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "416705827603-9hid4i25ts3t5dtd1t4lfcu0e1rdpqdp.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "graaby.app.wallet",
+            "certificate_hash": "6239cf6af263bfd00e20e1f53d8dc6f9f2e34888"
+          }
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 2,
+          "analytics_property": {
+            "tracking_id": "UA-62468811-1"
+          }
+        },
+        "cloud_messaging_service": {
+          "status": 2,
+          "apns_config": []
+        },
+        "appinvite_service": {
+          "status": 1,
+          "other_platform_oauth_client": []
+        },
+        "google_signin_service": {
+          "status": 1
+        },
+        "ads_service": {
+          "status": 1
+        }
+      }
+    }
+  ],
+  "ARTIFACT_VERSION": "1"
+}

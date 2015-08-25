@@ -4,6 +4,9 @@ import android.content.Context;
 
 import java.util.List;
 
+import javax.inject.Inject;
+
+import dagger.Lazy;
 import graaby.app.wallet.GraabyApplication;
 import graaby.app.wallet.auth.UserAuthenticationHandler;
 import graaby.app.wallet.models.realm.OutletDAO;
@@ -21,10 +24,13 @@ import io.realm.internal.Table;
  */
 public class ORMService {
     private final static String REALM_FILE = "graaby.realm";
+    @Inject
+    Lazy<UserAuthenticationHandler> mLazyAuthService;
     private Realm realmer;
 
     public ORMService(Context context) {
         try {
+            ((GraabyApplication) context.getApplicationContext()).getComponent().inject(this);
             Realm.setDefaultConfiguration(new RealmConfiguration.Builder(context)
                     .name(REALM_FILE)
                     .schemaVersion(2)
@@ -68,7 +74,7 @@ public class ORMService {
         realmer.beginTransaction();
         ProfileDAO profile = realmer.where(ProfileDAO.class).findFirst();
         if (profile == null) {
-            profile = new ProfileDAO(GraabyApplication.getOG().get(UserAuthenticationHandler.class).getAccountEmail());
+            profile = new ProfileDAO(mLazyAuthService.get().getAccountEmail());
         }
         profile.setFullName(name);
         profile.setPictureURL(profilePicURL);

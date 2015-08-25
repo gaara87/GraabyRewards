@@ -54,6 +54,7 @@ public class GraabyOutletDiscoveryService extends Service implements GoogleApiCl
     private static final String TAG = GraabyOutletDiscoveryService.class.toString();
     @Inject
     SettingsService mService;
+    @Inject
     ORMService realmDBService;
     private GoogleApiClient mGoogleAPIClient;
 
@@ -98,15 +99,13 @@ public class GraabyOutletDiscoveryService extends Service implements GoogleApiCl
         super.onCreate();
         Log.d(TAG, "Service onCreate()");
         if (GooglePlayServicesUtil.isGooglePlayServicesAvailable(this) == ConnectionResult.SUCCESS) {
+            GraabyApplication.getApplication().getApiComponent().inject(this);
             mGoogleAPIClient = new GoogleApiClient.Builder(this).addApi(LocationServices.API)
                     .addConnectionCallbacks(this)
                     .addOnConnectionFailedListener(this)
                     .build();
             mGoogleAPIClient.connect();
             EventBus.getDefault().register(this);
-            GraabyApplication.inject(this);
-
-            realmDBService = new ORMService(this);
         }
     }
 
