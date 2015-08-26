@@ -49,7 +49,6 @@ public class MainActivity extends BaseAppCompatActivity
      */
     private CharSequence mTitle;
 
-    private boolean authorized = false;
     private boolean initialized = false;
     private DrawerLayout mDrawerLayout;
 
@@ -67,7 +66,6 @@ public class MainActivity extends BaseAppCompatActivity
 
     @Override
     public void onSuccessfulAuthentication(boolean shouldStart) {
-        authorized = true;
         if (shouldStart) {
             initializeAfterResumeIfAllowed();
         }
@@ -248,8 +246,10 @@ public class MainActivity extends BaseAppCompatActivity
     }
 
     private void initializeAfterResumeIfAllowed() {
-        if (authorized && !initialized)
+        if (authHandler.isAuthenticated() && !initialized)
             initialize();
+        else if (!authHandler.isAuthenticated() && initialized)
+            finish();
     }
 
     @Override

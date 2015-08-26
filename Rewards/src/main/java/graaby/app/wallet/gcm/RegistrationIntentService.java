@@ -11,13 +11,10 @@ import com.google.android.gms.iid.InstanceID;
 
 import java.io.IOException;
 
-import javax.inject.Inject;
-
 import graaby.app.wallet.GraabyApplication;
 import graaby.app.wallet.R;
 import graaby.app.wallet.models.retrofit.BaseResponse;
 import graaby.app.wallet.models.retrofit.GCMInfo;
-import graaby.app.wallet.network.services.ProfileService;
 
 /**
  * Created by Akash.
@@ -27,15 +24,11 @@ public class RegistrationIntentService extends IntentService {
     public static final String SENT_TOKEN_TO_SERVER = "gcm_sent_ack";
     private static final String TAG = RegistrationIntentService.class.toString();
 
-    @Inject
-    ProfileService mProfileService;
-
     /**
      * Creates an IntentService.  Invoked by your subclass's constructor.
      */
     public RegistrationIntentService() {
         super(TAG);
-        GraabyApplication.getApplication().getApiComponent().inject(this);
     }
 
     @Override
@@ -74,7 +67,8 @@ public class RegistrationIntentService extends IntentService {
      * @param instanceID send instanceID to server
      */
     private boolean registerWithGraaby(String instanceID) {
-        BaseResponse response = mProfileService
+        GraabyApplication.getApplication().getComponent().userAuthenticationHandler().login(this);
+        BaseResponse response = GraabyApplication.getApplication().getApiComponent().profileServce()
                 .registerGCM(new GCMInfo(instanceID));
         if (response.responseSuccessCode == GraabyApplication.getContainerHolder().getContainer().getLong(getString(R.string.gtm_response_success))) {
             Log.i("GCM Registration", "Your app has been registered successfully:" + instanceID);

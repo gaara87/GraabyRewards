@@ -4,7 +4,6 @@ import dagger.Component;
 import graaby.app.wallet.dagger.modules.ApiServicesModule;
 import graaby.app.wallet.dagger.modules.RetrofitModule;
 import graaby.app.wallet.dagger.scopes.Authenticated;
-import graaby.app.wallet.gcm.RegistrationIntentService;
 import graaby.app.wallet.network.services.BusinessService;
 import graaby.app.wallet.network.services.ContactService;
 import graaby.app.wallet.network.services.FeedService;
@@ -84,8 +83,6 @@ public interface ApiServicesComponent {
     void inject(NavigationFragment fragment);
 
     void inject(ProfileFragment fragment);
-
-    void inject(RegistrationIntentService registrationIntentService);
 
     ProfileService profileServce();
 

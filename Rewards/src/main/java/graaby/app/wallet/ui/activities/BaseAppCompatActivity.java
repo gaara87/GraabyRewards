@@ -135,6 +135,7 @@ public abstract class BaseAppCompatActivity extends AppCompatActivity {
                             if (future.isDone()) {
                                 try {
                                     authHandler.initFromFuture(future);
+                                    finishLogoutProcess(false);
                                 } catch (OperationCanceledException | IOException | AuthenticatorException e) {
                                     e.printStackTrace();
                                     isExecutingLogoutProcess = false;
@@ -146,14 +147,14 @@ public abstract class BaseAppCompatActivity extends AppCompatActivity {
                 case REMOVE:
                     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP_MR1) {
                         if (acm.removeAccountExplicitly(accounts[0])) {
-                            finishLogoutProcess();
+                            finishLogoutProcess(true);
                         }
                     } else {
                         acm.removeAccount(accounts[0], future -> {
                             if (future.isDone()) {
                                 try {
                                     if (future.getResult() != null) {
-                                        finishLogoutProcess();
+                                        finishLogoutProcess(true);
                                     }
                                 } catch (OperationCanceledException | IOException | AuthenticatorException e) {
                                     e.printStackTrace();
@@ -168,8 +169,9 @@ public abstract class BaseAppCompatActivity extends AppCompatActivity {
         }
     }
 
-    private void finishLogoutProcess() {
-        authHandler.logout(this);
+    private void finishLogoutProcess(boolean shouldDelete) {
+        if (shouldDelete)
+            authHandler.logout(this);
         Toast.makeText(BaseAppCompatActivity.this, "Logged out successfully", Toast.LENGTH_SHORT).show();
         Intent intent = new Intent(getApplicationContext(), MainActivity.class);
         intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
