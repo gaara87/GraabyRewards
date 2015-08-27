@@ -4,13 +4,13 @@ import android.util.Log;
 
 import com.squareup.okhttp.OkHttpClient;
 
+import javax.inject.Named;
 import javax.inject.Singleton;
 
 import dagger.Module;
 import dagger.Provides;
 import graaby.app.wallet.BuildConfig;
 import graaby.app.wallet.auth.UserAuthenticationHandler;
-import graaby.app.wallet.dagger.scopes.Authenticated;
 import graaby.app.wallet.util.LoganSquareConverter;
 import graaby.app.wallet.util.ServerURL;
 import retrofit.ErrorHandler;
@@ -24,10 +24,12 @@ import retrofit.client.OkClient;
  */
 @Module
 public class RetrofitModule {
+    protected static final String NAMED_SCOPE_AUTHENTICATED = "authenticated";
+    protected static final String NAMED_SCOPE_UNAUTHENTICATED = "open";
     private static final String TAG = RetrofitModule.class.getSimpleName();
 
     @Provides
-    @Authenticated
+    @Named(value = NAMED_SCOPE_AUTHENTICATED)
     public RequestInterceptor provideRequestInterceptorForAuth(@Singleton final UserAuthenticationHandler authenticationHandler) {
         Log.d(TAG, "Providing requestInterceptor");
         return request -> {
@@ -38,9 +40,35 @@ public class RetrofitModule {
     }
 
     @Provides
-    @Authenticated
-    public RestAdapter provideRestAdapterForAuthRequests(OkHttpClient httpClient, @Authenticated RequestInterceptor requestInterceptor, ErrorHandler errorHandler) {
+    @Named(value = NAMED_SCOPE_AUTHENTICATED)
+    public RestAdapter provideRestAdapterForAuthRequests(OkHttpClient httpClient,
+                                                         @Named(value = NAMED_SCOPE_AUTHENTICATED) RequestInterceptor requestInterceptor,
+                                                         ErrorHandler errorHandler) {
         Log.d(TAG, "Providing RestAdapter");
+        return new RestAdapter.Builder()
+                .setEndpoint(ServerURL.url)
+                .setClient(new OkClient(httpClient))
+                .setRequestInterceptor(requestInterceptor)
+                .setErrorHandler(errorHandler)
+                .setLogLevel(RestAdapter.LogLevel.FULL)
+                .setLog(message -> Log.v("RETROFIT", message))
+                .setConverter(new LoganSquareConverter())
+                .build();
+    }
+
+    @Provides
+    @Named(value = NAMED_SCOPE_UNAUTHENTICATED)
+    public RequestInterceptor provideRequestInterceptorForUnauth() {
+        Log.d(TAG, "Providing openRequestInterceptor");
+        return request -> request.addHeader("User-Agent", "Android Graaby Rewards App " + BuildConfig.VERSION_CODE);
+    }
+
+    @Provides
+    @Named(value = NAMED_SCOPE_UNAUTHENTICATED)
+    public RestAdapter provideRestAdapterForUnauthRequests(OkHttpClient httpClient,
+                                                           @Named(value = NAMED_SCOPE_UNAUTHENTICATED) RequestInterceptor requestInterceptor,
+                                                           ErrorHandler errorHandler) {
+        Log.d(TAG, "Providing openRequestInterceptor");
         return new RestAdapter.Builder()
                 .setEndpoint(ServerURL.url)
                 .setClient(new OkClient(httpClient))

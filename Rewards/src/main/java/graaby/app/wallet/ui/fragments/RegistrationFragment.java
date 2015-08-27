@@ -83,7 +83,7 @@ public class RegistrationFragment extends BaseFragment implements Validator.Vali
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        GraabyApplication.getApplication().getOpenApiComponent().inject(this);
+        GraabyApplication.getApplication().getApiComponent().inject(this);
         mValidator = new Validator(this);
         mValidator.setValidationListener(this);
     }
@@ -165,7 +165,7 @@ public class RegistrationFragment extends BaseFragment implements Validator.Vali
 
     @Override
     void setupInjections() {
-        GraabyApplication.getApplication().getOpenApiComponent().inject(this);
+        GraabyApplication.getApplication().getApiComponent().inject(this);
     }
 
     @Override

@@ -260,7 +260,7 @@ public class LoginFragment extends BaseFragment {
 
     @Override
     void setupInjections() {
-        GraabyApplication.getApplication().getOpenApiComponent().inject(this);
+        GraabyApplication.getApplication().getApiComponent().inject(this);
     }
 
     public void loginAfterRegistering(String username, String password) {

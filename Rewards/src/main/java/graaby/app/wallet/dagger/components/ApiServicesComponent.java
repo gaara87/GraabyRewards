@@ -3,7 +3,9 @@ package graaby.app.wallet.dagger.components;
 import dagger.Component;
 import graaby.app.wallet.dagger.modules.ApiServicesModule;
 import graaby.app.wallet.dagger.modules.RetrofitModule;
-import graaby.app.wallet.dagger.scopes.Authenticated;
+import graaby.app.wallet.dagger.scopes.PerApp;
+import graaby.app.wallet.gcm.RegistrationIntentService;
+import graaby.app.wallet.network.services.AuthService;
 import graaby.app.wallet.network.services.BusinessService;
 import graaby.app.wallet.network.services.ContactService;
 import graaby.app.wallet.network.services.FeedService;
@@ -22,16 +24,18 @@ import graaby.app.wallet.ui.fragments.BusinessDetailFragment;
 import graaby.app.wallet.ui.fragments.BusinessesFragment;
 import graaby.app.wallet.ui.fragments.ContactsFragment;
 import graaby.app.wallet.ui.fragments.FeedFragment;
+import graaby.app.wallet.ui.fragments.LoginFragment;
 import graaby.app.wallet.ui.fragments.MarketFragment;
 import graaby.app.wallet.ui.fragments.NavigationFragment;
 import graaby.app.wallet.ui.fragments.PointReceivedFromContactFragment;
 import graaby.app.wallet.ui.fragments.PointReceivedFromTransactionFragment;
 import graaby.app.wallet.ui.fragments.ProfileFragment;
+import graaby.app.wallet.ui.fragments.RegistrationFragment;
 
 /**
  * Created by Akash.
  */
-@Authenticated
+@PerApp
 @Component(
         dependencies = GraabyAppComponent.class,
         modules = {
@@ -84,8 +88,16 @@ public interface ApiServicesComponent {
 
     void inject(ProfileFragment fragment);
 
+    void inject(RegistrationIntentService registrationIntentService);
+
     ProfileService profileServce();
 
     void inject(BaseFragment baseFragment);
+
+    void inject(LoginFragment fragment);
+
+    void inject(RegistrationFragment fragment);
+
+    AuthService authService();
 
 }

@@ -5,9 +5,11 @@ package graaby.app.wallet.dagger.modules;
  * Make some impeccable shyte
  */
 
+import javax.inject.Named;
+
 import dagger.Module;
 import dagger.Provides;
-import graaby.app.wallet.dagger.scopes.Authenticated;
+import graaby.app.wallet.network.services.AuthService;
 import graaby.app.wallet.network.services.BusinessService;
 import graaby.app.wallet.network.services.ContactService;
 import graaby.app.wallet.network.services.FeedService;
@@ -20,39 +22,43 @@ import retrofit.RestAdapter;
 @Module
 public class ApiServicesModule {
 
-
     @Provides
-    public ProfileService provideProfileService(@Authenticated RestAdapter restAdapter) {
+    public ProfileService provideProfileService(@Named(value = RetrofitModule.NAMED_SCOPE_AUTHENTICATED) RestAdapter restAdapter) {
         return restAdapter.create(ProfileService.class);
     }
 
     @Provides
-    public MarketService provideMarketService(@Authenticated RestAdapter restAdapter) {
+    public MarketService provideMarketService(@Named(value = RetrofitModule.NAMED_SCOPE_AUTHENTICATED) RestAdapter restAdapter) {
         return restAdapter.create(MarketService.class);
     }
 
     @Provides
-    public FeedService provideFeedService(@Authenticated RestAdapter restAdapter) {
+    public FeedService provideFeedService(@Named(value = RetrofitModule.NAMED_SCOPE_AUTHENTICATED) RestAdapter restAdapter) {
         return restAdapter.create(FeedService.class);
     }
 
     @Provides
-    public BusinessService provideBusinessService(@Authenticated RestAdapter restAdapter) {
+    public BusinessService provideBusinessService(@Named(value = RetrofitModule.NAMED_SCOPE_AUTHENTICATED) RestAdapter restAdapter) {
         return restAdapter.create(BusinessService.class);
     }
 
     @Provides
-    public ContactService provideContactService(@Authenticated RestAdapter restAdapter) {
+    public ContactService provideContactService(@Named(value = RetrofitModule.NAMED_SCOPE_AUTHENTICATED) RestAdapter restAdapter) {
         return restAdapter.create(ContactService.class);
     }
 
     @Provides
-    public SearchService provideSearchService(@Authenticated RestAdapter restAdapter) {
+    public SearchService provideSearchService(@Named(value = RetrofitModule.NAMED_SCOPE_AUTHENTICATED) RestAdapter restAdapter) {
         return restAdapter.create(SearchService.class);
     }
 
     @Provides
-    public SettingsService provideSettingsService(@Authenticated RestAdapter restAdapter) {
+    public SettingsService provideSettingsService(@Named(value = RetrofitModule.NAMED_SCOPE_AUTHENTICATED) RestAdapter restAdapter) {
         return restAdapter.create(SettingsService.class);
+    }
+
+    @Provides
+    public AuthService provideAuthService(@Named(value = RetrofitModule.NAMED_SCOPE_UNAUTHENTICATED) RestAdapter restAdapter) {
+        return restAdapter.create(AuthService.class);
     }
 }

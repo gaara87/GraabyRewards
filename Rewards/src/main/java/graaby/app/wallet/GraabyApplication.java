@@ -11,9 +11,7 @@ import com.google.android.gms.tagmanager.TagManager;
 import graaby.app.wallet.dagger.components.ApiServicesComponent;
 import graaby.app.wallet.dagger.components.DaggerApiServicesComponent;
 import graaby.app.wallet.dagger.components.DaggerGraabyAppComponent;
-import graaby.app.wallet.dagger.components.DaggerOpenApiServicesComponent;
 import graaby.app.wallet.dagger.components.GraabyAppComponent;
-import graaby.app.wallet.dagger.components.OpenApiServicesComponent;
 import graaby.app.wallet.dagger.modules.AndroidModule;
 import io.fabric.sdk.android.Fabric;
 
@@ -22,14 +20,13 @@ import io.fabric.sdk.android.Fabric;
  * Make some impeccable shyte
  */
 public class GraabyApplication extends Application {
-    private static ContainerHolder containerHolder;
+    private static ContainerHolder mContainerHolder;
     private static GraabyApplication application;
     private GraabyAppComponent mComponent;
     private ApiServicesComponent mApiComp;
-    private OpenApiServicesComponent mOpenApiComp;
 
     public static ContainerHolder getContainerHolder() {
-        return containerHolder;
+        return mContainerHolder;
     }
 
     public static GraabyApplication getApplication() {
@@ -41,9 +38,9 @@ public class GraabyApplication extends Application {
         super.onCreate();
         application = this;
         PendingResult<ContainerHolder> pendingResult = TagManager.getInstance(this).loadContainerPreferNonDefault(getString(R.string.gtm_tag_id), R.raw.gtm);
-        pendingResult.setResultCallback(containerHolder1 -> {
-            containerHolder = containerHolder1;
-            containerHolder1.getContainer();
+        pendingResult.setResultCallback(containerHolder -> {
+            mContainerHolder = containerHolder;
+            containerHolder.getContainer();
         });
         TagManager.getInstance(this).setVerboseLoggingEnabled(true);
 
@@ -67,13 +64,9 @@ public class GraabyApplication extends Application {
         return mApiComp;
     }
 
-    public OpenApiServicesComponent getOpenApiComponent() {
-        return mOpenApiComp;
-    }
 
     private void setupDaggerGraph() {
         mComponent = DaggerGraabyAppComponent.builder().androidModule(new AndroidModule(this)).build();
-        mOpenApiComp = DaggerOpenApiServicesComponent.builder().graabyAppComponent(mComponent).build();
         mApiComp = DaggerApiServicesComponent.builder().graabyAppComponent(mComponent).build();
     }
 }
