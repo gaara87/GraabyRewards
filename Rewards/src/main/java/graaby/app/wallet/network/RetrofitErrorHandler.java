@@ -36,7 +36,7 @@ public class RetrofitErrorHandler implements ErrorHandler {
                         statusCode == HttpURLConnection.HTTP_MOVED_TEMP) {
                     errorResourceString = R.string.error_unauthorized;
                     //Handle auth failure event
-                    EventBus.getDefault().postSticky(new AuthEvents.LoggedOutEvent(AuthEvents.LoggedOutEvent.TYPE.UPDATE));
+                    EventBus.getDefault().postSticky(new AuthEvents.LoggedOutEvent());
                 } else if (statusCode == HttpURLConnection.HTTP_NOT_FOUND) {
                     errorResourceString = R.string.error_404;
                 }

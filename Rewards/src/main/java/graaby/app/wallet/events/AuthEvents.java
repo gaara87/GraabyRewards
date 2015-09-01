@@ -11,14 +11,5 @@ public class AuthEvents {
     }
 
     public static class LoggedOutEvent {
-        public final TYPE typeOfEvent;
-
-        public LoggedOutEvent(TYPE eventType) {
-            typeOfEvent = eventType;
-        }
-
-        public enum TYPE {
-            UPDATE, REMOVE;
-        }
     }
 }

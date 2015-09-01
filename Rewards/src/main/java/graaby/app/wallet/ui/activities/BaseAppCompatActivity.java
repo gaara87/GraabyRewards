@@ -14,7 +14,6 @@ import android.support.v7.widget.Toolbar;
 import android.widget.Toast;
 
 import com.google.android.gms.analytics.Tracker;
-import com.google.android.gms.iid.InstanceID;
 
 import java.io.File;
 import java.io.IOException;
@@ -123,55 +122,29 @@ public abstract class BaseAppCompatActivity extends AppCompatActivity {
             final Account[] accounts = acm
                     .getAccountsByType(UserLoginActivity.ACCOUNT_TYPE);
 
-            switch (event.typeOfEvent) {
-                case UPDATE:
-                    if (accounts.length != 0) {
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP_MR1) {
+                if (acm.removeAccountExplicitly(accounts[0])) {
+                    finishLogoutProcess();
+                }
+            } else {
+                acm.removeAccount(accounts[0], future -> {
+                    if (future.isDone()) {
                         try {
-                            InstanceID.getInstance(this).deleteInstanceID();
-                        } catch (IOException e) {
+                            if (future.getResult() != null) {
+                                finishLogoutProcess();
+                            }
+                        } catch (OperationCanceledException | IOException | AuthenticatorException e) {
                             e.printStackTrace();
+                            isExecutingLogoutProcess = false;
                         }
-                        acm.updateCredentials(accounts[0], UserLoginActivity.AUTHTOKEN_TYPE, null, this, future -> {
-                            if (future.isDone()) {
-                                try {
-                                    authHandler.initFromFuture(future);
-                                    finishLogoutProcess(false);
-                                } catch (OperationCanceledException | IOException | AuthenticatorException e) {
-                                    e.printStackTrace();
-                                    isExecutingLogoutProcess = false;
-                                }
-                            }
-                        }, null);
                     }
-                    break;
-                case REMOVE:
-                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP_MR1) {
-                        if (acm.removeAccountExplicitly(accounts[0])) {
-                            finishLogoutProcess(true);
-                        }
-                    } else {
-                        acm.removeAccount(accounts[0], future -> {
-                            if (future.isDone()) {
-                                try {
-                                    if (future.getResult() != null) {
-                                        finishLogoutProcess(true);
-                                    }
-                                } catch (OperationCanceledException | IOException | AuthenticatorException e) {
-                                    e.printStackTrace();
-                                    isExecutingLogoutProcess = false;
-                                }
-
-                            }
-                        }, null);
-                    }
-                    break;
+                }, null);
             }
         }
     }
 
-    private void finishLogoutProcess(boolean shouldDelete) {
-        if (shouldDelete)
-            authHandler.logout(this);
+    private void finishLogoutProcess() {
+        authHandler.logout(this);
         Toast.makeText(BaseAppCompatActivity.this, "Logged out successfully", Toast.LENGTH_SHORT).show();
         Intent intent = new Intent(getApplicationContext(), MainActivity.class);
         intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);

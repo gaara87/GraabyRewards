@@ -262,7 +262,7 @@ public class SettingsActivity extends PreferenceActivity {
 
                                             @Override
                                             public void onSuccess(BaseResponse result) {
-                                                EventBus.getDefault().postSticky(new AuthEvents.LoggedOutEvent(AuthEvents.LoggedOutEvent.TYPE.REMOVE));
+                                                EventBus.getDefault().postSticky(new AuthEvents.LoggedOutEvent());
                                                 SettingsActivity.this.finish();
                                             }
                                         });
