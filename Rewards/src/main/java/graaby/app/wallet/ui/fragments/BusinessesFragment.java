@@ -1,6 +1,6 @@
 package graaby.app.wallet.ui.fragments;
 
-import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
 import android.content.IntentSender;
 import android.location.Location;
@@ -100,14 +100,14 @@ public class BusinessesFragment extends BaseFragment
     }
 
     @Override
-    public void onAttach(Activity activity) {
+    public void onAttach(Context activity) {
         super.onAttach(activity);
         if (getArguments() != null)
             mBrandId = getArguments().getInt(Helper.BRAND_ID_BUNDLE_KEY, Helper.DEFAULT_NON_BRAND_RELATED);
         setupLocationEnabler(activity);
     }
 
-    private void setupLocationEnabler(Activity activity) {
+    private void setupLocationEnabler(Context activity) {
         if (Helper.checkPlayServices(activity) && mBrandId == Helper.DEFAULT_NON_BRAND_RELATED) {
             mGoogleAPIClient = new GoogleApiClient.Builder(activity).addApi(LocationServices.API)
                     .addConnectionCallbacks(this)

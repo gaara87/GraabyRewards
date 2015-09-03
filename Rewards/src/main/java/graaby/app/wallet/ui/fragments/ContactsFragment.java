@@ -56,11 +56,6 @@ public class ContactsFragment extends BaseFragment implements DialogInterface.On
     }
 
     @Override
-    public void onAttach(Activity activity) {
-        super.onAttach(activity);
-    }
-
-    @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         LayoutInflater inflater = getLayoutInflater(savedInstanceState);

@@ -1,6 +1,5 @@
 package graaby.app.wallet.ui.fragments;
 
-import android.app.Activity;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -51,11 +50,6 @@ public class PointReceivedFromContactFragment extends BaseFragment {
     private String pictureURL;
 
     public PointReceivedFromContactFragment() {
-    }
-
-    @Override
-    public void onAttach(Activity activity) {
-        super.onAttach(activity);
     }
 
     @Override

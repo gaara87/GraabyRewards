@@ -1,6 +1,5 @@
 package graaby.app.wallet.ui.fragments;
 
-import android.app.Activity;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -50,12 +49,6 @@ public class PointReceivedFromTransactionFragment extends BaseFragment implement
 
     public PointReceivedFromTransactionFragment() {
 
-    }
-
-
-    @Override
-    public void onAttach(Activity activity) {
-        super.onAttach(activity);
     }
 
     @Override

@@ -1,7 +1,7 @@
 package graaby.app.wallet.ui.fragments;
 
-import android.app.Activity;
 import android.content.ComponentName;
+import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
@@ -78,7 +78,7 @@ public class BusinessDetailFragment extends BaseFragment {
     }
 
     @Override
-    public void onAttach(Activity activity) {
+    public void onAttach(Context activity) {
         super.onAttach(activity);
         mCallback = (BusinessDetailFragmentCallback) activity;
     }

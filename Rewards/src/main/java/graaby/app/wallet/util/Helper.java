@@ -48,11 +48,11 @@ public class Helper {
         imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
     }
 
-    public static boolean checkPlayServices(Activity activity) {
+    public static boolean checkPlayServices(Context activity) {
         int resultCode = GooglePlayServicesUtil.isGooglePlayServicesAvailable(activity);
         if (resultCode != ConnectionResult.SUCCESS) {
             if (GooglePlayServicesUtil.isUserRecoverableError(resultCode)) {
-                GooglePlayServicesUtil.getErrorDialog(resultCode, activity,
+                GooglePlayServicesUtil.getErrorDialog(resultCode, (Activity) activity,
                         PLAY_SERVICES_RESOLUTION_REQUEST).show();
             } else {
                 if (BuildConfig.USE_CRASHLYTICS)

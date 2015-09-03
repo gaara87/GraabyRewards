@@ -36,11 +36,12 @@ android {
         targetCompatibility JavaVersion.VERSION_1_8
     }
 
-    compileSdkVersion 22
+    compileSdkVersion 23
     buildToolsVersion '23.0.0'
+    useLibrary 'org.apache.http.legacy'
     defaultConfig {
         minSdkVersion 11
-        targetSdkVersion 22
+        targetSdkVersion 23
         multiDexEnabled true
     }
     buildTypes {
@@ -71,12 +72,12 @@ android {
         prod {
             applicationId "graaby.app.wallet"
             versionName "Zeta1 Scorpii"
-            versionCode 36
+            versionCode 37
         }
         dev {
             applicationId "graaby.app.wallet.dev"
             versionName "Zeta1 Scorpii-dev"
-            versionCode 36
+            versionCode 37
         }
     }
     applicationVariants.all { variant ->
@@ -132,11 +133,11 @@ apt {
 dependencies {
     compile fileTree(include: ['*.jar'], dir: 'libs')
     compile 'com.intellij:annotations:12.0'
-    compile 'com.android.support:support-annotations:22.2.1'
-    compile 'com.android.support:appcompat-v7:22.2.1'
-    compile 'com.android.support:cardview-v7:22.2.1'
-    compile 'com.android.support:recyclerview-v7:22.2.1'
-    compile 'com.android.support:design:22.2.1'
+    compile 'com.android.support:support-annotations:23.0.0'
+    compile 'com.android.support:appcompat-v7:23.0.0'
+    compile 'com.android.support:cardview-v7:23.0.0'
+    compile 'com.android.support:recyclerview-v7:23.0.0'
+    compile 'com.android.support:design:23.0.0'
     compile 'com.google.android.gms:play-services-analytics:7.8.0'
     compile 'com.google.android.gms:play-services-gcm:7.8.0'
     compile 'com.google.android.gms:play-services-identity:7.8.0'

@@ -5,7 +5,7 @@
     <string name="ga_appName">Graaby Rewards</string>
     <bool name="ga_autoActivityTracking">true</bool>
     <!-- Track exceptions -->
-    <bool name="ga_reportUncaughtExceptions">true</bool>
+    <bool name="ga_reportUncaughtExceptions">false</bool>
 
     <integer name="ga_sessionTimeout">300</integer>
 

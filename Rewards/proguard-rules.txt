@@ -48,10 +48,12 @@
 -keep public class com.android.vending.licensing.ILicensingService
 
 #To remove debug logs:
-#-assumenosideeffects class android.util.Log {
-#    public static *** d(...);
-#    public static *** v(...);
-#}
+-assumenosideeffects class android.util.Log {
+    public static *** d(...);
+    public static *** v(...);
+    public static *** e(...);
+    public static *** i(...);
+}
 
 -keepclasseswithmembernames class * {
     native <methods>;
@@ -88,27 +90,48 @@
 
 ######### PROJECT SPECIFIC LIBRARY SETTINGS ############
 
-
--keep class com.facebook.** { *; }
--keepattributes Signature
--dontwarn com.facebook**
-
--keep class okio.** { *; }
+# Okio
+-keep class sun.misc.Unsafe { *; }
+-dontwarn java.nio.file.*
+-dontwarn org.codehaus.mojo.animal_sniffer.IgnoreJRERequirement
 -dontwarn okio.**
+# Okio
 
--keep class com.squareup.okhttp.internal.** { *; }
--dontwarn com.squareup.okhttp.internal.**
+# OkHttp
+-keepattributes Signature
+-keepattributes *Annotation*
+-keep class com.squareup.okhttp.** { *; }
+-keep interface com.squareup.okhttp.** { *; }
+-dontwarn com.squareup.okhttp.**
+# OkHttp
 
--keep class android.support.v4.app.** { *; }
--keep interface android.support.v4.app.** { *; }
+# appcompat
+-keep public class android.support.v7.widget.** { *; }
+-keep public class android.support.v7.internal.widget.** { *; }
+-keep public class android.support.v7.internal.view.menu.** { *; }
 
--dontwarn android.support.v7.**
--keep class android.support.v7.** { *; }
--keep interface android.support.v7.** { *; }
+-keep public class * extends android.support.v4.view.ActionProvider {
+    public <init>(android.content.Context);
+}
+# appcompat
 
+#cardview
+-keep class android.support.v7.widget.RoundRectDrawable { *; }
+#cardview
+
+# ButterKnife 7
+-keep class butterknife.** { *; }
 -dontwarn butterknife.internal.**
--keep class **$$ViewInjector { *; }
--keepnames class * { @ButterKnife.bindView *;}
+-keep class **$$ViewBinder { *; }
+
+-keepclasseswithmembernames class * {
+    @butterknife.* <fields>;
+}
+
+-keepclasseswithmembernames class * {
+    @butterknife.* <methods>;
+}
+#ButterKnife 7
 
 #Play services
 -keep class * extends java.util.ListResourceBundle {
@@ -127,58 +150,47 @@
 -keepnames class * implements android.os.Parcelable {
     public static final ** CREATOR;
 }
+
+-keep class com.google.android.gms.** { *; }
+-dontwarn com.google.android.gms.**
 #play services
 
+#saripaar
 -keep class com.mobsandgeeks.saripaar.** {*;}
 -keep class commons.validator.routines.** {*;}
+#saripaar
+
+#retrofit
+-keep class com.squareup.okhttp.** { *; }
+-keep interface com.squareup.okhttp.** { *; }
+-dontwarn com.squareup.okhttp.**
 
 -dontwarn rx.**
-
--dontwarn com.squareup.okhttp.*
-
--dontwarn retrofit.appengine.UrlFetchClient
-
--keepattributes Annotation
-
+-dontwarn retrofit.**
+-dontwarn okio.**
 -keep class retrofit.** { *; }
-
 -keepclasseswithmembers class * {
-
-@retrofit.http.* <methods>; }
--keepattributes Signature
-
--keepclassmembers,allowobfuscation class * {
-    @javax.inject.* *;
-    @dagger.* *;
-    <init>();
+    @retrofit.http.* <methods>;
 }
+-keepattributes Signature
+-keepattributes Exceptions
 
--keep class javax.inject.** { *; }
--keep class **$$ModuleAdapter
--keep class **$$InjectAdapter
--keep class **$$StaticInjection
--keep class dagger.** { *; }
--dontwarn dagger.internal.**
-
--dontwarn org.w3c.dom.bootstrap.DOMImplementationRegistry
+#retrofit
 
 #Realm
 -keepnames public class * extends io.realm.RealmObject
--keep class io.realm.** { *; }
+-keep @io.realm.annotations.RealmModule class *
 -dontwarn javax.**
 -dontwarn io.realm.**
+-keep class io.realm.** { *; }
 #Realm
 
-#GreenRobot Event bus starts
--keepclassmembers class ** {
-    public void onEvent*(**);
+#GreenRobot Even bus starts
+-keep class de.greenrobot.event.** { *; }
+-keep class * {
+    @de.greenrobot.event.* <methods>;
 }
-
-# Only required if you use AsyncExecutor
--keepclassmembers class * extends de.greenrobot.event.util.ThrowableFailureEvent {
-    <init>(java.lang.Throwable);
-}
-#GreenRobot Event bus ends
+#GreenRobot Eventbus ends
 
 #LoganSqure
 -keep class com.bluelinelabs.logansquare.** { *; }
@@ -187,6 +199,7 @@
 #LoganSqure
 
 #Lambda
+# as per official recommendation: https://github.com/evant/gradle-retrolambda#proguard
 -dontwarn java.lang.invoke.*
 #Lambda
 
@@ -201,7 +214,25 @@
 #crashlytics
 
 #design support lib
--keep class android.support.design.widget.** { *; }
--keep interface android.support.design.widget.** { *; }
 -dontwarn android.support.design.**
+-keep class android.support.design.** { *; }
+-keep interface android.support.design.** { *; }
+-keep public class android.support.design.R$* { *; }
 #design support lib
+
+# Glide specific rules #
+# https://github.com/bumptech/glide
+-keep public class * implements com.bumptech.glide.module.GlideModule
+-keep public enum com.bumptech.glide.load.resource.bitmap.ImageHeaderParser$** {
+    **[] $VALUES;
+    public *;
+}
+#glide
+
+## Google Analytics 3.0 specific rules ##
+-keep class com.google.analytics.** { *; }
+## Google Analytics 3.0 specific rules ##
+
+-dontwarn retrofit.appengine.UrlFetchClient
+-keepattributes Annotation
+

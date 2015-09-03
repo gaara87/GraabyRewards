@@ -3,7 +3,7 @@ package graaby.app.wallet.ui.fragments;
 import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
 import android.annotation.TargetApi;
-import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
@@ -152,7 +152,7 @@ public class RegistrationFragment extends BaseFragment implements Validator.Vali
     }
 
     @Override
-    public void onAttach(Activity activity) {
+    public void onAttach(Context activity) {
         super.onAttach(activity);
         mCallback = (OnRegistrationListener) activity;
     }

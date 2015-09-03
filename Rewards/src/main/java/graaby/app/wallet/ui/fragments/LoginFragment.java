@@ -5,7 +5,6 @@ import android.accounts.AccountManager;
 import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
 import android.annotation.TargetApi;
-import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.nfc.NfcAdapter;
@@ -93,10 +92,10 @@ public class LoginFragment extends BaseFragment {
     }
 
     @Override
-    public void onAttach(Activity activity) {
-        super.onAttach(activity);
-        loginActivity = (LoginInterface) activity;
-        mAccountMgr = AccountManager.get(activity);
+    public void onAttach(Context context) {
+        super.onAttach(context);
+        loginActivity = (LoginInterface) context;
+        mAccountMgr = AccountManager.get(context);
     }
 
     @Override
