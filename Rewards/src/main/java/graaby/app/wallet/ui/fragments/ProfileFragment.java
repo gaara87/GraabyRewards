@@ -59,19 +59,13 @@ public class ProfileFragment extends BaseFragment {
 
     public void onAttach(Context activity) {
         super.onAttach(activity);
-        mCallback = (ViewBusinessesListener) activity;
+//        mCallback = (ViewBusinessesListener) activity;
     }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         sendRequest();
-    }
-
-    @Override
-    public void onResume() {
-        super.onResume();
-        setToolbarColors(R.color.wetasphalt, R.color.wetasphalt_darker);
     }
 
     @Override

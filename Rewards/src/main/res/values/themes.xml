@@ -46,6 +46,11 @@
         <item name="colorPrimaryDark">@color/pomegranate_dark</item>
     </style>
 
+    <style name="GraabyTheme2.Profile">
+        <item name="colorPrimary">@color/wetasphalt</item>
+        <item name="colorPrimaryDark">@color/wetasphalt_darker</item>
+    </style>
+
     <style name="GraabyTheme2.DiscountItemDetails">
         <item name="colorPrimary">@color/sunflower</item>
         <item name="colorPrimaryDark">@color/sunflower_darker</item>

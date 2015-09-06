@@ -115,6 +115,7 @@
 
     <string name="service_name">Graaby Rewards Card</string>
     <string name="service_card_title">Graaby Card</string>
+    <string name="title_activity_profile">Your Profile</string>
 
 
 </resources>
