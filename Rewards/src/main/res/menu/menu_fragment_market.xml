@@ -8,4 +8,10 @@
         android:title="@string/menu_action_search"
         app:showAsAction="always" />
 
+    <item
+        android:id="@+id/action_toggle_grid"
+        android:icon="@drawable/ic_grid_on_white_24dp"
+        android:title="Toggle View"
+        app:showAsAction="always" />
+
 </menu>

@@ -21,5 +21,8 @@
         android:id="@+id/item_businessAddressTextView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:textAppearance="?android:attr/textAppearanceSmall" />
+        android:layout_marginLeft="@dimen/globalPadding8"
+        android:layout_marginStart="@dimen/globalPadding8"
+        android:textAppearance="?android:attr/textAppearanceSmall"
+        tools:text="address location" />
 </LinearLayout>

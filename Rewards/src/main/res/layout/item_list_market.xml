@@ -1,0 +1,95 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="?attr/selectableItemBackground"
+    android:clickable="true"
+    android:focusable="true">
+
+    <ImageView
+        android:id="@+id/discount_image"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_margin="8dp"
+        android:src="@drawable/coupon_nopadding" />
+
+    <android.support.v7.widget.AppCompatTextView
+        android:id="@+id/discount_item_discountValue"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignTop="@+id/discount_image"
+        android:layout_toEndOf="@+id/discount_image"
+        android:layout_toRightOf="@+id/discount_image"
+        android:textAppearance="@style/TextAppearance.AppCompat.Headline"
+        tools:text="Discount Value" />
+
+    <android.support.v7.widget.AppCompatTextView
+        android:id="@+id/discount_item_business_name_textView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignLeft="@+id/discount_item_discountValue"
+        android:layout_alignStart="@+id/discount_item_discountValue"
+        android:layout_below="@+id/discount_item_discountValue"
+        android:ellipsize="end"
+        android:singleLine="true"
+        android:textAppearance="@style/TextAppearance.AppCompat.Caption"
+        tools:text="Business name" />
+
+    <LinearLayout
+        android:id="@+id/discount_item_cost_container"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBottom="@+id/discount_item_business_name_textView"
+        android:layout_toLeftOf="@+id/imageView2"
+        android:layout_toStartOf="@+id/imageView2"
+        android:gravity="right|end"
+        android:orientation="vertical">
+
+        <android.support.v7.widget.AppCompatTextView
+            android:id="@+id/discount_item_cost"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:textAppearance="@style/TextAppearance.AppCompat.Subhead"
+            tools:text="500" />
+
+        <android.support.v7.widget.AppCompatTextView
+            android:id="@+id/textView3"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:singleLine="true"
+            android:text="Graaby Points"
+            android:textAppearance="@style/TextAppearance.AppCompat.Caption"
+            tools:text="Graaby Points" />
+    </LinearLayout>
+
+
+    <android.support.v7.widget.AppCompatTextView
+        android:id="@+id/discount_item_count"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBottom="@+id/discount_image"
+        android:layout_alignEnd="@+id/discount_image"
+        android:layout_alignLeft="@+id/discount_image"
+        android:layout_alignRight="@+id/discount_image"
+        android:layout_alignStart="@+id/discount_image"
+        android:layout_alignTop="@+id/discount_image"
+        android:alpha="0.3"
+        android:ellipsize="end"
+        android:gravity="center"
+        android:textAppearance="@style/TextAppearance.AppCompat.Caption"
+        tools:text="300 left" />
+
+
+    <ImageView
+        android:id="@+id/imageView2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentRight="true"
+        android:layout_centerVertical="true"
+        android:scaleType="center"
+        android:src="@drawable/ic_point_24" />
+
+</RelativeLayout>

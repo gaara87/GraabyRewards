@@ -5,7 +5,9 @@ import android.content.Intent;
 import android.content.IntentSender;
 import android.location.Location;
 import android.os.Bundle;
-import android.support.annotation.NonNull;
+import android.support.design.widget.FloatingActionButton;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -13,6 +15,8 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
 import android.widget.Toast;
 
 import com.crashlytics.android.Crashlytics;
@@ -46,6 +50,7 @@ import javax.inject.Inject;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
+import butterknife.OnClick;
 import de.greenrobot.event.EventBus;
 import de.greenrobot.event.Subscribe;
 import graaby.app.wallet.BuildConfig;
@@ -62,6 +67,7 @@ import graaby.app.wallet.models.retrofit.OutletsRequest;
 import graaby.app.wallet.models.retrofit.OutletsResponse;
 import graaby.app.wallet.network.services.BusinessService;
 import graaby.app.wallet.ui.activities.SearchResultsActivity;
+import graaby.app.wallet.ui.adapters.BusinessesAdapter;
 import graaby.app.wallet.util.CacheSubscriber;
 import graaby.app.wallet.util.Helper;
 
@@ -74,11 +80,17 @@ public class BusinessesFragment extends BaseFragment
     GoogleMap mMap;
     @Inject
     BusinessService mBusinessService;
-    @NonNull
+    @NotNull
     @Inject
     ORMService ormService;
     @Bind(R.id.map)
     MapView mapView;
+    @Bind(R.id.recycler)
+    RecyclerView mList;
+    @Bind(R.id.fab)
+    FloatingActionButton fabToggle;
+
+    boolean mapVisible = false;
 
     private ClusterManager<BusinessMarker> mClusterManager;
     private int mBrandId = Helper.DEFAULT_NON_BRAND_RELATED;
@@ -87,6 +99,7 @@ public class BusinessesFragment extends BaseFragment
 
     private Set<Integer> outletsSet = new HashSet<>();
     private GoogleApiClient mGoogleAPIClient;
+    private BusinessesAdapter mAdapter = new BusinessesAdapter();
 
 
     public static BusinessesFragment newInstance() {
@@ -132,11 +145,16 @@ public class BusinessesFragment extends BaseFragment
 
         initializeMap();
 
+        mList.setLayoutManager(new LinearLayoutManager(getActivity()));
+        mList.setHasFixedSize(true);
+        mList.setAdapter(mAdapter);
+
         return inflatedView;
     }
 
     @Override
     public void onMapLoaded() {
+        fabToggle.setVisibility(View.VISIBLE);
         loadMarkersFromDB(mBrandId);
         if (mBrandId != Helper.DEFAULT_NON_BRAND_RELATED)
             sendRequest();
@@ -190,16 +208,16 @@ public class BusinessesFragment extends BaseFragment
 
         ArrayList<BusinessMarker> markers = new ArrayList<>();
         for (OutletDetail outlet : list) {
-            if (outletsSet.contains(outlet.outletID))
-                continue;
-            else
+            if (!outletsSet.contains(outlet.outletID)) {
                 outletsSet.add(outlet.outletID);
-
-            LatLng point = new LatLng(outlet.latitude, outlet.longitude);
-            builder.include(point);
-            BusinessMarker marker = new BusinessMarker(point, outlet);
-            markers.add(marker);
+                mAdapter.addOutlets(outlet);
+                LatLng point = new LatLng(outlet.latitude, outlet.longitude);
+                builder.include(point);
+                BusinessMarker marker = new BusinessMarker(point, outlet);
+                markers.add(marker);
+            }
         }
+
 
         if (mMap != null && markers.size() != 0) {
             mClusterManager.addItems(markers);
@@ -244,6 +262,52 @@ public class BusinessesFragment extends BaseFragment
         return super.onOptionsItemSelected(item);
     }
 
+    @OnClick(R.id.fab)
+    public void fabClick() {
+        int imageResourceID;
+        if (!mapVisible) {
+            Animation slideDown = AnimationUtils.loadAnimation(mList.getContext(), R.anim.slide_bottom_from_up);
+            slideDown.setAnimationListener(new Animation.AnimationListener() {
+                @Override
+                public void onAnimationStart(Animation animation) {
+
+                }
+
+                @Override
+                public void onAnimationEnd(Animation animation) {
+                    mList.setVisibility(View.GONE);
+                }
+
+                @Override
+                public void onAnimationRepeat(Animation animation) {
+
+                }
+            });
+            mList.startAnimation(slideDown);
+            imageResourceID = R.drawable.ic_view_list_white_24dp;
+        } else {
+            Animation slideUp = AnimationUtils.loadAnimation(mList.getContext(), R.anim.slide_up_from_bottom);
+            slideUp.setAnimationListener(new Animation.AnimationListener() {
+                @Override
+                public void onAnimationStart(Animation animation) {
+                    mList.setVisibility(View.VISIBLE);
+                }
+
+                @Override
+                public void onAnimationEnd(Animation animation) {
+                }
+
+                @Override
+                public void onAnimationRepeat(Animation animation) {
+
+                }
+            });
+            mList.startAnimation(slideUp);
+            imageResourceID = R.drawable.ic_map_white_24dp;
+        }
+        fabToggle.setImageResource(imageResourceID);
+        mapVisible = !mapVisible;
+    }
 
     private void initializeMap() {
         if (mMap == null) {
@@ -251,7 +315,7 @@ public class BusinessesFragment extends BaseFragment
             MapsInitializer.initialize(getActivity());
             mClusterManager = new ClusterManager<>(getActivity(), mMap);
             if (mMap != null) {
-                mMap.setMyLocationEnabled(Boolean.TRUE);
+//                mMap.setMyLocationEnabled(Boolean.TRUE);
                 mMap.setOnCameraChangeListener(mClusterManager);
                 mMap.setOnMarkerClickListener(mClusterManager);
                 mMap.setOnInfoWindowClickListener(mClusterManager);
@@ -393,7 +457,7 @@ public class BusinessesFragment extends BaseFragment
             sendRequest();
             Log.d(TAG, "Last location:-" + mLatLng.latitude + "," + mLatLng.longitude);
         } else {
-            Toast.makeText(getActivity(), "Finding location", Toast.LENGTH_SHORT).show();
+//            Toast.makeText(getActivity(), "Finding location", Toast.LENGTH_SHORT).show();
             LocationServices.FusedLocationApi
                     .requestLocationUpdates(mGoogleAPIClient
                             , getLocationRequest()
