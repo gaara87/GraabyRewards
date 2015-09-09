@@ -18,11 +18,16 @@ import graaby.app.wallet.models.retrofit.OutletDetail;
  */
 public class BusinessesAdapter extends RecyclerView.Adapter<BusinessesAdapter.ViewHolder> {
     ArrayList<OutletDetail> outlets = new ArrayList<>();
+    private BusinessItemClickListener mListener;
+
+    public BusinessesAdapter(BusinessItemClickListener listener) {
+        mListener = listener;
+    }
 
     @Override
     public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_list_search, parent, false);
-        return new ViewHolder(v);
+        return new ViewHolder(v, mListener);
     }
 
     @Override
@@ -30,6 +35,10 @@ public class BusinessesAdapter extends RecyclerView.Adapter<BusinessesAdapter.Vi
         OutletDetail outlet = outlets.get(position);
         holder.itemBusinessNameTextView.setText(outlet.businessName);
         holder.itemBusinessAddressTextView.setText(outlet.areaName);
+    }
+
+    public OutletDetail getOutletDetail(int position) {
+        return outlets.get(position);
     }
 
     @Override
@@ -42,15 +51,22 @@ public class BusinessesAdapter extends RecyclerView.Adapter<BusinessesAdapter.Vi
         notifyItemInserted(outlets.size() - 1);
     }
 
+    public interface BusinessItemClickListener {
+        void onBusinessItemClick(int position);
+    }
+
     public class ViewHolder extends RecyclerView.ViewHolder {
         @Bind(R.id.item_businessNameTextView)
         AppCompatTextView itemBusinessNameTextView;
         @Bind(R.id.item_businessAddressTextView)
         AppCompatTextView itemBusinessAddressTextView;
 
-        public ViewHolder(View itemView) {
+        public ViewHolder(View itemView, BusinessItemClickListener mListener) {
             super(itemView);
             ButterKnife.bind(this, itemView);
+            itemView.setOnClickListener(view -> {
+                mListener.onBusinessItemClick(this.getAdapterPosition());
+            });
         }
     }
 }

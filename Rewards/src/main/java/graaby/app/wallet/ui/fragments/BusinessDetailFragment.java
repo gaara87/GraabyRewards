@@ -6,28 +6,26 @@ import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
-import android.support.v4.widget.SwipeRefreshLayout;
 import android.text.TextUtils;
 import android.view.LayoutInflater;
-import android.view.Menu;
-import android.view.MenuInflater;
-import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
+import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.bluelinelabs.logansquare.LoganSquare;
 import com.bumptech.glide.Glide;
 
 import java.io.IOException;
-import java.util.List;
 
 import javax.inject.Inject;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
+import butterknife.OnClick;
 import de.greenrobot.event.EventBus;
-import de.hdodenhof.circleimageview.CircleImageView;
 import graaby.app.wallet.GraabyApplication;
 import graaby.app.wallet.R;
 import graaby.app.wallet.events.ToolbarEvents;
@@ -43,7 +41,7 @@ import graaby.app.wallet.util.Helper;
 public class BusinessDetailFragment extends BaseFragment {
 
     @Bind(R.id.item_businessPicImageView)
-    CircleImageView itemBusinessPicImageView;
+    ImageView itemBusinessPicImageView;
     @Bind(R.id.item_businessAddressTextView)
     TextView itemBusinessAddressTextView;
     @Bind(R.id.business_points)
@@ -58,11 +56,20 @@ public class BusinessDetailFragment extends BaseFragment {
     TextView profileTotalSavingsTextView;
     @Bind(R.id.profile_checkins_textview)
     TextView profileCheckinsTextview;
-    @Bind(R.id.swiperefresh)
-    SwipeRefreshLayout mSwipeRefresh;
+    @Bind(R.id.punch_container)
+    LinearLayout mPunchLayout;
+    @Bind(android.R.id.empty)
+    View empty;
+    @Bind(R.id.business_reward_discount_value)
+    TextView mDiscountTextView;
+    @Bind(R.id.business_call)
+    Button mCall;
+    @Bind(R.id.business_directions)
+    Button mDirections;
+    @Bind(R.id.business_site)
+    Button mWebsite;
     @Inject
     BusinessService mBusinessService;
-    private BusinessDetailFragmentCallback mCallback;
     private OutletDetail originalOutletDetail;
 
     public BusinessDetailFragment() {
@@ -75,12 +82,6 @@ public class BusinessDetailFragment extends BaseFragment {
         args.putString(Helper.INTENT_CONTAINER_INFO, LoganSquare.serialize(outletData));
         fragment.setArguments(args);
         return fragment;
-    }
-
-    @Override
-    public void onAttach(Context activity) {
-        super.onAttach(activity);
-        mCallback = (BusinessDetailFragmentCallback) activity;
     }
 
     @Override
@@ -101,10 +102,16 @@ public class BusinessDetailFragment extends BaseFragment {
     }
 
     @Override
+    public void onAttach(Context context) {
+        super.onAttach(context);
+
+    }
+
+    @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View v = super.onCreateView(inflater, container, savedInstanceState, R.layout.fragment_business_detail);
-        ButterKnife.bind(this, v);
-        mSwipeRefresh.setColorSchemeResources(R.color.midnightblue, R.color.wetasphalt, R.color.asbestos, R.color.concrete);
+        ButterKnife.bind(this, getActivity().findViewById(R.id.main_content));
+        setSwipeRefreshColors(R.color.midnightblue, R.color.wetasphalt, R.color.asbestos, R.color.concrete);
         return v;
     }
 
@@ -119,7 +126,7 @@ public class BusinessDetailFragment extends BaseFragment {
         mCompositeSubscriptions.add(
                 mBusinessService.getOutletDetails(new OutletDetailsRequest(originalOutletDetail.outletID))
                         .compose(this.<OutletDetail>applySchedulers())
-                        .subscribe(new CacheSubscriber<OutletDetail>(getActivity(), mSwipeRefresh) {
+                        .subscribe(new CacheSubscriber<OutletDetail>(getActivity()) {
                                        @Override
                                        public void onSuccess(OutletDetail result) {
 
@@ -152,9 +159,23 @@ public class BusinessDetailFragment extends BaseFragment {
 
                                            originalOutletDetail.phoneNumber = result.phoneNumber;
                                            originalOutletDetail.websiteURL = result.websiteURL;
-                                           BusinessDetailFragment.this.getActivity().invalidateOptionsMenu();
+                                           mDirections.setVisibility((originalOutletDetail.latitude != 0) ? View.VISIBLE : View.INVISIBLE);
+                                           mCall.setVisibility((!TextUtils.isEmpty(originalOutletDetail.phoneNumber)) ? View.VISIBLE : View.INVISIBLE);
+                                           mWebsite.setVisibility((!TextUtils.isEmpty(originalOutletDetail.websiteURL)) ? View.VISIBLE : View.INVISIBLE);
+                                           mDiscountTextView.setText(String.valueOf(result.flatGraabyDiscountPercentage) + "%");
 
-                                           mCallback.onRewardDetailsLoaded(result.flatGraabyDiscountPercentage, result.punchards.punchCardRewards);
+                                           if (result.punchards == null || result.punchards.punchCardRewards == null || result.punchards.punchCardRewards.size() == 0) {
+                                               empty.setVisibility(View.VISIBLE);
+                                           } else {
+                                               LayoutInflater inflater = LayoutInflater.from(getContext());
+                                               for (OutletDetail.Reward reward : result.punchards.punchCardRewards) {
+                                                   View punchRewardLayout = inflater.inflate(R.layout.item_list_reward_info, null);
+                                                   ViewHolder holder = new ViewHolder(punchRewardLayout);
+                                                   holder.text1.setText(reward.rewardDetail);
+                                                   holder.text2.setText(reward.onVisitCount);
+                                                   mPunchLayout.addView(punchRewardLayout);
+                                               }
+                                           }
                                        }
                                    }
                         ));
@@ -165,48 +186,29 @@ public class BusinessDetailFragment extends BaseFragment {
         GraabyApplication.getApplication().getApiComponent().inject(this);
     }
 
-    @Override
-    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
-        getActivity().getMenuInflater().inflate(R.menu.menu_business_detail, menu);
-        super.onCreateOptionsMenu(menu, inflater);
+    @OnClick(R.id.business_call)
+    public void onBusinessCall() {
+        Intent callIntent = new Intent(Intent.ACTION_DIAL);
+        callIntent.setData(Uri.parse("tel:" + originalOutletDetail.phoneNumber));
+        startActivity(callIntent);
     }
 
-    @Override
-    public void onPrepareOptionsMenu(Menu menu) {
-        super.onPrepareOptionsMenu(menu);
-        if (originalOutletDetail != null) {
-            menu.findItem(R.id.action_menu_item_directions).setVisible(originalOutletDetail.latitude != 0);
-            menu.findItem(R.id.action_menu_item_call).setVisible(!TextUtils.isEmpty(originalOutletDetail.phoneNumber));
-            menu.findItem(R.id.action_menu_item_open_browser).setVisible(!TextUtils.isEmpty(originalOutletDetail.websiteURL));
-        }
+    @OnClick(R.id.business_directions)
+    public void onBusinessDirections() {
+        String geoUri = null;
+        geoUri = "http://maps.google.com/maps?f=d&daddr=" + originalOutletDetail.latitude + "," + originalOutletDetail.longitude;
+        Intent intent = new Intent(Intent.ACTION_VIEW,
+                Uri.parse(geoUri));
+        intent.setComponent(new ComponentName("com.google.android.apps.maps",
+                "com.google.android.maps.MapsActivity"));
+        startActivity(intent);
     }
 
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        switch (item.getItemId()) {
-            case R.id.action_menu_item_directions:
-
-                String geoUri = null;
-                geoUri = "http://maps.google.com/maps?f=d&daddr=" + originalOutletDetail.latitude + "," + originalOutletDetail.longitude;
-                Intent intent = new Intent(Intent.ACTION_VIEW,
-                        Uri.parse(geoUri));
-                intent.setComponent(new ComponentName("com.google.android.apps.maps",
-                        "com.google.android.maps.MapsActivity"));
-                startActivity(intent);
-                break;
-            case R.id.action_menu_item_call:
-                Intent callIntent = new Intent(Intent.ACTION_DIAL);
-                callIntent.setData(Uri.parse("tel:" + originalOutletDetail.phoneNumber));
-                startActivity(callIntent);
-                break;
-            case R.id.action_menu_item_open_browser:
-                Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse("http://" + originalOutletDetail.websiteURL));
-                startActivity(browserIntent);
-                break;
-        }
-        return super.onOptionsItemSelected(item);
+    @OnClick(R.id.business_site)
+    public void onBusinessSite() {
+        Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse("http://" + originalOutletDetail.websiteURL));
+        startActivity(browserIntent);
     }
-
 
     @Override
     public void onDestroyView() {
@@ -214,11 +216,15 @@ public class BusinessDetailFragment extends BaseFragment {
         ButterKnife.unbind(this);
     }
 
-    public interface BusinessDetailFragmentCallback {
-        /**
-         * Called when fragment has loaded all the punchcards.
-         */
-        void onRewardDetailsLoaded(Integer discount, List<OutletDetail.Reward> punches);
+    class ViewHolder {
+        @Bind(android.R.id.text1)
+        TextView text1;
+        @Bind(android.R.id.text2)
+        TextView text2;
+
+        ViewHolder(View view) {
+            ButterKnife.bind(this, view);
+        }
     }
 
 }

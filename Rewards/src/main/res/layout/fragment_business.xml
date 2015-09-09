@@ -43,7 +43,6 @@
             android:src="@drawable/ic_map_white_24dp"
             android:visibility="gone"
             app:backgroundTint="@color/wisteria"
-            app:borderWidth="@dimen/fab_border_width"
             app:elevation="6dp"
             app:layout_anchor="@id/container"
             app:layout_anchorGravity="top|right|end"
