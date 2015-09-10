@@ -63,7 +63,7 @@
         android:layout_marginBottom="@dimen/fab_margin"
         android:layout_marginEnd="@dimen/fab_margin"
         android:layout_marginRight="@dimen/fab_margin"
-        android:src="@drawable/ic_add_shopping_cart"
+        android:src="@drawable/ic_add_shopping_cart_white_24dp"
         app:backgroundTint="@color/graaby_dark_blue"
         app:elevation="6dp"
         app:layout_anchor="@id/appbar"

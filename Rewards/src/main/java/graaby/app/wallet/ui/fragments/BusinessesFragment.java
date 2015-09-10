@@ -80,7 +80,8 @@ public class BusinessesFragment extends BaseFragment
         GoogleMap.OnMapLoadedCallback, GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener, LocationListener {
     public static final int REQUEST_CHECK_SETTINGS = 4013;
     public static final String TAG = BusinessesFragment.class.toString();
-    private static final String REQUESTING_LOCATION_UPDATES_KEY = "request_location";
+    private static final String STATE_REQUESTING_LOCATION_UPDATES_KEY = "request_location";
+    private static final String STATE_MAP = "mapViewSaveState";
     GoogleMap mMap;
     @Inject
     BusinessService mBusinessService;
@@ -116,7 +117,7 @@ public class BusinessesFragment extends BaseFragment
         super.onCreate(savedInstanceState);
         EventBus.getDefault().register(this);
         if (savedInstanceState != null) {
-            mRequestingLocationUpdates = savedInstanceState.getBoolean(REQUESTING_LOCATION_UPDATES_KEY);
+            mRequestingLocationUpdates = savedInstanceState.getBoolean(STATE_REQUESTING_LOCATION_UPDATES_KEY);
         }
     }
 
@@ -147,7 +148,8 @@ public class BusinessesFragment extends BaseFragment
         mSwipeRefresh.setEnabled(false);
         setSwipeRefreshColors(R.color.wisteria, R.color.amethyst, R.color.holo_darkpurple, R.color.holo_lightpurple);
 
-        mapView.onCreate(savedInstanceState);
+        final Bundle mapViewSavedInstanceState = savedInstanceState != null ? savedInstanceState.getBundle(STATE_MAP) : null;
+        mapView.onCreate(mapViewSavedInstanceState);
 
         this.setHasOptionsMenu(true);
 
@@ -170,8 +172,9 @@ public class BusinessesFragment extends BaseFragment
     protected void stopLocationUpdates() {
         mRequestingLocationUpdates = false;
 
-        LocationServices.FusedLocationApi.removeLocationUpdates(
-                mGoogleAPIClient, this);
+        if (mGoogleAPIClient != null && mGoogleAPIClient.isConnected())
+            LocationServices.FusedLocationApi.removeLocationUpdates(
+                    mGoogleAPIClient, this);
     }
 
     @Override
@@ -286,8 +289,13 @@ public class BusinessesFragment extends BaseFragment
 
     @Override
     public void onSaveInstanceState(Bundle outState) {
-        outState.putBoolean(REQUESTING_LOCATION_UPDATES_KEY,
+        outState.putBoolean(STATE_REQUESTING_LOCATION_UPDATES_KEY,
                 mRequestingLocationUpdates);
+        if (mapView != null) {
+            final Bundle mapViewSaveState = new Bundle(outState);
+            mapView.onSaveInstanceState(mapViewSaveState);
+            outState.putBundle(STATE_MAP, mapViewSaveState);
+        }
         super.onSaveInstanceState(outState);
     }
 
@@ -377,7 +385,7 @@ public class BusinessesFragment extends BaseFragment
         super.onResume();
         if (mapView != null && isAdded())
             mapView.onResume();
-        if (mGoogleAPIClient.isConnected() && !mRequestingLocationUpdates) {
+        if (mGoogleAPIClient != null && mGoogleAPIClient.isConnected() && !mRequestingLocationUpdates) {
             startLocationUpdates();
         }
     }
@@ -450,8 +458,9 @@ public class BusinessesFragment extends BaseFragment
 
     protected void startLocationUpdates() {
         mRequestingLocationUpdates = true;
-        LocationServices.FusedLocationApi.requestLocationUpdates(
-                mGoogleAPIClient, getLocationRequest(), this);
+        if (mGoogleAPIClient != null && mGoogleAPIClient.isConnected())
+            LocationServices.FusedLocationApi.requestLocationUpdates(
+                    mGoogleAPIClient, getLocationRequest(), this);
     }
 
     private void checkLocationSettings(LocationSettingsRequest.Builder builder) {
@@ -524,8 +533,8 @@ public class BusinessesFragment extends BaseFragment
     public void onLocationChanged(Location location) {
         mRequestingLocationUpdates = false;
         mLatLng = new LatLng(location.getLatitude(), location.getLongitude());
-        BusinessesFragment.this.moveMapCamera();
-        BusinessesFragment.this.sendRequest();
+        moveMapCamera();
+        sendRequest();
         Log.d(TAG, "New location:-" + mLatLng.latitude + "," + mLatLng.longitude);
     }
 }

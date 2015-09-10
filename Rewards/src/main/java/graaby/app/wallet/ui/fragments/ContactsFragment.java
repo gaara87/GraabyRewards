@@ -40,7 +40,7 @@ import graaby.app.wallet.util.CacheSubscriber;
 /**
  * Created by gaara on 1/6/14.
  */
-public class ContactsFragment extends BaseFragment implements DialogInterface.OnClickListener, View.OnClickListener {
+public class ContactsFragment extends BaseFragment implements DialogInterface.OnClickListener, ContactsAdapter.ContactsClickListener {
 
     public static final String TAG = ContactsFragment.class.toString();
     @Bind(R.id.recycler)
@@ -75,7 +75,7 @@ public class ContactsFragment extends BaseFragment implements DialogInterface.On
         ButterKnife.bind(this, v);
         setSwipeRefreshColors(R.color.belizehole, R.color.pomegranate, R.color.orange, R.color.peterriver);
         mSwipeRefresh.setEnabled(false);
-        mAdapter = new ContactsAdapter();
+        mAdapter = new ContactsAdapter(this);
         mGridRecycler.setHasFixedSize(true);
         mGridRecycler.setLayoutManager(new GridLayoutManager(getActivity(), getResources().getInteger(R.integer.grid_columns)));
         mGridRecycler.setAdapter(mAdapter);
@@ -222,8 +222,8 @@ public class ContactsFragment extends BaseFragment implements DialogInterface.On
     }
 
     @Override
-    public void onClick(View v) {
-        contactIDToSendPointsTo = (Integer) v.getTag();
+    public void onContactShareClick(int position) {
+        contactIDToSendPointsTo = mAdapter.getContactID(position);
         sendPointsDialog.show();
     }
 }
