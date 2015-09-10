@@ -9,12 +9,7 @@
         <item
             android:id="@+id/drawer_my_vouchers"
             android:icon="@drawable/voucher_withpadding"
-            android:title="My Vouchers" />
-
-        <item
-            android:id="@+id/drawer_my_coupons"
-            android:icon="@drawable/coupon_withpadding"
-            android:title="My Coupons" />
+            android:title="My Discounts" />
 
         <item android:title="Help">
             <menu>

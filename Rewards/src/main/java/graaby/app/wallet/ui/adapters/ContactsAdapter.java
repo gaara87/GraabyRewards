@@ -24,6 +24,11 @@ import graaby.app.wallet.models.retrofit.ContactsResponse;
 public class ContactsAdapter extends RecyclerView.Adapter<ContactsAdapter.ViewHolder> {
 
     private final ArrayList<ContactsResponse.ContactDetail> mList = new ArrayList<>();
+    private ContactsClickListener mClickListener;
+
+    public ContactsAdapter(ContactsClickListener mClickListener) {
+        this.mClickListener = mClickListener;
+    }
 
     public void clear() {
         mList.clear();
@@ -36,7 +41,7 @@ public class ContactsAdapter extends RecyclerView.Adapter<ContactsAdapter.ViewHo
     @Override
     public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_grid_contacts, parent, false);
-        return new ViewHolder(v);
+        return new ViewHolder(v, mClickListener);
     }
 
     @Override
@@ -51,13 +56,19 @@ public class ContactsAdapter extends RecyclerView.Adapter<ContactsAdapter.ViewHo
                 .into(holder.contactPic);
 
         holder.contactPoints.setText(node.graabyPoints + " Graaby Points");
-
-        holder.sharePoints.setTag(node.contactID);
     }
 
     @Override
     public int getItemCount() {
         return mList.size();
+    }
+
+    public Integer getContactID(int position) {
+        return mList.get(position).contactID;
+    }
+
+    public interface ContactsClickListener {
+        void onContactShareClick(int position);
     }
 
     public static class ViewHolder extends RecyclerView.ViewHolder {
@@ -70,9 +81,13 @@ public class ContactsAdapter extends RecyclerView.Adapter<ContactsAdapter.ViewHo
         @Bind(R.id.share_points)
         Button sharePoints;
 
-        ViewHolder(View view) {
+        ViewHolder(View view, ContactsClickListener listener) {
             super(view);
             ButterKnife.bind(this, view);
+            sharePoints.setOnClickListener(button -> {
+                listener.onContactShareClick(getAdapterPosition());
+            });
         }
+
     }
 }

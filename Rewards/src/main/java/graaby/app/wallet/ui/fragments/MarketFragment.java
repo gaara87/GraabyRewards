@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.widget.GridLayoutManager;
+import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -39,6 +40,7 @@ import graaby.app.wallet.util.CacheSubscriber;
 import graaby.app.wallet.util.DiscountItemType;
 import graaby.app.wallet.util.EndlessRecyclerOnScrollListener;
 import graaby.app.wallet.util.Helper;
+import graaby.app.wallet.util.SimpleDividerItemDecoration;
 import rx.Observable;
 import rx.Subscription;
 
@@ -60,6 +62,16 @@ public class MarketFragment extends BaseFragment implements MarketAdapter.Market
     private boolean areTheseMyDiscountItems = false;
     private Integer mBrandID = Helper.DEFAULT_NON_BRAND_RELATED;
     private int mCurrentPage;
+    private SimpleDividerItemDecoration decor;
+
+    private EndlessRecyclerOnScrollListener onScrollListener = new EndlessRecyclerOnScrollListener() {
+        @Override
+        public void onLoadMore(int current_page) {
+            Log.d("Load More", "Page : " + current_page);
+            mCurrentPage = current_page;
+            sendRequest();
+        }
+    };
 
     public static MarketFragment newInstance(Boolean myFlag, int outletID, Boolean searchable) {
         MarketFragment fragment = new MarketFragment();
@@ -96,33 +108,35 @@ public class MarketFragment extends BaseFragment implements MarketAdapter.Market
         ButterKnife.bind(this, v);
         setSwipeRefreshColors(R.color.sunflower, R.color.nephritis, R.color.peterriver, R.color.pumpkin);
         mSwipeRefresh.setEnabled(false);
-        mGridRecyclerView.setLayoutManager(new GridLayoutManager(getActivity(), getResources().getInteger(R.integer.grid_columns)));
+        decor = new SimpleDividerItemDecoration(mGridRecyclerView.getContext());
+        mGridRecyclerView.setLayoutManager(new LinearLayoutManager(mGridRecyclerView.getContext()));
         mGridRecyclerView.setHasFixedSize(true);
+        mGridRecyclerView.addItemDecoration(decor);
         mGridRecyclerView.setAdapter(adapter);
         return v;
     }
 
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
-        mGridRecyclerView.addOnScrollListener(new EndlessRecyclerOnScrollListener((GridLayoutManager) mGridRecyclerView.getLayoutManager()) {
-            @Override
-            public void onLoadMore(int page) {
-                Log.d("Load More", "Page : " + page);
-                mCurrentPage = page;
-                sendRequest();
-            }
-
-        });
-
+        onScrollListener.setLinearLayoutManager((LinearLayoutManager) mGridRecyclerView.getLayoutManager());
+        mGridRecyclerView.addOnScrollListener(onScrollListener);
         super.onViewCreated(view, savedInstanceState);
     }
 
     @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
-        if (!areTheseMyDiscountItems) {
-            inflater.inflate(R.menu.menu_fragment_market, menu);
-        }
+        inflater.inflate(R.menu.menu_fragment_market, menu);
         super.onCreateOptionsMenu(menu, inflater);
+    }
+
+    @Override
+    public void onPrepareOptionsMenu(Menu menu) {
+        super.onPrepareOptionsMenu(menu);
+        MenuItem item = menu.findItem(R.id.action_toggle_grid);
+        if (adapter != null && item != null) {
+            int resourceDrawableID = adapter.isItAList() ? R.drawable.ic_grid_on_white_24dp : R.drawable.ic_view_list_white_24dp;
+            item.setIcon(resourceDrawableID);
+        }
     }
 
     @Override
@@ -132,6 +146,21 @@ public class MarketFragment extends BaseFragment implements MarketAdapter.Market
                 Intent intent = new Intent(getActivity(), SearchResultsActivity.class);
                 intent.putExtra(Helper.KEY_TYPE, SearchResultsActivity.SEARCH_COLLAPSE);
                 startActivity(intent);
+                return true;
+            case R.id.action_toggle_grid:
+                if (adapter.isItAList()) {
+                    adapter.setAsGridAdapter();
+                    mGridRecyclerView.setLayoutManager(new GridLayoutManager(mGridRecyclerView.getContext(), getResources().getInteger(R.integer.grid_columns)));
+                    mGridRecyclerView.removeItemDecoration(decor);
+                    onScrollListener.setGridLayoutManager((GridLayoutManager) mGridRecyclerView.getLayoutManager());
+
+                } else {
+                    adapter.setAsListAdapter();
+                    mGridRecyclerView.setLayoutManager(new LinearLayoutManager(mGridRecyclerView.getContext()));
+                    mGridRecyclerView.addItemDecoration(decor);
+                    onScrollListener.setLinearLayoutManager((LinearLayoutManager) mGridRecyclerView.getLayoutManager());
+                }
+                getActivity().supportInvalidateOptionsMenu();
                 return true;
             default:
                 break;

@@ -14,16 +14,28 @@ public abstract class EndlessRecyclerOnScrollListener extends RecyclerView.OnScr
     private boolean loading = true; // True if we are still waiting for the last set of data to load.
     private int visibleThreshold = 5; // The minimum amount of items to have below your current scroll position before loading more.
     private int current_page = 1;
-
     private LinearLayoutManager linearLayoutManager;
     private GridLayoutManager gridLayoutManager;
 
+    public EndlessRecyclerOnScrollListener() {
+
+    }
     public EndlessRecyclerOnScrollListener(LinearLayoutManager linearLayoutManager) {
         this.linearLayoutManager = linearLayoutManager;
     }
 
     public EndlessRecyclerOnScrollListener(GridLayoutManager gridLayoutManager) {
         this.gridLayoutManager = gridLayoutManager;
+    }
+
+    public void setLinearLayoutManager(LinearLayoutManager linearLayoutManager) {
+        this.linearLayoutManager = linearLayoutManager;
+        this.gridLayoutManager = null;
+    }
+
+    public void setGridLayoutManager(GridLayoutManager gridLayoutManager) {
+        this.gridLayoutManager = gridLayoutManager;
+        this.linearLayoutManager = null;
     }
 
     @Override

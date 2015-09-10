@@ -17,7 +17,6 @@
     <string name="title_login">Login</string>
     <string name="title_register">Register</string>
 
-    <string name="market_value_hint">Discount Value</string>
     <string name="Rs">Rs.</string>
     <string name="hint_placeholder">-</string>
     <string name="guide_empty" />
@@ -116,6 +115,7 @@
 
     <string name="service_name">Graaby Rewards Card</string>
     <string name="service_card_title">Graaby Card</string>
+    <string name="title_activity_profile">Your Profile</string>
 
 
 </resources>

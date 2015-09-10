@@ -1,26 +1,53 @@
 <?xml version="1.0" encoding="utf-8"?>
 
 <android.support.v4.widget.SwipeRefreshLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:map="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/swiperefresh"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
     <FrameLayout
+        android:id="@+id/container"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:gravity="center">
+        android:layout_height="match_parent">
 
         <com.google.android.gms.maps.MapView
             android:id="@+id/map"
-            android:layout_width="fill_parent"
-            android:layout_height="fill_parent"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
             map:cameraZoom="17"
             map:mapType="normal"
             map:uiCompass="false"
-            map:uiZoomControls="true"
+            map:uiZoomControls="false"
             map:uiZoomGestures="true"
             map:useViewLifecycle="true" />
+
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/recycler"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="@android:color/white"
+            android:elevation="3dp"
+            tools:listitem="@layout/item_list_search" />
+
+        <android.support.design.widget.FloatingActionButton
+            android:id="@+id/fab"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="top|right|end"
+            android:layout_marginEnd="@dimen/fab_margin"
+            android:layout_marginRight="@dimen/fab_margin"
+            android:layout_marginTop="@dimen/fab_margin"
+            android:src="@drawable/ic_map_white_24dp"
+            android:visibility="gone"
+            app:backgroundTint="@color/wisteria"
+            app:elevation="6dp"
+            app:layout_anchor="@id/container"
+            app:layout_anchorGravity="top|right|end"
+            app:pressedTranslationZ="12dp"
+            app:rippleColor="@android:color/white" />
 
     </FrameLayout>
 </android.support.v4.widget.SwipeRefreshLayout>

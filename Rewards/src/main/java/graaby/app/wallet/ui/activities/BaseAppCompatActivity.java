@@ -108,8 +108,8 @@ public abstract class BaseAppCompatActivity extends AppCompatActivity {
 
     @Subscribe
     public void handle(ToolbarEvents.SetTitle event) {
-        if (mToolbar != null) {
-            mToolbar.setTitle(event.getName());
+        if (getSupportActionBar() != null) {
+            getSupportActionBar().setTitle(event.getName());
         }
     }
 

@@ -6,7 +6,7 @@
         android:id="@+id/action_menu_item_refresh"
         android:icon="@drawable/ic_action_refresh"
         android:title="Refresh"
-        app:showAsAction="never" />
+        app:showAsAction="ifRoom" />
 
     <item
         android:id="@+id/action_search"

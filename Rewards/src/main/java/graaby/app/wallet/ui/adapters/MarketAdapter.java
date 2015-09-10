@@ -5,6 +5,7 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
@@ -32,6 +33,7 @@ public class MarketAdapter extends RecyclerView.Adapter<MarketAdapter.ViewHolder
     private final MarketItemClickListener marketItemClickListener;
     private Boolean myDiscountItems = Boolean.FALSE;
     private String rupeeSymbol;
+    private boolean isItAList = true;
 
     public MarketAdapter(Context context, boolean areTheseMyDiscountItems, MarketItemClickListener listener) {
         marketItemClickListener = listener;
@@ -43,8 +45,29 @@ public class MarketAdapter extends RecyclerView.Adapter<MarketAdapter.ViewHolder
 
     @Override
     public ViewHolder onCreateViewHolder(ViewGroup viewGroup, int i) {
-        View v = LayoutInflater.from(viewGroup.getContext()).inflate(R.layout.item_grid_market, viewGroup, false);
+        View v = null;
+        if (i == 1)
+            v = LayoutInflater.from(viewGroup.getContext()).inflate(R.layout.item_list_market, viewGroup, false);
+        else if (i == 2)
+            v = LayoutInflater.from(viewGroup.getContext()).inflate(R.layout.item_grid_market, viewGroup, false);
         return new ViewHolder(v, marketItemClickListener);
+    }
+
+    public void setAsGridAdapter() {
+        isItAList = false;
+    }
+
+    public void setAsListAdapter() {
+        isItAList = true;
+    }
+
+    public boolean isItAList() {
+        return isItAList;
+    }
+
+    @Override
+    public int getItemViewType(int position) {
+        return isItAList ? 1 : 2;
     }
 
     @Override
@@ -68,8 +91,7 @@ public class MarketAdapter extends RecyclerView.Adapter<MarketAdapter.ViewHolder
                 finalDiscountValue = punchValueString;
                 break;
         }
-        holder.mDiscountItemDiscountValue.setCompoundDrawablesWithIntrinsicBounds(
-                discountItemResourceId, 0, 0, 0);
+        holder.mDiscountImage.setImageResource(discountItemResourceId);
         holder.mDiscountItemDiscountValue.setText(finalDiscountValue);
         holder.mDiscountItemBusinessNameTextView.setText(item.businessName);
 
@@ -83,6 +105,7 @@ public class MarketAdapter extends RecyclerView.Adapter<MarketAdapter.ViewHolder
             holder.mDiscountItemCostContainer.setVisibility(View.GONE);
         }
     }
+
 
     @Override
     public int getItemCount() {
@@ -106,6 +129,8 @@ public class MarketAdapter extends RecyclerView.Adapter<MarketAdapter.ViewHolder
     }
 
     public static class ViewHolder extends RecyclerView.ViewHolder {
+        @Bind(R.id.discount_image)
+        ImageView mDiscountImage;
         @Bind(R.id.discount_item_discountValue)
         TextView mDiscountItemDiscountValue;
         @Bind(R.id.discount_item_business_name_textView)

@@ -5,7 +5,10 @@ import android.content.Intent;
 import android.content.IntentSender;
 import android.location.Location;
 import android.os.Bundle;
-import android.support.annotation.NonNull;
+import android.support.design.widget.FloatingActionButton;
+import android.support.design.widget.Snackbar;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -13,6 +16,8 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
 import android.widget.Toast;
 
 import com.crashlytics.android.Crashlytics;
@@ -20,6 +25,7 @@ import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.common.api.PendingResult;
 import com.google.android.gms.common.api.Status;
+import com.google.android.gms.location.LocationListener;
 import com.google.android.gms.location.LocationRequest;
 import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.location.LocationSettingsRequest;
@@ -46,6 +52,7 @@ import javax.inject.Inject;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
+import butterknife.OnClick;
 import de.greenrobot.event.EventBus;
 import de.greenrobot.event.Subscribe;
 import graaby.app.wallet.BuildConfig;
@@ -62,23 +69,33 @@ import graaby.app.wallet.models.retrofit.OutletsRequest;
 import graaby.app.wallet.models.retrofit.OutletsResponse;
 import graaby.app.wallet.network.services.BusinessService;
 import graaby.app.wallet.ui.activities.SearchResultsActivity;
+import graaby.app.wallet.ui.adapters.BusinessesAdapter;
 import graaby.app.wallet.util.CacheSubscriber;
 import graaby.app.wallet.util.Helper;
+import graaby.app.wallet.util.SimpleDividerItemDecoration;
 
 
 public class BusinessesFragment extends BaseFragment
-        implements ClusterManager.OnClusterItemInfoWindowClickListener<BusinessMarker>,
-        GoogleMap.OnMapLoadedCallback, GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener {
+        implements ClusterManager.OnClusterItemInfoWindowClickListener<BusinessMarker>, BusinessesAdapter.BusinessItemClickListener,
+        GoogleMap.OnMapLoadedCallback, GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener, LocationListener {
     public static final int REQUEST_CHECK_SETTINGS = 4013;
     public static final String TAG = BusinessesFragment.class.toString();
+    private static final String STATE_REQUESTING_LOCATION_UPDATES_KEY = "request_location";
+    private static final String STATE_MAP = "mapViewSaveState";
     GoogleMap mMap;
     @Inject
     BusinessService mBusinessService;
-    @NonNull
+    @NotNull
     @Inject
     ORMService ormService;
     @Bind(R.id.map)
     MapView mapView;
+    @Bind(R.id.recycler)
+    RecyclerView mList;
+    @Bind(R.id.fab)
+    FloatingActionButton fabToggle;
+
+    boolean mapVisible = false;
 
     private ClusterManager<BusinessMarker> mClusterManager;
     private int mBrandId = Helper.DEFAULT_NON_BRAND_RELATED;
@@ -87,6 +104,8 @@ public class BusinessesFragment extends BaseFragment
 
     private Set<Integer> outletsSet = new HashSet<>();
     private GoogleApiClient mGoogleAPIClient;
+    private BusinessesAdapter mAdapter = new BusinessesAdapter(this);
+    private boolean mRequestingLocationUpdates = false;
 
 
     public static BusinessesFragment newInstance() {
@@ -97,6 +116,9 @@ public class BusinessesFragment extends BaseFragment
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         EventBus.getDefault().register(this);
+        if (savedInstanceState != null) {
+            mRequestingLocationUpdates = savedInstanceState.getBoolean(STATE_REQUESTING_LOCATION_UPDATES_KEY);
+        }
     }
 
     @Override
@@ -126,17 +148,38 @@ public class BusinessesFragment extends BaseFragment
         mSwipeRefresh.setEnabled(false);
         setSwipeRefreshColors(R.color.wisteria, R.color.amethyst, R.color.holo_darkpurple, R.color.holo_lightpurple);
 
-        mapView.onCreate(savedInstanceState);
+        final Bundle mapViewSavedInstanceState = savedInstanceState != null ? savedInstanceState.getBundle(STATE_MAP) : null;
+        mapView.onCreate(mapViewSavedInstanceState);
 
         this.setHasOptionsMenu(true);
 
         initializeMap();
 
+        mList.setLayoutManager(new LinearLayoutManager(getActivity()));
+        mList.setHasFixedSize(true);
+        mList.addItemDecoration(new SimpleDividerItemDecoration(getActivity()));
+        mList.setAdapter(mAdapter);
+
         return inflatedView;
     }
 
     @Override
+    public void onPause() {
+        super.onPause();
+        stopLocationUpdates();
+    }
+
+    protected void stopLocationUpdates() {
+        mRequestingLocationUpdates = false;
+
+        if (mGoogleAPIClient != null && mGoogleAPIClient.isConnected())
+            LocationServices.FusedLocationApi.removeLocationUpdates(
+                    mGoogleAPIClient, this);
+    }
+
+    @Override
     public void onMapLoaded() {
+        fabToggle.setVisibility(View.VISIBLE);
         loadMarkersFromDB(mBrandId);
         if (mBrandId != Helper.DEFAULT_NON_BRAND_RELATED)
             sendRequest();
@@ -190,16 +233,16 @@ public class BusinessesFragment extends BaseFragment
 
         ArrayList<BusinessMarker> markers = new ArrayList<>();
         for (OutletDetail outlet : list) {
-            if (outletsSet.contains(outlet.outletID))
-                continue;
-            else
+            if (!outletsSet.contains(outlet.outletID)) {
                 outletsSet.add(outlet.outletID);
-
-            LatLng point = new LatLng(outlet.latitude, outlet.longitude);
-            builder.include(point);
-            BusinessMarker marker = new BusinessMarker(point, outlet);
-            markers.add(marker);
+                mAdapter.addOutlets(outlet);
+                LatLng point = new LatLng(outlet.latitude, outlet.longitude);
+                builder.include(point);
+                BusinessMarker marker = new BusinessMarker(point, outlet);
+                markers.add(marker);
+            }
         }
+
 
         if (mMap != null && markers.size() != 0) {
             mClusterManager.addItems(markers);
@@ -244,6 +287,64 @@ public class BusinessesFragment extends BaseFragment
         return super.onOptionsItemSelected(item);
     }
 
+    @Override
+    public void onSaveInstanceState(Bundle outState) {
+        outState.putBoolean(STATE_REQUESTING_LOCATION_UPDATES_KEY,
+                mRequestingLocationUpdates);
+        if (mapView != null) {
+            final Bundle mapViewSaveState = new Bundle(outState);
+            mapView.onSaveInstanceState(mapViewSaveState);
+            outState.putBundle(STATE_MAP, mapViewSaveState);
+        }
+        super.onSaveInstanceState(outState);
+    }
+
+    @OnClick(R.id.fab)
+    public void fabClick() {
+        int imageResourceID;
+        if (!mapVisible) {
+            Animation slideDown = AnimationUtils.loadAnimation(mList.getContext(), R.anim.slide_bottom_from_up);
+            slideDown.setAnimationListener(new Animation.AnimationListener() {
+                @Override
+                public void onAnimationStart(Animation animation) {
+
+                }
+
+                @Override
+                public void onAnimationEnd(Animation animation) {
+                    mList.setVisibility(View.GONE);
+                }
+
+                @Override
+                public void onAnimationRepeat(Animation animation) {
+
+                }
+            });
+            mList.startAnimation(slideDown);
+            imageResourceID = R.drawable.ic_view_list_white_24dp;
+        } else {
+            Animation slideUp = AnimationUtils.loadAnimation(mList.getContext(), R.anim.slide_up_from_bottom);
+            slideUp.setAnimationListener(new Animation.AnimationListener() {
+                @Override
+                public void onAnimationStart(Animation animation) {
+                    mList.setVisibility(View.VISIBLE);
+                }
+
+                @Override
+                public void onAnimationEnd(Animation animation) {
+                }
+
+                @Override
+                public void onAnimationRepeat(Animation animation) {
+
+                }
+            });
+            mList.startAnimation(slideUp);
+            imageResourceID = R.drawable.ic_map_white_24dp;
+        }
+        fabToggle.setImageResource(imageResourceID);
+        mapVisible = !mapVisible;
+    }
 
     private void initializeMap() {
         if (mMap == null) {
@@ -251,7 +352,7 @@ public class BusinessesFragment extends BaseFragment
             MapsInitializer.initialize(getActivity());
             mClusterManager = new ClusterManager<>(getActivity(), mMap);
             if (mMap != null) {
-                mMap.setMyLocationEnabled(Boolean.TRUE);
+//                mMap.setMyLocationEnabled(Boolean.TRUE);
                 mMap.setOnCameraChangeListener(mClusterManager);
                 mMap.setOnMarkerClickListener(mClusterManager);
                 mMap.setOnInfoWindowClickListener(mClusterManager);
@@ -282,8 +383,11 @@ public class BusinessesFragment extends BaseFragment
     @Override
     public void onResume() {
         super.onResume();
-        if (mapView != null)
+        if (mapView != null && isAdded())
             mapView.onResume();
+        if (mGoogleAPIClient != null && mGoogleAPIClient.isConnected() && !mRequestingLocationUpdates) {
+            startLocationUpdates();
+        }
     }
 
     @Override
@@ -294,7 +398,6 @@ public class BusinessesFragment extends BaseFragment
 
         if (EventBus.getDefault().isRegistered(this))
             EventBus.getDefault().unregister(this);
-//        locationManager.removeUpdates(this);
     }
 
     @Override
@@ -322,7 +425,8 @@ public class BusinessesFragment extends BaseFragment
 
     @Override
     public void onConnected(Bundle bundle) {
-        prepareLocationRequest();
+        if (!mRequestingLocationUpdates)
+            prepareLocationRequest();
     }
 
     @Override
@@ -348,7 +452,15 @@ public class BusinessesFragment extends BaseFragment
     private LocationRequest getLocationRequest() {
         return new LocationRequest()
                 .setPriority(LocationRequest.PRIORITY_BALANCED_POWER_ACCURACY)
+                .setMaxWaitTime(60000)
                 .setNumUpdates(1);
+    }
+
+    protected void startLocationUpdates() {
+        mRequestingLocationUpdates = true;
+        if (mGoogleAPIClient != null && mGoogleAPIClient.isConnected())
+            LocationServices.FusedLocationApi.requestLocationUpdates(
+                    mGoogleAPIClient, getLocationRequest(), this);
     }
 
     private void checkLocationSettings(LocationSettingsRequest.Builder builder) {
@@ -386,6 +498,14 @@ public class BusinessesFragment extends BaseFragment
         });
     }
 
+    @Override
+    public void setUserVisibleHint(boolean isVisibleToUser) {
+        super.setUserVisibleHint(isVisibleToUser);
+        if (isVisibleToUser && mList != null && mGoogleAPIClient.isConnected() && mRequestingLocationUpdates) {
+            Snackbar.make(mList, "Finding location", Snackbar.LENGTH_SHORT).show();
+        }
+    }
+
     private void getLastKnownWithRequest() {
         Location lastKnown = LocationServices.FusedLocationApi.getLastLocation(mGoogleAPIClient);
         if (lastKnown != null) {
@@ -393,16 +513,7 @@ public class BusinessesFragment extends BaseFragment
             sendRequest();
             Log.d(TAG, "Last location:-" + mLatLng.latitude + "," + mLatLng.longitude);
         } else {
-            Toast.makeText(getActivity(), "Finding location", Toast.LENGTH_SHORT).show();
-            LocationServices.FusedLocationApi
-                    .requestLocationUpdates(mGoogleAPIClient
-                            , getLocationRequest()
-                            , location -> {
-                        mLatLng = new LatLng(location.getLatitude(), location.getLongitude());
-                        moveMapCamera();
-                        sendRequest();
-                        Log.d(TAG, "New location:-" + mLatLng.latitude + "," + mLatLng.longitude);
-                    });
+            startLocationUpdates();
         }
 
     }
@@ -410,6 +521,21 @@ public class BusinessesFragment extends BaseFragment
     @Subscribe
     public void handle(LocationEvents.LocationEnabled event) {
         getLastKnownWithRequest();
+    }
+
+    @Override
+    public void onBusinessItemClick(int position) {
+        OutletDetail place = mAdapter.getOutletDetail(position);
+        Helper.openBusiness(getActivity(), place);
+    }
+
+    @Override
+    public void onLocationChanged(Location location) {
+        mRequestingLocationUpdates = false;
+        mLatLng = new LatLng(location.getLatitude(), location.getLongitude());
+        moveMapCamera();
+        sendRequest();
+        Log.d(TAG, "New location:-" + mLatLng.latitude + "," + mLatLng.longitude);
     }
 }
 

@@ -14,6 +14,7 @@
 -->
 
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:minHeight="?android:attr/listPreferredItemHeight"
@@ -26,36 +27,31 @@
         android:id="@android:id/text1"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="@dimen/globalPadding8"
-        android:layout_toEndOf="@android:id/text2"
-        android:layout_toRightOf="@android:id/text2"
-        android:gravity="center_vertical"
-        android:text="wow dos this work"
+        android:layout_centerVertical="true"
+        android:layout_marginLeft="@dimen/global8"
+        android:layout_marginStart="@dimen/global8"
+        android:layout_toEndOf="@+id/view"
+        android:layout_toRightOf="@+id/view"
         android:textAppearance="@style/TextAppearance.AppCompat.Body2" />
-
 
     <android.support.v7.widget.AppCompatTextView
         android:id="@android:id/text2"
-        android:layout_width="40dp"
-        android:layout_height="40dp"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true"
-        android:layout_alignParentTop="true"
-        android:layout_marginEnd="?listPreferredItemPaddingStart"
-        android:layout_marginRight="?listPreferredItemPaddingStart"
-        android:background="@drawable/purple_circle"
-        android:gravity="center"
-        android:textAppearance="@style/TextAppearance.AppCompat.Title.Inverse" />
-
-    <android.support.v7.widget.AppCompatTextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignEnd="@android:id/text2"
-        android:layout_alignLeft="@android:id/text2"
-        android:layout_alignRight="@android:id/text2"
-        android:layout_alignStart="@android:id/text2"
-        android:gravity="center"
-        android:text="on vist"
-        android:textAppearance="@style/Graaby.Theme.TextAppearance.Stat.Caption.Inverse" />
+        android:layout_centerVertical="true"
+        android:layout_marginLeft="@dimen/global8"
+        android:paddingTop="@dimen/global16"
+        android:textAppearance="@style/TextAppearance.AppCompat.Title.Inverse"
+        android:textColor="?attr/colorPrimary"
+        tools:text="#" />
+
+    <android.support.v7.widget.AppCompatTextView
+        android:id="@+id/view"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerVertical="true"
+        android:paddingBottom="@dimen/global16"
+        android:text="on visit"
+        android:textAppearance="@style/Graaby.Theme.TextAppearance.Stat.Caption" />
 
 </RelativeLayout>

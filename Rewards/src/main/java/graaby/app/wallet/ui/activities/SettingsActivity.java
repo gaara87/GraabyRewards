@@ -25,6 +25,7 @@ import android.text.TextUtils;
 import android.view.MenuItem;
 import android.widget.Toast;
 
+import java.io.File;
 import java.util.List;
 
 import javax.inject.Inject;
@@ -38,6 +39,8 @@ import graaby.app.wallet.models.retrofit.BaseResponse;
 import graaby.app.wallet.models.retrofit.EmptyJson;
 import graaby.app.wallet.network.services.SettingsService;
 import graaby.app.wallet.util.CacheSubscriber;
+import graaby.app.wallet.util.RealPathUtil;
+import retrofit.mime.TypedFile;
 import rx.android.schedulers.AndroidSchedulers;
 import rx.schedulers.Schedulers;
 
@@ -60,6 +63,8 @@ public class SettingsActivity extends PreferenceActivity {
      * shown on tablets.
      */
     private static final boolean ALWAYS_SIMPLE_PREFS = false;
+    private static final String TAG = SettingsActivity.class.toString();
+    private static final int PICK_IMAGE_REQUEST = 22;
     private static Preference.OnPreferenceChangeListener sBindPreferenceSummaryToValueListener = (preference, value) -> {
         String stringValue = value.toString();
 
@@ -240,38 +245,44 @@ public class SettingsActivity extends PreferenceActivity {
         bindPreferenceSummaryToValue(findPreference("businesss_check_list"));
         bindPreferenceSummaryToValue(findPreference("notifications_new_message_ringtone"));
 
-        findPreference("logout_button").setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
-            @Override
-            public boolean onPreferenceClick(Preference preference) {
-                AlertDialog.Builder builder = new AlertDialog.Builder(SettingsActivity.this);
-                builder.setMessage(R.string.logout_dialog_message)
-                        .setTitle(R.string.logout_dialog_title)
-                        .setPositiveButton("Logout", (dialogInterface, i) -> {
-                            final AccountManager acm = AccountManager.get(SettingsActivity.this);
-                            final Account[] accounts = acm
-                                    .getAccountsByType(UserLoginActivity.ACCOUNT_TYPE);
-                            if (accounts.length != 0) {
-                                mSettingsService.logoutUser(new EmptyJson())
-                                        .subscribeOn(Schedulers.newThread())
-                                        .observeOn(AndroidSchedulers.mainThread())
-                                        .subscribe(new CacheSubscriber<BaseResponse>(SettingsActivity.this) {
-                                            @Override
-                                            public void onFail(Throwable e) {
-                                                Toast.makeText(SettingsActivity.this, "Unable to log you out with the server", Toast.LENGTH_SHORT).show();
-                                            }
+        findPreference("upload_image").setOnPreferenceClickListener(preference -> {
+            Intent intent = new Intent();
+            intent.setType("image/*");
+            intent.addCategory(Intent.CATEGORY_OPENABLE);
+            intent.setAction(Intent.ACTION_GET_CONTENT);
+            startActivityForResult(Intent.createChooser(intent, "Select Picture"), PICK_IMAGE_REQUEST);
+            return true;
+        });
 
-                                            @Override
-                                            public void onSuccess(BaseResponse result) {
-                                                EventBus.getDefault().postSticky(new AuthEvents.LoggedOutEvent());
-                                                SettingsActivity.this.finish();
-                                            }
-                                        });
-                            }
-                        }).setNegativeButton("Cancel", null);
-                AlertDialog dialog = builder.create();
-                dialog.show();
-                return true;
-            }
+        findPreference("logout_button").setOnPreferenceClickListener(preference -> {
+            AlertDialog.Builder builder = new AlertDialog.Builder(SettingsActivity.this);
+            builder.setMessage(R.string.logout_dialog_message)
+                    .setTitle(R.string.logout_dialog_title)
+                    .setPositiveButton("Logout", (dialogInterface, i) -> {
+                        final AccountManager acm = AccountManager.get(SettingsActivity.this);
+                        final Account[] accounts = acm
+                                .getAccountsByType(UserLoginActivity.ACCOUNT_TYPE);
+                        if (accounts.length != 0) {
+                            mSettingsService.logoutUser(new EmptyJson())
+                                    .subscribeOn(Schedulers.newThread())
+                                    .observeOn(AndroidSchedulers.mainThread())
+                                    .subscribe(new CacheSubscriber<BaseResponse>(SettingsActivity.this) {
+                                        @Override
+                                        public void onFail(Throwable e) {
+                                            Toast.makeText(SettingsActivity.this, "Unable to log you out with the server", Toast.LENGTH_SHORT).show();
+                                        }
+
+                                        @Override
+                                        public void onSuccess(BaseResponse result) {
+                                            EventBus.getDefault().postSticky(new AuthEvents.LoggedOutEvent());
+                                            SettingsActivity.this.finish();
+                                        }
+                                    });
+                        }
+                    }).setNegativeButton("Cancel", null);
+            AlertDialog dialog = builder.create();
+            dialog.show();
+            return true;
         });
 
         findPreference("social_btn_fb").setOnPreferenceClickListener(preference -> true);
@@ -289,6 +300,30 @@ public class SettingsActivity extends PreferenceActivity {
             }
             return true;
         });
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+
+        if (requestCode == PICK_IMAGE_REQUEST && resultCode == RESULT_OK && data != null && data.getData() != null) {
+
+            String path = RealPathUtil.getRealPathFromURI(this, data.getData());
+            if (!TextUtils.isEmpty(path)) {
+                TypedFile typedFile = new TypedFile("multipart/form-data", new File(path));
+                mSettingsService.uploadProfileImage(typedFile)
+                        .subscribeOn(Schedulers.newThread())
+                        .observeOn(AndroidSchedulers.mainThread())
+                        .subscribe(new CacheSubscriber<BaseResponse>(this) {
+                            @Override
+                            public void onSuccess(BaseResponse result) {
+                                Toast.makeText(SettingsActivity.this, "Profile Picture updated", Toast.LENGTH_SHORT).show();
+                            }
+                        });
+            } else {
+                Toast.makeText(this, "Unable to locate file", Toast.LENGTH_SHORT).show();
+            }
+        }
     }
 
     /**

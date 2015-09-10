@@ -143,7 +143,7 @@ public class DiscountItemDetailsActivity extends BaseAppCompatActivity implement
     private void resetButtonState() {
         if (!isItemGraabed) {
             mGrabItButton.setOnClickListener(this);
-            mGrabItButton.setImageDrawable(getResources().getDrawable(R.drawable.ic_add_shopping_cart));
+            mGrabItButton.setImageDrawable(getResources().getDrawable(R.drawable.ic_add_shopping_cart_white_24dp));
             mItemFor.setText(getString(R.string.discount_for));
         } else {
             mGrabItButton.setOnClickListener(null);
