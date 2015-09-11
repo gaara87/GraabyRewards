@@ -1,1 +1,1 @@
-include ':Rewards'
+include ':Rewards', ':Nearby'

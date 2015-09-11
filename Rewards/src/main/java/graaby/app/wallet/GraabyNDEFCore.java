@@ -33,6 +33,7 @@ public final class GraabyNDEFCore implements Parcelable {
         }
 
     };
+    public static final String CORE_FILENAME = "beamer";
     private static final String NDEF_TYPE_APPLICATION = "application/graaby.app";
     private static final long serialVersionUID = -4251480829022377156L;
     public static int BASE_YEAR = 2010;
@@ -71,7 +72,7 @@ public final class GraabyNDEFCore implements Parcelable {
     public static void saveNfcData(Context context, UserCredentialsResponse.NFCData data) {
         if (data != null) {
             try {
-                FileOutputStream fos = context.openFileOutput("beamer", Activity.MODE_PRIVATE);
+                FileOutputStream fos = context.openFileOutput(CORE_FILENAME, Activity.MODE_PRIVATE);
                 LoganSquare.serialize(data, fos);
                 fos.close();
             } catch (IOException ignored) {
@@ -82,7 +83,7 @@ public final class GraabyNDEFCore implements Parcelable {
 
     public static NdefMessage createNdefMessage(Context applicationContext) throws IOException {
         Parcel pc = Parcel.obtain();
-        FileInputStream fis = applicationContext.openFileInput("beamer");
+        FileInputStream fis = applicationContext.openFileInput(CORE_FILENAME);
         UserCredentialsResponse.NFCData nfcCore = LoganSquare.parse(fis, UserCredentialsResponse.NFCData.class);
         byte[] iv = Base64.decode(nfcCore.iv, Base64.DEFAULT);
         GraabyNDEFCore core = new GraabyNDEFCore(nfcCore);
@@ -96,9 +97,9 @@ public final class GraabyNDEFCore implements Parcelable {
         return new NdefMessage(new NdefRecord[]{nr});
     }
 
-    public static byte[] getGraabyUserAsBytesForHCE(Context applicationContext) throws IOException {
+    public static byte[] getGraabyUserAsBytes(Context applicationContext) throws IOException {
         Parcel pc = Parcel.obtain();
-        FileInputStream fis = applicationContext.openFileInput("beamer");
+        FileInputStream fis = applicationContext.openFileInput(CORE_FILENAME);
         UserCredentialsResponse.NFCData nfcCore = LoganSquare.parse(fis, UserCredentialsResponse.NFCData.class);
         fis.close();
         GraabyNDEFCore core = new GraabyNDEFCore(nfcCore);

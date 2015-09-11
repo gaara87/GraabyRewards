@@ -18,7 +18,7 @@ public class ProfileActivity extends BaseAppCompatActivity {
 
         NearbyFragment fragment = (NearbyFragment) getSupportFragmentManager().findFragmentByTag("nearby");
         if (fragment == null) {
-            fragment = NearbyFragment.newInstance(false);
+            fragment = new NearbyFragment();
             getSupportFragmentManager().beginTransaction().add(fragment, "nearby").commit();
             getSupportFragmentManager().executePendingTransactions();
         }

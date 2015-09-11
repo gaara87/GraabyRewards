@@ -33,7 +33,6 @@ import graaby.app.wallet.R;
 import graaby.app.wallet.models.retrofit.BaseResponse;
 import graaby.app.wallet.models.retrofit.DiscountItemDetailsResponse;
 import graaby.app.wallet.network.services.MarketService;
-import graaby.app.wallet.ui.fragments.NearbyFragment;
 import graaby.app.wallet.util.CacheSubscriber;
 import graaby.app.wallet.util.Helper;
 import rx.Observable;
@@ -104,17 +103,6 @@ public class DiscountItemDetailsActivity extends BaseAppCompatActivity implement
         sendRequest();
 
         setDetails();
-
-        setupNearbyListener();
-    }
-
-    private void setupNearbyListener() {
-        NearbyFragment fragment = (NearbyFragment) getSupportFragmentManager().findFragmentByTag("nearby");
-        if (fragment == null) {
-            fragment = NearbyFragment.newInstance(true);
-            getSupportFragmentManager().beginTransaction().add(fragment, "nearby").commit();
-            getSupportFragmentManager().executePendingTransactions();
-        }
     }
 
     @Override
