@@ -6,6 +6,7 @@ import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 
 import com.google.android.gms.analytics.Tracker;
+import com.google.android.gms.nearby.messages.Strategy;
 import com.squareup.okhttp.OkHttpClient;
 
 import javax.inject.Singleton;
@@ -53,6 +54,8 @@ public interface GraabyAppComponent {
     OkHttpClient okHttpClient();
 
     ErrorHandler errorHandler();
+
+    Strategy strategy();
 
     public static class Initializer {
         public static GraabyAppComponent init(GraabyApplication context) {

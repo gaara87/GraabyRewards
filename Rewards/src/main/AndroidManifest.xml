@@ -40,6 +40,34 @@
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name" >
 
+        <meta-data
+            android:name="com.google.android.nearby.messages.API_KEY"
+            android:value="AIzaSyAIOV3jmIiGEQ41GMe7rcsJhwfb63d14fs" />
+
+        <meta-data
+            android:name="com.google.android.maps.v2.API_KEY"
+            android:value="AIzaSyC9FNzrV-HNTjHASAkuI0mmS-uBbXybaxs" />
+        <meta-data
+            android:name="com.google.android.gms.version"
+            android:value="@integer/google_play_services_version" />
+        <meta-data
+            android:name="com.facebook.sdk.ApplicationId"
+            android:value="@string/fb_app_id" />
+        <meta-data
+            android:name="com.crashlytics.ApiKey"
+            android:value="fae7d2973350643d19450c2a7894cc1f6e92f97c" />
+
+        <meta-data
+            android:name="VERSION"
+            android:value="1" />
+        <meta-data
+            android:name="QUERY_LOG"
+            android:value="true" />
+
+        <meta-data
+            android:name="io.fabric.ApiKey"
+            android:value="fae7d2973350643d19450c2a7894cc1f6e92f97c" />
+
         <activity
             android:name=".MainActivity"
             android:label="@string/app_name"
@@ -289,35 +317,6 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="graaby.app.wallet.MainActivity" />
         </activity>
-
-        <meta-data
-            android:name="com.google.android.nearby.messages.API_KEY"
-            android:value="AIzaSyC9FNzrV-HNTjHASAkuI0mmS-uBbXybaxs" />
-
-        <meta-data
-            android:name="com.google.android.maps.v2.API_KEY"
-            android:value="AIzaSyC9FNzrV-HNTjHASAkuI0mmS-uBbXybaxs" />
-        <meta-data
-            android:name="com.google.android.gms.version"
-            android:value="@integer/google_play_services_version" />
-        <meta-data
-            android:name="com.facebook.sdk.ApplicationId"
-            android:value="@string/fb_app_id" />
-        <meta-data
-            android:name="com.crashlytics.ApiKey"
-            android:value="fae7d2973350643d19450c2a7894cc1f6e92f97c" />
-
-        <meta-data
-            android:name="VERSION"
-            android:value="1" />
-        <meta-data
-            android:name="QUERY_LOG"
-            android:value="true" />
-
-        <meta-data
-            android:name="io.fabric.ApiKey"
-            android:value="fae7d2973350643d19450c2a7894cc1f6e92f97c" />
-
     </application>
 
 </manifest>
