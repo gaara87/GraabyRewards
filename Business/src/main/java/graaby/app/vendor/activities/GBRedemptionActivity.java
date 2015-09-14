@@ -38,6 +38,7 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.lang.ref.WeakReference;
 import java.lang.reflect.Field;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
@@ -66,16 +67,6 @@ import graaby.app.vendor.volley.VolleySingletonRequestQueue;
 public class GBRedemptionActivity extends FragmentActivity implements BillFragment.Callbacks, DiscountAndFinalizeFragment.Callbacks, MediaPlayer.OnCompletionListener {
 
     public static GraabyTag userTag = null;
-    private final Handler mHandler = new Handler() {
-        @Override
-        public void handleMessage(Message msg) {
-            if (msg.what == 1) {
-                Toast.makeText(GBRedemptionActivity.this, "User inactive for too long", Toast.LENGTH_SHORT).show();
-                GBRedemptionActivity.this.finish();
-            }
-            super.handleMessage(msg);
-        }
-    };
     protected boolean isItAGiftVoucher;
     JobManager mJobManager;
     @InjectView(R.id.pager)
@@ -86,8 +77,6 @@ public class GBRedemptionActivity extends FragmentActivity implements BillFragme
     ProgressBar mProgressbar;
     @InjectView(R.id.tx_image)
     ImageView mTransactionImage;
-
-
     private RequestQueue mRequestQ;
     private BillFragment billFragment = null;
     private DiscountAndFinalizeFragment discountInstrumentFragment = null;
@@ -165,7 +154,7 @@ public class GBRedemptionActivity extends FragmentActivity implements BillFragme
         thankYouToast.setView(layout);
 
         int timeout = localPrefs.getInt(SettingsActivity.GRAABY_TIMEOUT, 15);
-        waiter = new Waiter(timeout * 1000, mHandler);
+        waiter = new Waiter(timeout * 1000, new InactiveHandler(this));
         waiter.start();
 
         PagerAdapter mPagerAdapter = new GBRedemptionPagerAdapter(getSupportFragmentManager());
@@ -294,7 +283,6 @@ public class GBRedemptionActivity extends FragmentActivity implements BillFragme
         mRequestQ.add(checkin);
         showTransactionSubmissionProcess();
     }
-
 
     @Override
     public void onSuccessfulAuthorizationByBusiness(Float graabyDiscountPercentage, Float billAmount, Float netBillAmount, final Integer rewardPoints,
@@ -449,6 +437,23 @@ public class GBRedemptionActivity extends FragmentActivity implements BillFragme
     @Override
     public void onCompletion(MediaPlayer mediaPlayer) {
         mediaPlayer.release();
+    }
+
+    private static class InactiveHandler extends Handler {
+        private WeakReference<GBRedemptionActivity> mActivity;
+
+        public InactiveHandler(GBRedemptionActivity activity) {
+            mActivity = new WeakReference<>(activity);
+        }
+
+        @Override
+        public void handleMessage(Message msg) {
+            if (msg.what == 1 && mActivity.get() != null) {
+                Toast.makeText(mActivity.get(), "User inactive for too long", Toast.LENGTH_SHORT).show();
+                mActivity.get().finish();
+            }
+            super.handleMessage(msg);
+        }
     }
 
     class GBRedemptionPagerAdapter extends FragmentPagerAdapter {

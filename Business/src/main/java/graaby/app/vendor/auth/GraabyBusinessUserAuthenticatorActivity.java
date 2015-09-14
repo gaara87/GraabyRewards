@@ -59,8 +59,8 @@ final public class GraabyBusinessUserAuthenticatorActivity extends
         requestQueue = VolleySingletonRequestQueue.getInstance(this.getApplicationContext()).
                 getRequestQueue();
         mAdapter = NfcAdapter.getDefaultAdapter(this);
-
-        mAdapter.setNdefPushMessage(null, this, this);
+        if (mAdapter != null)
+            mAdapter.setNdefPushMessage(null, this, this);
         pendingIntent = PendingIntent.getActivity(this, 0, new Intent(this,
                 GraabyBusinessUserAuthenticatorActivity.class).addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP), 0);
     }
@@ -137,12 +137,14 @@ final public class GraabyBusinessUserAuthenticatorActivity extends
 
     public void onPause() {
         super.onPause();
-        mAdapter.disableForegroundDispatch(this);
+        if (mAdapter != null)
+            mAdapter.disableForegroundDispatch(this);
     }
 
     public void onResume() {
         super.onResume();
-        mAdapter.enableForegroundDispatch(this, pendingIntent, null, null);
+        if (mAdapter != null)
+            mAdapter.enableForegroundDispatch(this, pendingIntent, null, null);
     }
 
     public void onNewIntent(Intent intent) {
