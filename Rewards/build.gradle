@@ -163,4 +163,5 @@ dependencies {
     }
     compile 'com.github.anrwatchdog:anrwatchdog:1.1.+'
     compile project(':Nearby')
+    compile project(':Base Library')
 }

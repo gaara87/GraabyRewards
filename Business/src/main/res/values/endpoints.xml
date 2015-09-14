@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="api_get_it_all">/get_it_all</string>
+    <string name="api_get_gift_details">/get_gift_details</string>
+    <string name="api_submit_it_all">/submit_it_all</string>
+    <string name="api_checkin">/checkin</string>
+    <string name="api_tablet_auth">/tablet_auth</string>
+    <string name="api_tablet_deauth">/tablet_deauth</string>
+    <string name="api_submit_transaction">/submit_tx</string>
+    <string name="api_resubmit_transaction">/resubmit_tx</string>
+    <string name="api_ads">/ads</string>
+</resources>

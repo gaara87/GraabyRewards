@@ -1,0 +1,14 @@
+<resources>
+    <string name="title_activity_settings">Settings</string>
+
+    <!-- Strings related to Settings -->
+
+    <!-- Example General settings -->
+    <string name="pref_header_general">General</string>
+
+    <string name="pref_title_checkin_only">Have a check-in ONLY capability</string>
+    <string name="pref_description_checkin_only">Check-in only implies that transaction processing will not happen</string>
+
+    <string name="pref_title_display_name">Outlet name</string>
+
+</resources>

@@ -1,1 +1,1 @@
-include ':Rewards', ':Nearby'
+include ':Rewards', ':Nearby', ':Base Library', ':NFC Library', ':Business', ':TagInitializer'

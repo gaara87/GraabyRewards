@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="utf-8"?><!--
+     Copyright (C) 2012 - Akash Ramani
+
+     Licensed under the Apache License, Version 2.0 (the "License");
+     you may not use this file except in compliance with the License.
+     You may obtain a copy of the License at
+
+          http://www.apache.org/licenses/LICENSE-2.0
+
+     Unless required by applicable law or agreed to in writing, software
+     distributed under the License is distributed on an "AS IS" BASIS,
+     WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+     See the License for the specific language governing permissions and
+     limitations under the License.
+     
+     android:keyHeight="100dip"
+    android:keyWidth="200dip"
+-->
+<Keyboard xmlns:android="http://schemas.android.com/apk/res/android"
+    android:horizontalGap="8dp"
+    android:keyHeight="11.5%"
+    android:keyWidth="32%"
+    android:verticalGap="1%">
+
+    <Row android:rowEdgeFlags="top">
+        <Key
+            android:codes="8"
+            android:keyEdgeFlags="left"
+            android:keyLabel="1" />
+        <Key
+            android:codes="9"
+            android:keyLabel="2" />
+        <Key
+            android:codes="10"
+            android:keyLabel="3" />
+    </Row>
+    <Row>
+        <Key
+            android:codes="11"
+            android:keyEdgeFlags="left"
+            android:keyLabel="4" />
+        <Key
+            android:codes="12"
+            android:keyLabel="5" />
+        <Key
+            android:codes="13"
+            android:keyEdgeFlags="right"
+            android:keyLabel="6" />
+    </Row>
+    <Row>
+        <Key
+            android:codes="14"
+            android:keyEdgeFlags="left"
+            android:keyLabel="7" />
+        <Key
+            android:codes="15"
+            android:keyLabel="8" />
+        <Key
+            android:codes="16"
+            android:keyEdgeFlags="right"
+            android:keyLabel="9" />
+    </Row>
+    <Row android:rowEdgeFlags="bottom">
+        <Key
+            android:codes="56"
+            android:keyEdgeFlags="left"
+            android:keyLabel="." />
+        <Key
+            android:codes="7"
+            android:keyLabel="0" />
+        <Key
+            android:codes="67"
+            android:keyEdgeFlags="right"
+            android:keyIcon="@drawable/content_backspace" />
+    </Row>
+
+</Keyboard>

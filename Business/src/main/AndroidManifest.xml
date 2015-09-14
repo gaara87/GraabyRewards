@@ -1,0 +1,106 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    package="graaby.app.vendor">
+
+
+    <supports-screens
+        android:largeScreens="true"
+        android:normalScreens="false"
+        android:requiresSmallestWidthDp="600"
+        android:smallScreens="false"
+        android:xlargeScreens="true" />
+
+    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+    <uses-permission android:name="android.permission.GET_ACCOUNTS" />
+    <uses-permission android:name="android.permission.AUTHENTICATE_ACCOUNTS" />
+    <uses-permission android:name="android.permission.MANAGE_ACCOUNTS" />
+    <uses-permission android:name="android.permission.NFC" />
+    <uses-permission android:name="android.permission.USE_CREDENTIALS" />
+
+    <uses-feature
+        android:name="android.hardware.nfc"
+        android:required="true" />
+
+    <application
+        android:name=".GraabyRedemptionApplication"
+        android:allowBackup="true"
+        android:icon="@drawable/ic_business_launcher"
+        android:label="@string/app_name"
+        android:theme="@style/AppTheme"
+        tools:replace="android:icon">
+        <activity
+            android:name=".GBLauncherActivity"
+            android:configChanges="keyboardHidden|screenSize"
+            android:label="@string/app_name"
+            android:launchMode="singleTask"
+            android:theme="@style/AppTheme"
+            android:windowSoftInputMode="stateHidden">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+            <intent-filter>
+                <action android:name="android.nfc.action.NDEF_DISCOVERED" />
+
+                <category android:name="android.intent.category.DEFAULT" />
+
+                <data android:mimeType="@string/nfc_mime_type" />
+                <data android:mimeType="@string/nfc_mime_type_business" />
+            </intent-filter>
+        </activity>
+        <activity
+            android:name=".activities.GBRedemptionActivity"
+            android:configChanges="keyboardHidden|screenSize|orientation"
+            android:label="@string/app_name"
+            android:parentActivityName=".GBLauncherActivity"
+            android:screenOrientation="sensorLandscape"
+            android:windowSoftInputMode="stateHidden" />
+        <activity
+            android:name=".activities.GBTagInitializerActivity"
+            android:configChanges="orientation|keyboardHidden|screenSize"
+            android:label="@string/title_activity_tag_initialize"
+            android:theme="@style/AdminAppBaseTheme"
+            android:windowSoftInputMode="stateHidden" />
+
+        <service
+            android:name=".auth.GraabyBusinessUserAuthenticationService"
+            android:exported="true"
+            android:permission="android.permission.GET_ACCOUNTS">
+            <intent-filter>
+                <action android:name="android.accounts.AccountAuthenticator" />
+            </intent-filter>
+
+            <meta-data
+                android:name="android.accounts.AccountAuthenticator"
+                android:resource="@xml/authenticator" />
+        </service>
+
+        <activity
+            android:name=".auth.GraabyBusinessUserAuthenticatorActivity"
+            android:label="@string/app_name"
+            android:logo="@drawable/ic_business_launcher"
+            android:windowSoftInputMode="stateHidden|adjustResize" />
+        <activity
+            android:name="graaby.app.lib.nfc.activities.GraabyBusinessConfirmationActivity"
+            android:windowSoftInputMode="stateHidden" />
+
+        <meta-data
+            android:name="android.nfc.disable_beam_default"
+            android:value="true" />
+
+        <activity
+            android:name=".activities.SettingsActivity"
+            android:label="@string/title_activity_settings"
+            android:parentActivityName=".GBLauncherActivity"
+            android:theme="@style/AdminAppBaseTheme">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="graaby.app.vendor.GBLauncherActivity" />
+        </activity>
+
+    </application>
+
+</manifest>

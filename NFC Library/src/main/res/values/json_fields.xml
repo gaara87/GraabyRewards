@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="tag_field_name">name</string>
+    <string name="tag_field_gender">m</string>
+    <string name="tag_field_expiry">expiry</string>
+    <string name="field_id">id</string>
+    <string name="field_card">card</string>
+    <string name="field_iv">iv</string>
+    <string name="field_confirm">confirm</string>
+    <string name="response_field_reg_data">reg_data</string>
+</resources>

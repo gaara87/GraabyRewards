@@ -1,0 +1,62 @@
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:graaby="http://graaby.com">
+
+    <EditTextPreference
+        android:defaultValue="10"
+        android:enabled="false"
+        android:inputType="numberDecimal"
+        android:key="d"
+        android:numeric="decimal"
+        android:title="Graaby discount %" />
+
+    <Preference
+        android:key="tab-uid"
+        android:title="Tablet Unique ID" />
+
+
+    <CheckBoxPreference
+        android:defaultValue="true"
+        android:key="checkin_only"
+        android:summary="@string/pref_description_checkin_only"
+        android:title="@string/pref_title_checkin_only" />
+
+    <!-- NOTE: EditTextPreference accepts EditText attributes. -->
+    <!-- NOTE: EditTextPreference's summary should be set to its value by the activity code. -->
+    <EditTextPreference
+        android:capitalize="words"
+        android:editable="false"
+        android:enabled="false"
+        android:inputType="textCapWords"
+        android:key="name"
+        android:maxLines="1"
+        android:selectAllOnFocus="true"
+        android:singleLine="true"
+        android:title="@string/pref_title_display_name" />
+
+    <Preference
+        android:enabled="false"
+        android:key="cache"
+        android:summary="There are no transactions pending"
+        android:title="Clear pending transactions" />
+
+    <Preference
+        android:key="logout"
+        android:title="Logout of the current outlet" />
+
+    <graaby.app.vendor.helpers.SeekBarPreference
+        android:defaultValue="6"
+        android:key="max"
+        android:max="6"
+        android:summary="Adjust max count"
+        android:title="Maximum selectable discounts simultaneously"
+        graaby:min="1" />
+
+    <graaby.app.vendor.helpers.SeekBarPreference
+        android:defaultValue="15"
+        android:key="timeout"
+        android:max="60"
+        android:summary="Adjust max timeout (seconds)"
+        android:title="Inactivity timeout period"
+        graaby:min="15" />
+
+</PreferenceScreen>

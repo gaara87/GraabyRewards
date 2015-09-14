@@ -1,0 +1,95 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="horizontal"
+    tools:context=".GBRedemptionActivity">
+
+
+    <RelativeLayout
+        android:layout_width="0dp"
+        android:layout_height="match_parent"
+        android:layout_gravity="center"
+        android:layout_weight="1"
+        android:paddingRight="@dimen/globalPadding8">
+
+        <EditText
+            android:id="@+id/et_phoneNumber"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignLeft="@+id/et_billAmount"
+            android:layout_marginTop="81dp"
+            android:drawableLeft="@drawable/ic_action_phone"
+            android:ems="10"
+            android:hint="@string/phone_number_edit_text_hint"
+            android:inputType="phone"
+            android:maxLength="10"
+            android:textColor="@android:color/black"
+            android:textSize="@dimen/readable_text_size"
+            android:visibility="invisible" />
+
+        <EditText
+            android:id="@+id/et_billAmount"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:layout_toRightOf="@+id/textView"
+            android:drawableLeft="@drawable/ic_rupee"
+            android:ems="10"
+            android:hint="@string/bill_amount_edit_text_hint"
+            android:inputType="numberDecimal"
+            android:textColor="@android:color/black"
+            android:textSize="@dimen/readable_text_size" />
+
+        <Button
+            android:id="@+id/btn_clear_bill_amount"
+            android:layout_width="@dimen/readable_text_size"
+            android:layout_height="@dimen/readable_text_size"
+            android:layout_alignRight="@id/et_billAmount"
+            android:layout_centerVertical="true"
+            android:background="@android:drawable/ic_menu_close_clear_cancel"
+            android:visibility="invisible" />
+
+        <Button
+            android:id="@+id/confirm"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:layout_marginRight="@dimen/globalPadding8"
+            android:background="@drawable/btn_next_selector"
+            android:drawableLeft="@drawable/ic_action_forward"
+            android:text="@string/btn_next"
+            android:textAppearance="?android:attr/textAppearanceLarge" />
+
+        <Button
+            android:id="@+id/btn_checkin"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentTop="true"
+            android:layout_alignRight="@+id/confirm"
+            android:background="@drawable/btn_checkin_selector"
+            android:clickable="true"
+            android:drawableLeft="@drawable/ic_checkin"
+            android:text="@string/checkin_btn"
+            android:textColor="@android:color/white" />
+
+    </RelativeLayout>
+
+    <graaby.app.vendor.helpers.CustomNumpadView
+        android:id="@+id/numpadViewTx"
+        android:layout_width="0dp"
+        android:layout_height="match_parent"
+        android:layout_weight="1"
+        android:background="@android:color/transparent"
+        android:keyBackground="@drawable/btn_keyboard_selector"
+        android:keyPreviewHeight="0dp"
+        android:keyTextColor="@android:color/black"
+        android:keyTextSize="45sp"
+        android:labelTextSize="40sp"
+        android:shadowRadius="0.0"
+        android:visibility="visible" />
+
+</LinearLayout>

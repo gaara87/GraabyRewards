@@ -1,0 +1,22 @@
+<resources>
+    <integer name="request_code_initializer">11</integer>
+    <integer name="response_code_success">13</integer>
+    <integer name="response_code_fail">14</integer>
+    <integer name="authentication_countdown_timer">60000</integer>
+    <integer name="confirm_tag_written_value">2</integer>
+    <string name="app_name">GraabyNFCLibrary</string>
+    <string name="nfc_beam_application_record">graaby.app.wallet</string>
+    <string name="nfc_mime_type">application/graaby.app</string>
+    <string name="nfc_mime_type_business">application/graaby.app.vendor</string>
+    <string name="business_authentication_message_success">Authorization Completed</string>
+    <string name="business_authentication_message_fail">This is not an authorized card</string>
+    <string name="tag_init_message_fail_timeout">Please tap before the timeout to initialize</string>
+    <string name="business_authentication_text">Please ask the business to authenticate the transaction</string>
+    <string name="tries_left">Attempts Left: %1$s</string>
+    <string name="rupee">₹</string>
+    <string name="summary_billed_amount">Subtotal (₹)</string>
+    <string name="summary_total">--------- Total ---------</string>
+    <string name="summary_graaby_discount">Discounts (₹)</string>
+    <string name="summary_graaby_default_discount">Graaby default discount: %1$d%%</string>
+    <string name="initialize_scan_again">Please scan your Graaby Tag again\n to complete the registration!\n</string>
+</resources>

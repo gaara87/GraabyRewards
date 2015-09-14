@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:background="@color/clouds"
+    android:keepScreenOn="true"
+    android:orientation="horizontal"
+    tools:context=".GBLauncherActivity">
+
+    <com.android.volley.toolbox.NetworkImageView
+        android:id="@+id/adImage"
+        android:layout_width="0dp"
+        android:layout_height="match_parent"
+        android:layout_weight="3"
+        android:background="@drawable/card_bg"
+        android:contentDescription="Advertisements"
+        android:scaleType="fitCenter"
+        tools:ignore="HardcodedText" />
+
+    <RelativeLayout
+        android:layout_width="0dp"
+        android:layout_height="fill_parent"
+        android:layout_gravity="center"
+        android:layout_weight="1">
+
+        <TextView
+            android:id="@+id/scanTextView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentTop="true"
+            android:gravity="center"
+            android:text="@string/tagScanString"
+            android:textSize="@dimen/readable_text_size" />
+
+        <Button
+            android:id="@+id/btn_gift_voucher"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:background="@drawable/btn_gift_voucher_selector"
+            android:drawableLeft="@drawable/gift_voucher"
+            android:src="@drawable/gift_voucher"
+            android:text="Redeem Gift Voucher"
+            android:textColor="@android:color/white" />
+
+        <TextView
+            android:id="@+id/textView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/scanTextView"
+            android:layout_centerHorizontal="true"
+            android:text="(Read below for instructions)"
+            android:textAppearance="?android:attr/textAppearanceSmall" />
+
+        <RadioGroup
+            android:id="@+id/radiogroup"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true">
+
+        </RadioGroup>
+
+    </RelativeLayout>
+
+
+</LinearLayout>
