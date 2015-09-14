@@ -20,11 +20,11 @@ import graaby.app.taginitializer.fragments.GraabyTagListFragment;
  * lead to a {@link GraabyTagDetailActivity} representing
  * item details. On tablets, the activity presents the list of items and
  * item details side-by-side using two vertical panes.
- * <p/>
+ * <p>
  * The activity makes heavy use of fragments. The list of items is a
  * {@link graaby.app.taginitializer.fragments.GraabyTagListFragment} and the item details
  * (if present) is a {@link graaby.app.taginitializer.fragments.GraabyTagDetailFragment}.
- * <p/>
+ * <p>
  * This activity also implements the required
  * {@link graaby.app.taginitializer.fragments.GraabyTagListFragment.Callbacks} interface
  * to listen for item selections.

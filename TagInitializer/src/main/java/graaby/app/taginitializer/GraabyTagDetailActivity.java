@@ -15,7 +15,7 @@ import graaby.app.taginitializer.fragments.GraabyTagDetailFragment;
  * activity is only used on handset devices. On tablet-size devices,
  * item details are presented side-by-side with a list of items
  * in a {@link GraabyTagListActivity}.
- * <p/>
+ * <p>
  * This activity is mostly just a 'shell' activity containing nothing
  * more than a {@link graaby.app.taginitializer.fragments.GraabyTagDetailFragment}.
  */

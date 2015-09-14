@@ -24,7 +24,7 @@ import graaby.app.taginitializer.VolleySingletonRequestQueue;
  * also supports tablet devices by allowing list items to be given an
  * 'activated' state upon selection. This helps indicate which item is
  * currently being viewed in a {@link GraabyTagDetailFragment}.
- * <p/>
+ * <p>
  * Activities containing this fragment MUST implement the {@link Callbacks}
  * interface.
  */
