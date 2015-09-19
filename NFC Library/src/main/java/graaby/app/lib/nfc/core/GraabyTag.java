@@ -74,6 +74,14 @@ public final class GraabyTag implements Serializable {
         return null;
     }
 
+    public static GraabyTag parseNearbyInfo(byte[] content) {
+        Parcel pc = Parcel.obtain();
+        pc.unmarshall(content, 0, content.length);
+        GraabyCore graabyCoreTemp = GraabyCore.CREATOR.createFromParcel(pc);
+        return new GraabyTag(graabyCoreTemp);
+        //TODO: find a way to transfer IV
+    }
+
     public static boolean writeTag(Context context, Long id, byte[] key, Tag tag) {
         Parcel pc = Parcel.obtain();
         {

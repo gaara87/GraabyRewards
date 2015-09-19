@@ -14,6 +14,7 @@ import android.nfc.Tag;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Parcelable;
+import android.util.Log;
 import android.view.Gravity;
 import android.view.View;
 import android.view.ViewGroup;
@@ -28,6 +29,8 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.ImageLoader;
 import com.android.volley.toolbox.NetworkImageView;
+import com.google.android.gms.nearby.messages.Message;
+import com.google.android.gms.nearby.messages.MessageListener;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -46,6 +49,7 @@ import graaby.app.vendor.auth.GraabyBusinessUserLogin;
 import graaby.app.vendor.util.SystemUiHelper;
 import graaby.app.vendor.volley.CustomRequest;
 import graaby.app.vendor.volley.VolleySingletonRequestQueue;
+import graaby.app.wallet.nearby.NearbySubscribe;
 
 /**
  * Created by gaara on 9/6/13.
@@ -53,11 +57,14 @@ import graaby.app.vendor.volley.VolleySingletonRequestQueue;
 public class GBLauncherActivity extends Activity implements GraabyBusinessUserLogin.GraabyBusinessUserLoginEvent, View.OnClickListener {
 
 
+    private static final String TAG = GBLauncherActivity.class.toString();
     private NetworkImageView imageView;
     private CustomRequest getAdvertisementURLs;
     private Toast welcomeToast;
 
     private ImageLoader imageLoader;
+
+    private NearbySubscribe mNearbySubscriber;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -67,10 +74,12 @@ public class GBLauncherActivity extends Activity implements GraabyBusinessUserLo
         GraabyBusinessUserLogin.login(this, 0);
         getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
         try {
-            NdefMessage msg = new NdefMessage(
-                    new NdefRecord[]{NdefRecord
-                            .createApplicationRecord(getString(R.string.nfc_beam_application_record))});
-            NfcAdapter.getDefaultAdapter(this).setNdefPushMessage(msg, this);
+            if (NfcAdapter.getDefaultAdapter(this) != null) {
+                NdefMessage msg = new NdefMessage(
+                        new NdefRecord[]{NdefRecord
+                                .createApplicationRecord(getString(R.string.nfc_beam_application_record))});
+                NfcAdapter.getDefaultAdapter(this).setNdefPushMessage(msg, this);
+            }
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -120,6 +129,41 @@ public class GBLauncherActivity extends Activity implements GraabyBusinessUserLo
             e.printStackTrace();
         }
         initializeToastView();
+
+        initializeSubscribe();
+    }
+
+    private void initializeSubscribe() {
+        mNearbySubscriber = new NearbySubscribe(this, new MessageListener() {
+            @Override
+            public void onFound(Message message) {
+                GraabyTag tag = GraabyTag.parseNearbyInfo(message.getContent());
+                Log.d(TAG, "Found user" + tag.getGraabyUserName());
+                onSuccessfulTap(tag, null);
+            }
+        });
+        if (!mNearbySubscriber.isConnected())
+            mNearbySubscriber.onStart();
+    }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+        if (mNearbySubscriber != null)
+            mNearbySubscriber.onStart();
+    }
+
+    @Override
+    protected void onStop() {
+        if (mNearbySubscriber != null)
+            mNearbySubscriber.onStop();
+        super.onStop();
+    }
+
+    @Override
+    protected void onDestroy() {
+        mNearbySubscriber = null;
+        super.onDestroy();
     }
 
     private void initializeToastView() {
