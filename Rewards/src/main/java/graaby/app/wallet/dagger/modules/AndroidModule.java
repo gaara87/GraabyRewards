@@ -93,6 +93,7 @@ public class AndroidModule {
         analytics.setDryRun(BuildConfig.DEBUG);
         Tracker t = analytics.newTracker(R.xml.analytics);
         t.enableAdvertisingIdCollection(true);
+        t.enableExceptionReporting(!BuildConfig.DEBUG);
         return t;
     }
 

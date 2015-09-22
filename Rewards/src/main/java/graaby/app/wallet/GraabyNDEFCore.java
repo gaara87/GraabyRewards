@@ -124,4 +124,11 @@ public final class GraabyNDEFCore implements Parcelable {
         dest.writeByteArray(this.localAESKey);
     }
 
+    public static String getGraabyUserID(Context context) throws IOException {
+        FileInputStream fis = context.openFileInput(CORE_FILENAME);
+        UserCredentialsResponse.NFCData nfcCore = LoganSquare.parse(fis, UserCredentialsResponse.NFCData.class);
+        fis.close();
+        GraabyNDEFCore core = new GraabyNDEFCore(nfcCore);
+        return String.valueOf(core.graabyID);
+    }
 }

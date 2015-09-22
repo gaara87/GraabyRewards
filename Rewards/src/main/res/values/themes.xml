@@ -51,6 +51,11 @@
         <item name="colorPrimaryDark">@color/wetasphalt_darker</item>
     </style>
 
+    <style name="GraabyTheme2.Nearby">
+        <item name="colorPrimary">@color/emarald</item>
+        <item name="colorPrimaryDark">@color/nephritis</item>
+    </style>
+
     <style name="GraabyTheme2.DiscountItemDetails">
         <item name="colorPrimary">@color/sunflower</item>
         <item name="colorPrimaryDark">@color/sunflower_darker</item>

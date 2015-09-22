@@ -16,11 +16,13 @@ import java.lang.ref.WeakReference;
  * Created by Akash.
  */
 abstract class NearbyBase implements GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener {
-    private static final String TAG = NearbyBase.class.toString();
+    protected static final String TAG = NearbyBase.class.toString();
     WeakReference<Activity> mActivityContext;
     GoogleApiClient mGoogleApiClient;
     ErrorCheckingCallback.BooleanWrapper mResolvingError;
-
+    public static final String MESSAGE_FILTER_TYPE_STEP_1_WHO_AM_I = "whoami";
+    public static final String MESSAGE_FILTER_TYPE_STEP_2_DO_I_HAVE_UNLOCK = "unlock_requested";
+    public static final String MESSAGE_FILTER_TYPE_STEP_3_I_AM_ME_DUH = "unlocked_granted";
 
     public void initialize(Activity context) {
         mActivityContext = new WeakReference<>(context);
@@ -34,6 +36,8 @@ abstract class NearbyBase implements GoogleApiClient.ConnectionCallbacks, Google
 
     @Override
     public void onConnected(Bundle bundle) {
+        Log.d(TAG, "Connected to Play services");
+
         Nearby.Messages.getPermissionStatus(mGoogleApiClient).setResultCallback(
                 new ErrorCheckingCallback(mActivityContext.get(), mResolvingError, "getPermissionStatus", this::publishOrSubscribe)
         );
@@ -51,13 +55,20 @@ abstract class NearbyBase implements GoogleApiClient.ConnectionCallbacks, Google
 
     public void onStart() {
         if (mGoogleApiClient != null && !mGoogleApiClient.isConnected()) {
+            Log.d(TAG, "Attempting to connect to Google Play Services");
             mGoogleApiClient.connect();
         }
+    }
+
+    public boolean isConnected() {
+        return mGoogleApiClient != null && mGoogleApiClient.isConnected();
     }
 
     public void onStop() {
         if (mGoogleApiClient != null && mGoogleApiClient.isConnected()) {
             // Clean up when the user leaves the activity.
+            Log.d(TAG, "Disconnecting from Google Play Services");
+
             mGoogleApiClient.disconnect();
         }
     }

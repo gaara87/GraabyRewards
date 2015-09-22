@@ -37,6 +37,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.IOException;
+import java.nio.charset.Charset;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -49,6 +50,7 @@ import graaby.app.vendor.auth.GraabyBusinessUserLogin;
 import graaby.app.vendor.util.SystemUiHelper;
 import graaby.app.vendor.volley.CustomRequest;
 import graaby.app.vendor.volley.VolleySingletonRequestQueue;
+import graaby.app.wallet.nearby.NearbyPublish;
 import graaby.app.wallet.nearby.NearbySubscribe;
 
 /**
@@ -64,7 +66,10 @@ public class GBLauncherActivity extends Activity implements GraabyBusinessUserLo
 
     private ImageLoader imageLoader;
 
-    private NearbySubscribe mNearbySubscriber;
+    private NearbySubscribe mNearbySubscriberStep1;
+    private NearbySubscribe mNearbySubscriberStep3;
+
+    private HashMap<Long, NearbyTagHolder> mCurrentlyNearbyTags = new HashMap<>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -134,35 +139,69 @@ public class GBLauncherActivity extends Activity implements GraabyBusinessUserLo
     }
 
     private void initializeSubscribe() {
-        mNearbySubscriber = new NearbySubscribe(this, new MessageListener() {
+        mNearbySubscriberStep1 = new NearbySubscribe(this, new MessageListener() {
             @Override
             public void onFound(Message message) {
                 GraabyTag tag = GraabyTag.parseNearbyInfo(message.getContent());
                 Log.d(TAG, "Found user" + tag.getGraabyUserName());
-                onSuccessfulTap(tag, null);
+                NearbyPublish tagPublisher = new NearbyPublish(GBLauncherActivity.this, tag.getGraabyIdString(), 2);
+                mCurrentlyNearbyTags.put(tag.getGraabyId(), new NearbyTagHolder(tag, tagPublisher));
+                tagPublisher.onStart();
             }
-        });
-        if (!mNearbySubscriber.isConnected())
-            mNearbySubscriber.onStart();
+        }, 1, null);
+        mNearbySubscriberStep1.onStart();
+
+        mNearbySubscriberStep3 = new NearbySubscribe(GBLauncherActivity.this, new MessageListener() {
+            @Override
+            public void onFound(Message message) {
+                String graabyUserID = new String(message.getContent(), Charset.forName("UTF8"));
+                Long acceptedUser = Long.valueOf(graabyUserID);
+                GraabyTag holder = mCurrentlyNearbyTags.get(acceptedUser).tag;
+                onSuccessfulTap(holder, null);
+                clearNearbyTagsAndPublishers();
+            }
+        }, 3, null);
+
+        mNearbySubscriberStep3.onStart();
+
+    }
+
+    private void clearNearbyTagsAndPublishers() {
+        for (NearbyTagHolder holder : mCurrentlyNearbyTags.values()) {
+            holder.publisher.onStop();
+            holder.publisher = null;
+        }
+        mCurrentlyNearbyTags.clear();
+
     }
 
     @Override
     protected void onStart() {
         super.onStart();
-        if (mNearbySubscriber != null)
-            mNearbySubscriber.onStart();
+        if (mNearbySubscriberStep1 != null)
+            mNearbySubscriberStep1.onStart();
+        if (mNearbySubscriberStep3 != null)
+            mNearbySubscriberStep3.onStart();
     }
 
     @Override
     protected void onStop() {
-        if (mNearbySubscriber != null)
-            mNearbySubscriber.onStop();
+        if (mNearbySubscriberStep1 != null)
+            mNearbySubscriberStep1.onStop();
+        if (mNearbySubscriberStep3 != null)
+            mNearbySubscriberStep3.onStop();
+
+        clearNearbyTagsAndPublishers();
         super.onStop();
     }
 
     @Override
     protected void onDestroy() {
-        mNearbySubscriber = null;
+        mNearbySubscriberStep1 = null;
+        mNearbySubscriberStep3 = null;
+        if (mCurrentlyNearbyTags != null && mCurrentlyNearbyTags.size() != 0) {
+            mCurrentlyNearbyTags.clear();
+        }
         super.onDestroy();
     }
 
@@ -347,6 +386,16 @@ public class GBLauncherActivity extends Activity implements GraabyBusinessUserLo
                     ((RadioButton) group.getChildAt(0)).setChecked(true);
                 }
             }
+        }
+    }
+
+    class NearbyTagHolder {
+        GraabyTag tag;
+        NearbyPublish publisher;
+
+        public NearbyTagHolder(GraabyTag tag, NearbyPublish publisher) {
+            this.tag = tag;
+            this.publisher = publisher;
         }
     }
 }

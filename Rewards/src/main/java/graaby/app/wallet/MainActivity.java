@@ -44,13 +44,14 @@ public class MainActivity extends BaseAppCompatActivity
     ViewPager mPager;
     @Bind(R.id.tabs)
     TabLayout mTabLayout;
+    @Bind(R.id.drawer_layout)
+    DrawerLayout mDrawerLayout;
     /**
      * Used to store the last screen title. For use in {@link #restoreActionBar()}.
      */
     private CharSequence mTitle;
 
     private boolean initialized = false;
-    private DrawerLayout mDrawerLayout;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -171,7 +172,8 @@ public class MainActivity extends BaseAppCompatActivity
     }
 
     private void setupDrawerLayout() {
-        mDrawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
+//        mDrawerLayout.setDrawerListener(new DrawerLayout.SimpleDrawerListener() {
+//        });
     }
 
     public void restoreActionBar() {
@@ -203,7 +205,7 @@ public class MainActivity extends BaseAppCompatActivity
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         try {
-            if (!mDrawerLayout.isDrawerOpen(GravityCompat.START)) {
+            if (mDrawerLayout != null && !mDrawerLayout.isDrawerOpen(GravityCompat.START)) {
                 // Only show items in the action bar relevant to this screen
                 // if the drawer is not showing. Otherwise, let the drawer
                 // decide what to show in the action bar.
@@ -243,6 +245,14 @@ public class MainActivity extends BaseAppCompatActivity
     protected void onResume() {
         super.onResume();
         initializeAfterResumeIfAllowed();
+    }
+
+    @Override
+    public void onBackPressed() {
+        if (mDrawerLayout != null && mDrawerLayout.isDrawerOpen(GravityCompat.START))
+            mDrawerLayout.closeDrawer(GravityCompat.START);
+        else
+            super.onBackPressed();
     }
 
     private void initializeAfterResumeIfAllowed() {

@@ -2,22 +2,27 @@ package graaby.app.wallet.ui.activities;
 
 import android.os.Bundle;
 import android.support.v4.app.NavUtils;
+import android.util.Log;
 import android.view.MenuItem;
 
 import graaby.app.wallet.R;
-import graaby.app.wallet.ui.fragments.ProfileFragment;
+import graaby.app.wallet.ui.fragments.NearbyFragment;
 
-public class ProfileActivity extends BaseAppCompatActivity {
+/**
+ * Created by Akash.
+ */
+public class NearbyActivity extends BaseAppCompatActivity {
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
+    public void onCreate(Bundle savedInstanceState) {
+        Log.d(NearbyActivity.class.toString(), "Starting to look for graaby business devices");
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_fragment_container);
         getSupportActionBar().setDisplayHomeAsUpEnabled(Boolean.TRUE);
 
-        ProfileFragment profileFragment = new ProfileFragment();
+        NearbyFragment fragment = new NearbyFragment();
         getSupportFragmentManager().beginTransaction()
-                .replace(R.id.container, profileFragment).commit();
+                .replace(R.id.container, fragment).commit();
     }
 
     @Override

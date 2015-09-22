@@ -1,14 +1,12 @@
 package graaby.app.wallet.nearby;
 
 import android.app.Activity;
-import android.util.Log;
+import android.support.annotation.Nullable;
 
 import com.google.android.gms.nearby.Nearby;
-import com.google.android.gms.nearby.messages.Message;
+import com.google.android.gms.nearby.messages.MessageFilter;
 import com.google.android.gms.nearby.messages.MessageListener;
 import com.google.android.gms.nearby.messages.Strategy;
-
-import java.nio.charset.Charset;
 
 /**
  * Created by Akash.
@@ -16,23 +14,35 @@ import java.nio.charset.Charset;
 public class NearbySubscribe extends NearbyBase {
 
     MessageListener mMessageListener;
+    Runnable onSuccessRunnableCallback;
+    MessageFilter mCustomMessageFilter;
 
-    public NearbySubscribe(Activity context) {
+    private NearbySubscribe(Activity context, Runnable runnable) {
         super.initialize(context);
+        onSuccessRunnableCallback = runnable;
+    }
 
+    public NearbySubscribe(Activity context, MessageListener messageListener, int step, @Nullable Runnable runnable) {
+        this(context, runnable);
+        this.mMessageListener = messageListener;
+        if (step == 2)
+            mCustomMessageFilter = new MessageFilter.Builder().includeNamespacedType("", MESSAGE_FILTER_TYPE_STEP_2_DO_I_HAVE_UNLOCK).build();
+        else if (step == 3)
+            mCustomMessageFilter = new MessageFilter.Builder().includeNamespacedType("", MESSAGE_FILTER_TYPE_STEP_3_I_AM_ME_DUH).build();
+        else
+            mCustomMessageFilter = new MessageFilter.Builder().includeNamespacedType("", MESSAGE_FILTER_TYPE_STEP_1_WHO_AM_I).build();
     }
 
     @Override
     void publishOrSubscribe() {
-        mMessageListener = new MessageListener() {
-            @Override
-            public void onFound(final Message message) {
-                Log.d("NearbySubscribe", "WOHOOO!! " + new String(message.getContent(), Charset.forName("UTF8")));
-            }
-        };
+
+        ErrorCheckingCallback errorCheckingCallback = (onSuccessRunnableCallback != null) ?
+                new ErrorCheckingCallback(mActivityContext.get(), mResolvingError, "subscribe()", onSuccessRunnableCallback) :
+                new ErrorCheckingCallback(mActivityContext.get(), mResolvingError, "subscribe()");
         Nearby.Messages.subscribe(mGoogleApiClient, mMessageListener, new Strategy.Builder().setDiscoveryMode(Strategy.DISCOVERY_MODE_SCAN)
-                .setDistanceType(Strategy.DISTANCE_TYPE_EARSHOT).build())
-                .setResultCallback(new ErrorCheckingCallback(mActivityContext.get(), mResolvingError, "subscribe()"));
+                        .setDistanceType(Strategy.DISTANCE_TYPE_EARSHOT).build(),
+                mCustomMessageFilter)
+                .setResultCallback(errorCheckingCallback);
     }
 
     @Override
