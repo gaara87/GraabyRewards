@@ -148,7 +148,12 @@ public class GBLauncherActivity extends Activity implements GraabyBusinessUserLo
                 mCurrentlyNearbyTags.put(tag.getGraabyId(), new NearbyTagHolder(tag, tagPublisher));
                 tagPublisher.onStart();
             }
-        }, 1, null);
+        }, 1, new Runnable() {
+            @Override
+            public void run() {
+                findViewById(R.id.nearby_identifier).setVisibility(View.VISIBLE);
+            }
+        });
         mNearbySubscriberStep1.onStart();
 
         mNearbySubscriberStep3 = new NearbySubscribe(GBLauncherActivity.this, new MessageListener() {

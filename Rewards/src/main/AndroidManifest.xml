@@ -316,8 +316,8 @@
 
         <activity
             android:name=".ui.activities.NearbyActivity"
-            android:label="Scanning nearby devices"
             android:parentActivityName=".MainActivity"
+            android:screenOrientation="portrait"
             android:theme="@style/GraabyTheme2.Nearby">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"

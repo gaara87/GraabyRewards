@@ -16,6 +16,8 @@ import com.google.android.gms.nearby.messages.MessageListener;
 
 import java.io.IOException;
 import java.nio.charset.Charset;
+import java.util.Timer;
+import java.util.TimerTask;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
@@ -63,20 +65,37 @@ public class NearbyFragment extends BaseFragment {
             mNearbySubscriberStep2 = new NearbySubscribe(getActivity(), new MessageListener() {
                 @Override
                 public void onFound(Message message) {
+                    mNearbyPublisherStep1.onStop();
                     setStatus("Device found, waiting to verify identity");
                     final String graabyUserID = new String(message.getContent(), Charset.forName("UTF8"));
                     try {
                         if (GraabyNDEFCore.getGraabyUserID(getContext()).equals(graabyUserID)) {
                             View parentView = getActivity().findViewById(R.id.container);
-                            if (parentView != null)
+                            if (parentView != null) {
+                                int textColor;
+                                if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.M) {
+                                    textColor = getResources().getColor(R.color.emarald, getActivity().getTheme());
+                                } else {
+                                    textColor = getResources().getColor(R.color.emarald);
+                                }
                                 Snackbar.make(parentView, "Verify yourself by unlocking ->", Snackbar.LENGTH_INDEFINITE)
+                                        .setActionTextColor(textColor)
                                         .setAction("Unlock", view -> {
                                             mNearbyPublisherStep3 = new NearbyPublish(getActivity(), graabyUserID, 3, 5);
                                             mNearbyPublisherStep3.onStart();
                                             mNearbyPublisherStep1.onStop();
                                             mNearbyPublisherStep3.onStop();
                                             setStatus("User verified, continue with checkout on the device");
+                                            mProgress.setVisibility(View.GONE);
+                                            new Timer().schedule(new TimerTask() {
+                                                @Override
+                                                public void run() {
+                                                    getActivity().finish();
+                                                }
+                                            }, 1000);
+
                                         }).show();
+                            }
                         }
                     } catch (IOException e) {
                         e.printStackTrace();
@@ -145,6 +164,6 @@ public class NearbyFragment extends BaseFragment {
     }
 
     private void setStatus(String statusText) {
-        mStatusTextView.setText(statusText);
+        getActivity().runOnUiThread(() -> mStatusTextView.setText(statusText));
     }
 }

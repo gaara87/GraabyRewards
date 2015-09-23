@@ -54,6 +54,7 @@
     <style name="GraabyTheme2.Nearby">
         <item name="colorPrimary">@color/emarald</item>
         <item name="colorPrimaryDark">@color/nephritis</item>
+        <item name="colorAccent">@color/text_primary_inverse</item>
     </style>
 
     <style name="GraabyTheme2.DiscountItemDetails">
