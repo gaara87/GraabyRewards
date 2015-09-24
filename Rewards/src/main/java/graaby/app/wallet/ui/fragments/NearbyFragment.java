@@ -10,14 +10,13 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ProgressBar;
 import android.widget.TextView;
+import android.widget.ToggleButton;
 
 import com.google.android.gms.nearby.messages.Message;
 import com.google.android.gms.nearby.messages.MessageListener;
 
 import java.io.IOException;
 import java.nio.charset.Charset;
-import java.util.Timer;
-import java.util.TimerTask;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
@@ -37,9 +36,15 @@ public class NearbyFragment extends BaseFragment {
     ProgressBar mProgress;
     @Bind(R.id.status)
     TextView mStatusTextView;
+    @Bind(R.id.nearby_scan)
+    ToggleButton mNearbyBtn;
     private NearbyPublish mNearbyPublisherStep1;
     private NearbySubscribe mNearbySubscriberStep2;
     private NearbyPublish mNearbyPublisherStep3;
+
+    public static NearbyFragment newInstance() {
+        return new NearbyFragment();
+    }
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -51,21 +56,25 @@ public class NearbyFragment extends BaseFragment {
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View v = super.onCreateView(inflater, container, savedInstanceState, R.layout.fragment_nearby);
         ButterKnife.bind(this, v);
+        mNearbyBtn.setOnCheckedChangeListener((compoundButton, b) -> {
+            if (b) startNearbySearch();
+            else stopSearch();
+        });
         return v;
     }
 
-    @Override
-    public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
-        super.onViewCreated(view, savedInstanceState);
+    private void startNearbySearch() {
         try {
             GraabyNDEFCore.getGraabyUserID(getContext());
             mNearbyPublisherStep1 = new NearbyPublish(getActivity(), GraabyNDEFCore.getGraabyUserAsBytes(getContext()), () -> {
                 setStatus("Scanning for Graaby devices");
+                mProgress.setVisibility(View.VISIBLE);
             });
             mNearbySubscriberStep2 = new NearbySubscribe(getActivity(), new MessageListener() {
                 @Override
                 public void onFound(Message message) {
                     mNearbyPublisherStep1.onStop();
+                    mProgress.setVisibility(View.VISIBLE);
                     setStatus("Device found, waiting to verify identity");
                     final String graabyUserID = new String(message.getContent(), Charset.forName("UTF8"));
                     try {
@@ -86,13 +95,7 @@ public class NearbyFragment extends BaseFragment {
                                             mNearbyPublisherStep1.onStop();
                                             mNearbyPublisherStep3.onStop();
                                             setStatus("User verified, continue with checkout on the device");
-                                            mProgress.setVisibility(View.GONE);
-                                            new Timer().schedule(new TimerTask() {
-                                                @Override
-                                                public void run() {
-                                                    getActivity().finish();
-                                                }
-                                            }, 1000);
+                                            mProgress.setVisibility(View.INVISIBLE);
 
                                         }).show();
                             }
@@ -108,6 +111,17 @@ public class NearbyFragment extends BaseFragment {
         }
     }
 
+    private void stopSearch() {
+        if (mNearbyPublisherStep1 != null)
+            mNearbyPublisherStep1.onStop();
+        if (mNearbySubscriberStep2 != null)
+            mNearbySubscriberStep2.onStop();
+        if (mNearbyPublisherStep3 != null)
+            mNearbyPublisherStep3.onStop();
+
+        mProgress.setVisibility(View.INVISIBLE);
+    }
+
     @Override
     public void onStart() {
         super.onStart();
@@ -121,12 +135,7 @@ public class NearbyFragment extends BaseFragment {
 
     @Override
     public void onStop() {
-        if (mNearbyPublisherStep1 != null)
-            mNearbyPublisherStep1.onStop();
-        if (mNearbySubscriberStep2 != null)
-            mNearbySubscriberStep2.onStop();
-        if (mNearbyPublisherStep3 != null)
-            mNearbyPublisherStep3.onStop();
+        stopSearch();
         super.onStop();
     }
 
@@ -155,7 +164,6 @@ public class NearbyFragment extends BaseFragment {
     void setupInjections() {
 
     }
-
 
     @Override
     public void onDestroyView() {

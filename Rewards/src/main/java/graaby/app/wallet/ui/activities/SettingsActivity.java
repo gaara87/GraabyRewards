@@ -4,7 +4,6 @@ import android.accounts.Account;
 import android.accounts.AccountManager;
 import android.annotation.TargetApi;
 import android.app.AlertDialog;
-import android.content.ActivityNotFoundException;
 import android.content.Context;
 import android.content.Intent;
 import android.content.res.Configuration;
@@ -39,6 +38,7 @@ import graaby.app.wallet.models.retrofit.BaseResponse;
 import graaby.app.wallet.models.retrofit.EmptyJson;
 import graaby.app.wallet.network.services.SettingsService;
 import graaby.app.wallet.util.CacheSubscriber;
+import graaby.app.wallet.util.Helper;
 import graaby.app.wallet.util.RealPathUtil;
 import retrofit.mime.TypedFile;
 import rx.android.schedulers.AndroidSchedulers;
@@ -287,19 +287,7 @@ public class SettingsActivity extends PreferenceActivity {
 
         findPreference("social_btn_fb").setOnPreferenceClickListener(preference -> true);
 
-        findPreference("send_feedback").setOnPreferenceClickListener(preference -> {
-            Intent i = new Intent(Intent.ACTION_SEND);
-            i.setType("message/rfc822");
-            i.putExtra(Intent.EXTRA_EMAIL, new String[]{"contact@graaby.com"});
-            i.putExtra(Intent.EXTRA_SUBJECT, "[Graaby app feedback]");
-            i.putExtra(Intent.EXTRA_TEXT, "");
-            try {
-                startActivity(Intent.createChooser(i, "E-mail Graaby through..."));
-            } catch (ActivityNotFoundException ex) {
-                Toast.makeText(SettingsActivity.this, "There are no email clients installed.", Toast.LENGTH_SHORT).show();
-            }
-            return true;
-        });
+        findPreference("send_feedback").setOnPreferenceClickListener(preference -> Helper.sendFeedback(this));
     }
 
     @Override

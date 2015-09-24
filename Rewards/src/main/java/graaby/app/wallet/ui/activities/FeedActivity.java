@@ -2,6 +2,8 @@ package graaby.app.wallet.ui.activities;
 
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.NavUtils;
+import android.view.MenuItem;
 
 import graaby.app.wallet.R;
 import graaby.app.wallet.ui.fragments.FeedFragment;
@@ -22,6 +24,16 @@ public class FeedActivity extends BaseAppCompatActivity {
     @Override
     protected void setupInjections() {
 
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case android.R.id.home:
+                NavUtils.navigateUpFromSameTask(this);
+                return true;
+        }
+        return super.onOptionsItemSelected(item);
     }
 
 }

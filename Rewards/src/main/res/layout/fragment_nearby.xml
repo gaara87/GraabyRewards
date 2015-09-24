@@ -3,9 +3,9 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="?colorPrimary"
     android:keepScreenOn="true"
-    tools:context=".ui.activities.NearbyActivity">
+    tools:context=".MainActivity">
+
 
     <ProgressBar
         android:id="@android:id/progress"
@@ -14,7 +14,8 @@
         android:layout_height="wrap_content"
         android:layout_centerHorizontal="true"
         android:layout_centerVertical="true"
-        android:indeterminate="true" />
+        android:indeterminate="true"
+        android:visibility="invisible" />
 
     <TextView
         android:id="@+id/status"
@@ -28,4 +29,15 @@
         android:padding="@dimen/globalPadding8"
         android:singleLine="false"
         tools:text="Continuous status text" />
+
+    <ToggleButton
+        android:id="@+id/nearby_scan"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@android:id/progress"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="48dp"
+        android:textOff="Start Scanning"
+        android:textOn="Stop Scanning" />
+
 </RelativeLayout>

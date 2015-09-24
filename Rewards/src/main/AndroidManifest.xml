@@ -317,12 +317,12 @@
         <activity
             android:name=".ui.activities.NearbyActivity"
             android:parentActivityName=".MainActivity"
-            android:screenOrientation="portrait"
-            android:theme="@style/GraabyTheme2.Nearby">
+            android:screenOrientation="portrait">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="graaby.app.wallet.MainActivity" />
         </activity>
+
     </application>
 
 </manifest>

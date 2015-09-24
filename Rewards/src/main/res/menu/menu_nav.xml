@@ -7,20 +7,20 @@
             android:title="@string/title_profile" />
 
         <item
-            android:id="@+id/drawer_nearby"
-            android:icon="@drawable/ic_nearby_grey"
-            android:title="Scan nearby"/>
-
-        <item
             android:id="@+id/drawer_my_vouchers"
             android:icon="@drawable/voucher_withpadding"
-            android:title="My Discounts" />
+            android:title="My discounts" />
+
+        <item
+            android:id="@+id/drawer_feeds"
+            android:icon="@drawable/nav_feeds"
+            android:title="Feeds" />
 
         <item android:title="Help">
             <menu>
                 <item
-                    android:id="@+id/drawer_favourite"
-                    android:title="Feedback" />
+                    android:id="@+id/drawer_feedback"
+                    android:title="Send feedback" />
 
                 <item
                     android:id="@+id/drawer_settings"

@@ -2,12 +2,10 @@ package graaby.app.wallet;
 
 import android.app.Activity;
 import android.content.Intent;
-import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.provider.SearchRecentSuggestions;
 import android.support.design.widget.NavigationView;
 import android.support.design.widget.TabLayout;
-import android.support.v4.graphics.drawable.DrawableCompat;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.view.ViewPager;
 import android.support.v4.widget.DrawerLayout;
@@ -57,6 +55,7 @@ public class MainActivity extends BaseAppCompatActivity
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main_wallet);
+        ButterKnife.bind(this);
         authHandler.loginOrAddAccount(this, this);
     }
 
@@ -80,7 +79,6 @@ public class MainActivity extends BaseAppCompatActivity
 
     private void initialize() {
         setNavigationView();
-        ButterKnife.bind(this);
         GraabyOutletDiscoveryService.setupLocationService(this);
         registerGCM();
         setupToolbar();
@@ -124,37 +122,12 @@ public class MainActivity extends BaseAppCompatActivity
 
 
     private void setupTabLayout() {
-        mPager.setAdapter(new HomePagerAdapter(getSupportFragmentManager(), this));
+        HomePagerAdapter adapter = new HomePagerAdapter(getSupportFragmentManager(), this);
+        mPager.setAdapter(adapter);
         mPager.setOffscreenPageLimit(1);
         mTabLayout.setupWithViewPager(mPager);
         mTabLayout.setOnTabSelectedListener(this);
-        for (int i = 0; i < mTabLayout.getTabCount(); i++) {
-            int drawableResourceID = 0;
-            switch (i) {
-                case 0:
-                    drawableResourceID = R.drawable.nav_market;
-                    break;
-                case 1:
-                    drawableResourceID = R.drawable.nav_business;
-                    break;
-                case 2:
-                    drawableResourceID = R.drawable.nav_feeds;
-                    break;
-                case 3:
-                    drawableResourceID = R.drawable.nav_contacts;
-            }
-            if (mTabLayout != null && drawableResourceID != 0) {
-                Drawable drawable = null;
-                if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.LOLLIPOP) {
-                    drawable = getResources().getDrawable(drawableResourceID, getTheme());
-                } else {
-                    drawable = getResources().getDrawable(drawableResourceID);
-                }
-                drawable = DrawableCompat.wrap(drawable);
-                DrawableCompat.setTint(drawable.mutate(), getResources().getColor(android.R.color.white));
-                mTabLayout.getTabAt(i).setIcon(drawable);
-            }
-        }
+        adapter.setupTabIcons(mTabLayout);
     }
 
     private void setupToolbar() {
@@ -177,7 +150,6 @@ public class MainActivity extends BaseAppCompatActivity
     }
 
     public void restoreActionBar() {
-        getSupportActionBar().setDisplayShowTitleEnabled(true);
         getSupportActionBar().setTitle(mTitle);
     }
 
@@ -270,7 +242,9 @@ public class MainActivity extends BaseAppCompatActivity
     @Override
     public void onTabSelected(TabLayout.Tab tab) {
         mPager.setCurrentItem(tab.getPosition());
-        getSupportActionBar().setTitle(((HomePagerAdapter) mPager.getAdapter()).getTitle(tab.getPosition()));
+        HomePagerAdapter adapter = (HomePagerAdapter) mPager.getAdapter();
+        setTitle(adapter.getTitle(tab.getPosition()));
+        mTitle = getString(adapter.getTitle(tab.getPosition()));
     }
 
     @Override
