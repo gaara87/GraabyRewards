@@ -204,33 +204,37 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="horizontal">
+        android:background="@android:color/white"
+        android:orientation="vertical">
 
         <Button
             android:id="@+id/business_call"
-            android:layout_width="0dp"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:drawableTop="@drawable/ic_call_36dp"
+            android:drawableLeft="@drawable/ic_call_black_24dp"
+            android:drawablePadding="@dimen/global16"
+            android:gravity="left|center_vertical"
             android:text="CALL"
-            android:theme="@style/GraabyTheme2.Button.Borderless.Neutral" />
+            android:theme="@style/GraabyTheme2.Button.Borderless" />
 
         <Button
             android:id="@+id/business_directions"
-            android:layout_width="0dp"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:drawableTop="@drawable/ic_directions_36px"
+            android:drawableLeft="@drawable/ic_directions_black_24dp"
+            android:drawablePadding="@dimen/global16"
+            android:gravity="left|center_vertical"
             android:text="DIRECTIONS"
-            android:theme="@style/GraabyTheme2.Button.Borderless.Neutral" />
+            android:theme="@style/GraabyTheme2.Button.Borderless" />
 
         <Button
             android:id="@+id/business_site"
-            android:layout_width="0dp"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:drawableTop="@drawable/ic_site_36dpx"
+            android:drawableLeft="@drawable/ic_site_24dp"
+            android:drawablePadding="@dimen/global16"
+            android:gravity="left|center_vertical"
             android:text="SITE"
-            android:theme="@style/GraabyTheme2.Button.Borderless.Neutral" />
+            android:theme="@style/GraabyTheme2.Button.Borderless" />
     </LinearLayout>
 </LinearLayout>
