@@ -23,8 +23,8 @@ public class HomePagerAdapter extends FragmentPagerAdapter {
     private final int[][] tabTitleResourceArray = {
             {R.string.title_marketplace, R.drawable.nav_market},
             {R.string.title_nearby, R.drawable.ic_nearby_grey},
-            {R.string.title_contacts, R.drawable.nav_contacts},
-            {R.string.title_businesses, R.drawable.nav_business}
+            {R.string.title_businesses, R.drawable.nav_business},
+            {R.string.title_contacts, R.drawable.nav_contacts}
     };
     private final Context mContext;
 
