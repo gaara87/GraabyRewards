@@ -18,12 +18,20 @@ import com.google.android.gms.nearby.messages.MessageListener;
 import java.io.IOException;
 import java.nio.charset.Charset;
 
+import javax.inject.Inject;
+
 import butterknife.Bind;
 import butterknife.ButterKnife;
+import dagger.Lazy;
+import graaby.app.wallet.GraabyApplication;
 import graaby.app.wallet.GraabyNDEFCore;
 import graaby.app.wallet.R;
+import graaby.app.wallet.models.retrofit.UserCredentialsResponse;
 import graaby.app.wallet.nearby.NearbyPublish;
 import graaby.app.wallet.nearby.NearbySubscribe;
+import graaby.app.wallet.network.services.ProfileService;
+import graaby.app.wallet.util.CacheSubscriber;
+import rx.schedulers.Schedulers;
 
 
 /**
@@ -38,6 +46,8 @@ public class NearbyFragment extends BaseFragment {
     TextView mStatusTextView;
     @Bind(R.id.nearby_scan)
     ToggleButton mNearbyBtn;
+    @Inject
+    Lazy<ProfileService> mCoreDataService;
     private NearbyPublish mNearbyPublisherStep1;
     private NearbySubscribe mNearbySubscriberStep2;
     private NearbyPublish mNearbyPublisherStep3;
@@ -61,6 +71,26 @@ public class NearbyFragment extends BaseFragment {
             else stopSearch();
         });
         return v;
+    }
+
+    @Override
+    public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+        if (!GraabyNDEFCore.isCoreDataAvailable(getContext())) {
+            mCompositeSubscriptions.add(
+                    mCoreDataService.get().getNFCInfo().observeOn(Schedulers.newThread())
+                            .subscribeOn(Schedulers.newThread())
+                            .subscribe(new CacheSubscriber<UserCredentialsResponse.NFCData>(getActivity()) {
+                                @Override
+                                public void onSuccess(UserCredentialsResponse.NFCData result) {
+                                    GraabyNDEFCore.saveNfcData(getActivity(), result);
+                                    mNearbyBtn.setEnabled(true);
+                                }
+                            })
+            );
+        } else {
+            mNearbyBtn.setEnabled(true);
+        }
     }
 
     private void startNearbySearch() {
@@ -162,7 +192,7 @@ public class NearbyFragment extends BaseFragment {
 
     @Override
     void setupInjections() {
-
+        GraabyApplication.getApplication().getApiComponent().inject(this);
     }
 
     @Override

@@ -12,6 +12,7 @@ import android.util.Base64;
 import com.bluelinelabs.logansquare.LoganSquare;
 import com.crashlytics.android.Crashlytics;
 
+import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
@@ -81,6 +82,11 @@ public final class GraabyNDEFCore implements Parcelable {
         }
     }
 
+    public static boolean isCoreDataAvailable(Context context) {
+        File f = new File(context.getFilesDir() + "/" + CORE_FILENAME);
+        return f.exists();
+    }
+
     public static NdefMessage createNdefMessage(Context applicationContext) throws IOException {
         Parcel pc = Parcel.obtain();
         FileInputStream fis = applicationContext.openFileInput(CORE_FILENAME);
@@ -108,6 +114,14 @@ public final class GraabyNDEFCore implements Parcelable {
         return pc.marshall();
     }
 
+    public static String getGraabyUserID(Context context) throws IOException {
+        FileInputStream fis = context.openFileInput(CORE_FILENAME);
+        UserCredentialsResponse.NFCData nfcCore = LoganSquare.parse(fis, UserCredentialsResponse.NFCData.class);
+        fis.close();
+        GraabyNDEFCore core = new GraabyNDEFCore(nfcCore);
+        return String.valueOf(core.graabyID);
+    }
+
     @Override
     public int describeContents() {
         return 0;
@@ -122,13 +136,5 @@ public final class GraabyNDEFCore implements Parcelable {
                 this.male
         });
         dest.writeByteArray(this.localAESKey);
-    }
-
-    public static String getGraabyUserID(Context context) throws IOException {
-        FileInputStream fis = context.openFileInput(CORE_FILENAME);
-        UserCredentialsResponse.NFCData nfcCore = LoganSquare.parse(fis, UserCredentialsResponse.NFCData.class);
-        fis.close();
-        GraabyNDEFCore core = new GraabyNDEFCore(nfcCore);
-        return String.valueOf(core.graabyID);
     }
 }

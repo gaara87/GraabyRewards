@@ -35,6 +35,7 @@
         android:layout_below="@android:id/progress"
         android:layout_centerHorizontal="true"
         android:layout_marginTop="48dp"
+        android:enabled="false"
         android:textOff="Start Scanning"
         android:textOn="Stop Scanning" />
 
