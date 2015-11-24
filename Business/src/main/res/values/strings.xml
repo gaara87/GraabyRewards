@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="Rs">₹</string>
+    <string name="bill_amount_edit_text_hint">Enter bill amount</string>
+    <string name="phone_number_edit_text_hint">Enter your Phone#</string>
+    <string name="btn_next">Next (Discounts)</string>
+    <string name="checkin_btn">Check-in and leave</string>
+    <string name="welcome_text">Welcome,\n%1$s</string>
+    <string name="reward_amount">Graaby points are based on business reward scheme</string>
+    <string name="tagScanString">Scan your Graaby Tag to start</string>
+    <string name="gift_voucher_dialog_fragment">Enter Phone Number</string>
+    <string name="error_no_discount_items_available">There are no vouchers or\n coupons available</string>
+    <string name="error_request_timedout">Unable to get your vouchers,coupons and punch cards\n\nPlease retry later \nor\ninform the business</string>
+    <string name="error_no_internet">No internet connection available</string>
+    <string name="error_write_fail">Unable to initialize the tag, please retry</string>
+    <string name="gifted_by_text">Gifted by %1$s</string>
+    <string name="title_activity_tag_initialize">Register your tag with Graaby</string>
+    <string name="response_success">success</string>
+    <string name="toast_success_tag_write">Tag written successfully. Tap again to start using</string>
+    <string name="max_count_info">Maximum selection allowed: %1$s</string>
+    <string name="check_in_button">Check In</string>
+    <string name="confirm_finish_button">Confirm &amp; Finish</string>
+    <string name="summary">Summary</string>
+    <string name="error_register_user">There seems to be a problem contacting the server,try again later</string>
+</resources>

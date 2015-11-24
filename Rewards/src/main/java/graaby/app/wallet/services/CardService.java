@@ -156,7 +156,7 @@ public class CardService extends HostApduService {
         // send the loyalty card account number, followed by a SELECT_OK status trailer (0x9000).
         if (Arrays.equals(SELECT_APDU, commandApdu)) {
             try {
-                byte[] accountBytes = GraabyNDEFCore.getGraabyUserAsBytesForHCE(getApplicationContext());
+                byte[] accountBytes = GraabyNDEFCore.getGraabyUserAsBytes(getApplicationContext());
                 Log.i(TAG, "Sending graaby user info size: " + accountBytes.length);
                 return ConcatArrays(accountBytes, SELECT_OK_SW);
             } catch (IOException e) {

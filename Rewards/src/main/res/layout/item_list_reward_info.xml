@@ -21,17 +21,19 @@
     android:paddingEnd="?listPreferredItemPaddingEnd"
     android:paddingLeft="?listPreferredItemPaddingStart"
     android:paddingRight="?listPreferredItemPaddingEnd"
-    android:paddingStart="?listPreferredItemPaddingStart">
+    android:paddingStart="?listPreferredItemPaddingStart"
+    tools:context=".ui.activities.BrandDetailsActivity">
 
     <android.support.v7.widget.AppCompatTextView
         android:id="@android:id/text1"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_centerVertical="true"
-        android:layout_marginLeft="@dimen/global8"
-        android:layout_marginStart="@dimen/global8"
+        android:layout_marginLeft="@dimen/global16"
+        android:layout_marginStart="@dimen/global16"
         android:layout_toEndOf="@+id/view"
         android:layout_toRightOf="@+id/view"
+        tools:text="Free foot massage"
         android:textAppearance="@style/TextAppearance.AppCompat.Body2" />
 
     <android.support.v7.widget.AppCompatTextView

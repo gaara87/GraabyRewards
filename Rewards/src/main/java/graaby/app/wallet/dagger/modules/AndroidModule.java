@@ -10,6 +10,7 @@ import android.util.Log;
 
 import com.google.android.gms.analytics.GoogleAnalytics;
 import com.google.android.gms.analytics.Tracker;
+import com.google.android.gms.nearby.messages.Strategy;
 import com.squareup.okhttp.Cache;
 import com.squareup.okhttp.OkHttpClient;
 
@@ -92,6 +93,7 @@ public class AndroidModule {
         analytics.setDryRun(BuildConfig.DEBUG);
         Tracker t = analytics.newTracker(R.xml.analytics);
         t.enableAdvertisingIdCollection(true);
+        t.enableExceptionReporting(!BuildConfig.DEBUG);
         return t;
     }
 
@@ -130,5 +132,12 @@ public class AndroidModule {
     public ErrorHandler provideErrorHandler() {
         Log.d(TAG, "Providing errorHandler");
         return new RetrofitErrorHandler(application);
+    }
+
+    @Provides
+    @Singleton
+    public Strategy provideStrategy() {
+        Log.d(TAG, "Providing Nearby Strategy");
+        return new Strategy.Builder().setDistanceType(Strategy.DISTANCE_TYPE_EARSHOT).build();
     }
 }

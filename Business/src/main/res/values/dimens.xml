@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <dimen name="globalPadding8">8dp</dimen>
+    <dimen name="border_radius">6dp</dimen>
+
+    <dimen name="readable_text_size">40sp</dimen>
+    <dimen name="summary_text_size">30sp</dimen>
+    <dimen name="global64">64dp</dimen>
+
+</resources>

@@ -1,0 +1,4 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <integer name="response_code_need_to_rewrite_tag">15</integer>
+</resources>

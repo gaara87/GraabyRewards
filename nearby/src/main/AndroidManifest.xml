@@ -1,0 +1,11 @@
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    package="graaby.app.wallet.nearby">
+
+    <application android:allowBackup="true">
+        <meta-data
+            android:name="com.google.android.nearby.messages.API_KEY"
+            android:value="AIzaSyAIOV3jmIiGEQ41GMe7rcsJhwfb63d14fs" />
+
+    </application>
+
+</manifest>

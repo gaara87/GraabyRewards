@@ -1,0 +1,50 @@
+<android.support.v7.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:card_view="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:foreground="?android:attr/selectableItemBackground"
+    card_view:cardCornerRadius="8dp">
+
+    <LinearLayout
+        android:id="@id/linearLayout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@drawable/background_selection_transition"
+        android:orientation="vertical"
+        android:paddingEnd="@dimen/globalPadding8"
+        android:paddingLeft="0dp"
+        android:paddingRight="@dimen/globalPadding8"
+        android:paddingStart="0dp">
+
+        <TextView
+            android:id="@+id/tv_discount_item_id"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="end|center_vertical"
+            android:hint="Discount id"
+            android:textAppearance="?android:attr/textAppearanceMedium"
+            android:visibility="invisible" />
+
+        <TextView
+            android:id="@+id/tv_item_value"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:drawableLeft="@drawable/coupon_nopadding"
+            android:drawableStart="@drawable/coupon_nopadding"
+            android:gravity="center_vertical|end"
+            android:singleLine="true"
+            android:textColor="@android:color/primary_text_light"
+            android:textSize="@dimen/readable_text_size" />
+
+        <TextView
+            android:id="@+id/tv_discount_item_gifted_by"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="Gifted by"
+            android:text="@string/gifted_by_text"
+            android:textAppearance="?android:attr/textAppearanceSmall"
+            android:textColor="@color/concrete"
+            android:visibility="gone" />
+
+    </LinearLayout>
+</android.support.v7.widget.CardView>

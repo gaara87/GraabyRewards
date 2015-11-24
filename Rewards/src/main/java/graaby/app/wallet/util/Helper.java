@@ -1,10 +1,12 @@
 package graaby.app.wallet.util;
 
 import android.app.Activity;
+import android.content.ActivityNotFoundException;
 import android.content.Context;
 import android.content.Intent;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
+import android.widget.Toast;
 
 import com.bluelinelabs.logansquare.LoganSquare;
 import com.crashlytics.android.Crashlytics;
@@ -59,6 +61,20 @@ public class Helper {
                     Crashlytics.log("Device does not contain play services");
             }
             return false;
+        }
+        return true;
+    }
+
+    public static boolean sendFeedback(Activity activity) {
+        Intent i = new Intent(Intent.ACTION_SEND);
+        i.setType("message/rfc822");
+        i.putExtra(Intent.EXTRA_EMAIL, new String[]{"contact@graaby.com"});
+        i.putExtra(Intent.EXTRA_SUBJECT, "[Graaby app feedback]");
+        i.putExtra(Intent.EXTRA_TEXT, "");
+        try {
+            activity.startActivity(Intent.createChooser(i, "E-mail Graaby through..."));
+        } catch (ActivityNotFoundException ex) {
+            Toast.makeText(activity, "There are no email clients installed.", Toast.LENGTH_SHORT).show();
         }
         return true;
     }

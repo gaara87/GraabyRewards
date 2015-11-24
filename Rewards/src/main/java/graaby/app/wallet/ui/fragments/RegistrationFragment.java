@@ -43,7 +43,7 @@ import graaby.app.wallet.util.CacheSubscriber;
 
 public class RegistrationFragment extends BaseFragment implements Validator.ValidationListener, CompoundButton.OnCheckedChangeListener {
 
-    @Bind(R.id.emails_spinner)
+    @Bind(R.id.email)
     AppCompatSpinner mSpinner;
 
     @Password(scheme = Password.Scheme.ALPHA_NUMERIC_MIXED_CASE_SYMBOLS, message = "Minimum 6 characters")

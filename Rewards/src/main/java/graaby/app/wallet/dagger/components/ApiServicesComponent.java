@@ -27,6 +27,7 @@ import graaby.app.wallet.ui.fragments.FeedFragment;
 import graaby.app.wallet.ui.fragments.LoginFragment;
 import graaby.app.wallet.ui.fragments.MarketFragment;
 import graaby.app.wallet.ui.fragments.NavigationFragment;
+import graaby.app.wallet.ui.fragments.NearbyFragment;
 import graaby.app.wallet.ui.fragments.PointReceivedFromContactFragment;
 import graaby.app.wallet.ui.fragments.PointReceivedFromTransactionFragment;
 import graaby.app.wallet.ui.fragments.ProfileFragment;
@@ -89,6 +90,8 @@ public interface ApiServicesComponent {
     void inject(ProfileFragment fragment);
 
     void inject(RegistrationIntentService registrationIntentService);
+
+    void inject(NearbyFragment fragment);
 
     ProfileService profileServce();
 

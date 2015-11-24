@@ -1,0 +1,108 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:gravity="center_horizontal"
+    android:orientation="vertical"
+    android:padding="@dimen/globalPadding8">
+
+    <LinearLayout
+        android:id="@+id/layout_id_info"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center_horizontal"
+        android:orientation="vertical"
+        android:visibility="visible">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:drawableLeft="@android:drawable/ic_lock_lock"
+            android:drawableRight="@android:drawable/ic_lock_lock"
+            android:text=" Your e-mail and phone will be stored safely with us "
+            android:textAppearance="?android:attr/textAppearanceLarge" />
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content">
+
+            <EditText
+                android:id="@+id/editText_primary_email"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:drawableRight="@drawable/ic_action_email"
+                android:hint="Enter your E-mail id "
+                android:inputType="textEmailAddress"
+                android:lines="1"
+                android:textSize="@dimen/readable_text_size" />
+
+            <CheckBox
+                android:id="@+id/checkBox_verify_mail"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:checked="false"
+                android:text="Verify" />
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="+91"
+                android:textAppearance="?android:attr/textAppearanceMedium" />
+
+            <EditText
+                android:id="@+id/editText_primary_phone"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:drawableRight="@drawable/ic_action_call"
+                android:ems="10"
+                android:gravity="center_vertical"
+                android:hint="Enter your Phone #"
+                android:inputType="phone"
+                android:textSize="@dimen/summary_text_size" />
+
+            <CheckBox
+                android:id="@+id/checkBox_verify_phone"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:checked="false"
+                android:text="Verify" />
+
+        </LinearLayout>
+
+
+        <Button
+            android:id="@+id/btn_verify_user_info"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginTop="@dimen/globalPadding8"
+            android:text="Register the information" />
+    </LinearLayout>
+
+    <TextView
+        android:id="@+id/textView_verification"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
+        android:text="Note: A verification e-mail will be sent to the given address"
+        android:textAppearance="?android:attr/textAppearanceMedium" />
+
+    <TextView
+        android:id="@+id/tv_tap_to_confirm"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:drawableBottom="@drawable/ic_tap_scan"
+        android:gravity="center"
+        android:text="@string/initialize_scan_again"
+        android:textSize="@dimen/readable_text_size"
+        android:visibility="visible" />
+
+
+</LinearLayout>

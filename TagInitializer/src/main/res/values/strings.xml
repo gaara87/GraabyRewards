@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="action_new_card">New Tag</string>
+    <string name="api_new_card">/available_card</string>
+    <string name="cb_write_on_tap">Write on next tap</string>
+    <string name="caution_text">Scan a tag to convert it into an authenticated business tag. \n\nCaution: It will overwrite all existing content</string>
+    <string name="field_token">token</string>
+    <string name="outlet_id_string">%1$s ( %2$s )</string>
+    <string name="field_agent_id">agent_id</string>
+    <string name="field_agent_name">agent_name</string>
+    <string name="title_activity_tag_info">Graaby Tag Info</string>
+    <string name="hello_world">Hello world!</string>
+    <string name="title_graabytag_list">Graaby Tags</string>
+    <string name="title_graabytag_detail">Tag Detail</string>
+    <string name="field_key">key</string>
+    <string name="field_state">state</string>
+    <string-array name="action_list">
+        <item>Blanks</item>
+        <item>Pending</item>
+        <item>All</item>
+    </string-array>
+    <string-array name="endpoint_list">
+        <item>blank</item>
+        <item>pending</item>
+        <item>all</item>
+    </string-array>
+</resources>

@@ -9,9 +9,6 @@
 
     <integer name="ga_sessionTimeout">300</integer>
 
-    <!--Put this inside debug only-->
-    <bool name="ga_dryRun">true</bool>
-
     <!--screen names-->
     <!--fragments-->
     <screenName name="graaby.app.wallet.ui.fragments.ProfileFragment">Profile</screenName>
@@ -41,6 +38,6 @@
     <screenName name="graaby.app.wallet.ui.activities.SettingsActivity">Settings</screenName>
     <screenName name="graaby.app.wallet.ui.activities.OnboardingActivity">Onboarding</screenName>
     <screenName name="graaby.app.wallet.ui.activities.FeedActivity">Feeds activity</screenName>
-
+    <screenName name="graaby.app.wallet.ui.activities.NearbyActivity">Nearby</screenName>
 
 </resources>

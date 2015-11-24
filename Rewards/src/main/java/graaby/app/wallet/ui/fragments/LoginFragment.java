@@ -63,7 +63,7 @@ public class LoginFragment extends BaseFragment {
     LoginInterface loginActivity;
     @Bind(R.id.password)
     EditText mPasswordView;
-    @Bind(R.id.emails_spinner)
+    @Bind(R.id.email)
     AutoCompleteTextView mAutoCompleteSpinner;
     @Bind(R.id.login_form)
     View mLoginFormView;

@@ -1,0 +1,92 @@
+apply plugin: 'com.android.application'
+
+repositories {
+    mavenCentral()
+}
+
+android {
+    signingConfigs {
+        releaseSigning {
+            storeFile file(STORE_FILE)
+            storePassword STORE_PASSWORD
+            keyAlias KEY_ALIAS
+            keyPassword KEY_PASSWORD
+        }
+    }
+    compileSdkVersion 23
+    buildToolsVersion "23.0.1"
+
+    defaultConfig {
+        minSdkVersion 14
+        targetSdkVersion 23
+    }
+    productFlavors {
+        prod {
+            applicationId "graaby.app.vendor"
+            versionCode 17
+            versionName "1.0.7"
+        }
+
+        dev {
+            applicationId "graaby.app.vendor.dev"
+            versionCode 17
+            versionName "1.0.7"
+        }
+    }
+    buildTypes {
+        release {
+            minifyEnabled true
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+            signingConfig signingConfigs.releaseSigning
+        }
+        debug {
+            debuggable true
+            applicationIdSuffix ".debug"
+            versionNameSuffix "-DEBUG"
+        }
+    }
+
+    lintOptions {
+        disable 'InvalidPackage'
+    }
+
+    packagingOptions {
+        exclude 'META-INF/services/javax.annotation.processing.Processor'
+    }
+
+    applicationVariants.all { variant ->
+        variant.outputs.each { output ->
+            def file = output.outputFile
+
+            String parent = file.parent
+            if (project.hasProperty('OUTPUT_DIR') && new File((String) OUTPUT_DIR).exists())
+                parent = OUTPUT_DIR
+
+            output.outputFile = new File(
+                    parent,
+                    (String) file.name.replace(
+                            ".apk",
+
+                            // alter this string to change output file name
+                            "-" + variant.versionName + "-build" + variant.versionCode + "-.apk"
+                    )
+            )
+        }
+    }
+}
+
+dependencies {
+    devCompile project(path: ':NFC Library', configuration: 'devRelease')
+    prodCompile project(path: ':NFC Library', configuration: 'prodRelease')
+    compile 'com.android.support:support-v4:23.0.1'
+    compile 'com.android.support:cardview-v7:23.0.1'
+    compile 'com.squareup.okhttp:okhttp:1.2.1'
+    compile 'com.path:android-priority-jobqueue:1.1.2'
+    compile 'com.mcxiaoke.volley:library:1.0.7'
+    compile 'com.jakewharton:butterknife:5.1.2'
+    compile 'com.nineoldandroids:library:2.4.0'
+    compile 'com.daimajia.easing:library:1.0.0@aar'
+    compile 'com.daimajia.androidanimations:library:1.1.2@aar'
+    compile project(':Nearby')
+    compile 'com.google.android.gms:play-services-analytics:7.8.0'
+}

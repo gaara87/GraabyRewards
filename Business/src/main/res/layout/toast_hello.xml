@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/toast_hello_root"
+    android:layout_width="wrap_content"
+    android:layout_height="match_parent"
+    android:background="@color/wetasphalt"
+    android:orientation="horizontal"
+    android:padding="@dimen/globalPadding8">
+
+    <TextView
+        android:id="@+id/grbyUserName"
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:gravity="center_vertical"
+        android:text="@string/welcome_text"
+        android:textColor="@android:color/primary_text_dark"
+        android:textSize="@dimen/readable_text_size" />
+
+</LinearLayout>

@@ -159,12 +159,13 @@ public abstract class BaseAppCompatActivity extends AppCompatActivity {
                 try {
                     mNfcAdapter.setNdefPushMessage(GraabyNDEFCore.createNdefMessage(this), this);
                 } catch (Exception e) {
-                    File f = new File(getFilesDir() + "/beamer");
+                    File f = new File(getFilesDir() + "/" + GraabyNDEFCore.CORE_FILENAME);
                     if (f.exists()) {
                         f.delete();
-                        if (((GraabyApplication) getApplication()).getComponent().userAuthenticationHandler().isAuthenticated())
+                        if (authHandler.isAuthenticated())
                             mCompositeSubscriptions.add(
-                                    ((GraabyApplication) getApplication()).getApiComponent().profileServce().getNFCInfo().observeOn(Schedulers.newThread())
+                                    GraabyApplication.getApplication().getApiComponent().profileServce().getNFCInfo()
+                                            .observeOn(Schedulers.newThread())
                                             .subscribeOn(Schedulers.newThread())
                                             .subscribe(new CacheSubscriber<UserCredentialsResponse.NFCData>(this) {
                                                 @Override

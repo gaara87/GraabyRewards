@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="field_graaby_user_id">grbyuid</string>
+    <string name="field_batch_transactions">txs</string>
+    <string name="field_tab_uid">tab-uid</string>
+    <string name="field_auth_code">auth-code</string>
+    <string name="field_success">success</string>
+    <string name="field_fail">fail</string>
+    <string name="field_data">data</string>
+    <string name="field_checkin">checkin</string>
+    <string name="field_discount_percentage">d</string>
+    <string name="field_corporate_discount_percentage">cd</string>
+    <string name="field_gross_bill_amount">gross</string>
+    <string name="field_redeemed_coupons">cpn_redeemed</string>
+    <string name="field_redeemed_vouchers">vcr_redeemed</string>
+    <string name="field_timestamp">tstamp</string>
+    <string name="field_items">items</string>
+    <string name="field_value">v</string>
+    <string name="field_type_discount_item">t</string>
+    <string name="field_gift_from">gift_from</string>
+    <string name="field_gift">gift</string>
+    <string name="field_punch">punch</string>
+    <string name="field_phone">ph</string>
+    <string name="field_net_bill_amount">net</string>
+    <string name="field_total_discount">d</string>
+    <string name="field_iv">iv</string>
+    <string name="field_url">url</string>
+    <string name="field_reward_amount">reward</string>
+    <string name="field_email">email</string>
+    <string name="field_phone_num">phone</string>
+    <string name="field_bill_num">bill_num</string>
+    <string name="field_outlet_name">name</string>
+    <string name="field_point">point</string>
+</resources>

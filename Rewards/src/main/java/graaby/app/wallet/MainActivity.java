@@ -2,12 +2,10 @@ package graaby.app.wallet;
 
 import android.app.Activity;
 import android.content.Intent;
-import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.provider.SearchRecentSuggestions;
 import android.support.design.widget.NavigationView;
 import android.support.design.widget.TabLayout;
-import android.support.v4.graphics.drawable.DrawableCompat;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.view.ViewPager;
 import android.support.v4.widget.DrawerLayout;
@@ -44,18 +42,20 @@ public class MainActivity extends BaseAppCompatActivity
     ViewPager mPager;
     @Bind(R.id.tabs)
     TabLayout mTabLayout;
+    @Bind(R.id.drawer_layout)
+    DrawerLayout mDrawerLayout;
     /**
      * Used to store the last screen title. For use in {@link #restoreActionBar()}.
      */
     private CharSequence mTitle;
 
     private boolean initialized = false;
-    private DrawerLayout mDrawerLayout;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main_wallet);
+        ButterKnife.bind(this);
         authHandler.loginOrAddAccount(this, this);
     }
 
@@ -79,7 +79,6 @@ public class MainActivity extends BaseAppCompatActivity
 
     private void initialize() {
         setNavigationView();
-        ButterKnife.bind(this);
         GraabyOutletDiscoveryService.setupLocationService(this);
         registerGCM();
         setupToolbar();
@@ -123,37 +122,12 @@ public class MainActivity extends BaseAppCompatActivity
 
 
     private void setupTabLayout() {
-        mPager.setAdapter(new HomePagerAdapter(getSupportFragmentManager(), this));
+        HomePagerAdapter adapter = new HomePagerAdapter(getSupportFragmentManager(), this);
+        mPager.setAdapter(adapter);
         mPager.setOffscreenPageLimit(1);
         mTabLayout.setupWithViewPager(mPager);
         mTabLayout.setOnTabSelectedListener(this);
-        for (int i = 0; i < mTabLayout.getTabCount(); i++) {
-            int drawableResourceID = 0;
-            switch (i) {
-                case 0:
-                    drawableResourceID = R.drawable.nav_market;
-                    break;
-                case 1:
-                    drawableResourceID = R.drawable.nav_business;
-                    break;
-                case 2:
-                    drawableResourceID = R.drawable.nav_feeds;
-                    break;
-                case 3:
-                    drawableResourceID = R.drawable.nav_contacts;
-            }
-            if (mTabLayout != null && drawableResourceID != 0) {
-                Drawable drawable = null;
-                if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.LOLLIPOP) {
-                    drawable = getResources().getDrawable(drawableResourceID, getTheme());
-                } else {
-                    drawable = getResources().getDrawable(drawableResourceID);
-                }
-                drawable = DrawableCompat.wrap(drawable);
-                DrawableCompat.setTint(drawable.mutate(), getResources().getColor(android.R.color.white));
-                mTabLayout.getTabAt(i).setIcon(drawable);
-            }
-        }
+        adapter.setupTabIcons(mTabLayout);
     }
 
     private void setupToolbar() {
@@ -171,11 +145,11 @@ public class MainActivity extends BaseAppCompatActivity
     }
 
     private void setupDrawerLayout() {
-        mDrawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
+//        mDrawerLayout.setDrawerListener(new DrawerLayout.SimpleDrawerListener() {
+//        });
     }
 
     public void restoreActionBar() {
-        getSupportActionBar().setDisplayShowTitleEnabled(true);
         getSupportActionBar().setTitle(mTitle);
     }
 
@@ -203,7 +177,7 @@ public class MainActivity extends BaseAppCompatActivity
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         try {
-            if (!mDrawerLayout.isDrawerOpen(GravityCompat.START)) {
+            if (mDrawerLayout != null && !mDrawerLayout.isDrawerOpen(GravityCompat.START)) {
                 // Only show items in the action bar relevant to this screen
                 // if the drawer is not showing. Otherwise, let the drawer
                 // decide what to show in the action bar.
@@ -245,6 +219,14 @@ public class MainActivity extends BaseAppCompatActivity
         initializeAfterResumeIfAllowed();
     }
 
+    @Override
+    public void onBackPressed() {
+        if (mDrawerLayout != null && mDrawerLayout.isDrawerOpen(GravityCompat.START))
+            mDrawerLayout.closeDrawer(GravityCompat.START);
+        else
+            super.onBackPressed();
+    }
+
     private void initializeAfterResumeIfAllowed() {
         if (authHandler.isAuthenticated() && !initialized)
             initialize();
@@ -260,7 +242,9 @@ public class MainActivity extends BaseAppCompatActivity
     @Override
     public void onTabSelected(TabLayout.Tab tab) {
         mPager.setCurrentItem(tab.getPosition());
-        getSupportActionBar().setTitle(((HomePagerAdapter) mPager.getAdapter()).getTitle(tab.getPosition()));
+        HomePagerAdapter adapter = (HomePagerAdapter) mPager.getAdapter();
+        setTitle(adapter.getTitle(tab.getPosition()));
+        mTitle = getString(adapter.getTitle(tab.getPosition()));
     }
 
     @Override

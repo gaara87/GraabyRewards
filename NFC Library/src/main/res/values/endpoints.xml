@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="api_register_card">/register_card</string>
+    <string name="api_get_tag_info">/tag/detail</string>
+    <string name="api_get_tags">/tag/list/</string>
+    <string name="api_tag_confirm">/tag/confirm</string>
+    <string name="api_register_user">/register_user</string>
+    <string name="api_confirm_card">/confirm_card</string>
+</resources>

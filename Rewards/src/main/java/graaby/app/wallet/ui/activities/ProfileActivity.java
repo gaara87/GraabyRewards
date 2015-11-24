@@ -1,7 +1,6 @@
 package graaby.app.wallet.ui.activities;
 
 import android.os.Bundle;
-import android.support.v4.app.Fragment;
 import android.support.v4.app.NavUtils;
 import android.view.MenuItem;
 
@@ -16,9 +15,9 @@ public class ProfileActivity extends BaseAppCompatActivity {
         setContentView(R.layout.activity_fragment_container);
         getSupportActionBar().setDisplayHomeAsUpEnabled(Boolean.TRUE);
 
-        Fragment fragment = new ProfileFragment();
+        ProfileFragment profileFragment = new ProfileFragment();
         getSupportFragmentManager().beginTransaction()
-                .replace(R.id.container, fragment).commit();
+                .replace(R.id.container, profileFragment).commit();
     }
 
     @Override

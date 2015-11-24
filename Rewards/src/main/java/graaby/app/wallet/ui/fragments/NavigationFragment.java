@@ -24,6 +24,7 @@ import graaby.app.wallet.events.ProfileEvents;
 import graaby.app.wallet.models.realm.ProfileDAO;
 import graaby.app.wallet.models.retrofit.ProfileNavResponse;
 import graaby.app.wallet.network.services.ProfileService;
+import graaby.app.wallet.ui.activities.FeedActivity;
 import graaby.app.wallet.ui.activities.MarketActivity;
 import graaby.app.wallet.ui.activities.ProfileActivity;
 import graaby.app.wallet.ui.activities.SettingsActivity;
@@ -147,13 +148,20 @@ public class NavigationFragment extends BaseFragment implements NavigationView.O
             case R.id.drawer_profile:
                 Intent intent = new Intent(getActivity(), ProfileActivity.class);
                 getActivity().startActivity(intent);
-                break;
+                return false;
             case R.id.drawer_my_vouchers:
                 intent = new Intent(getActivity(), MarketActivity.class);
                 intent.putExtra(Helper.KEY_TYPE,
                         DiscountItemType.VOUCHERS);
                 getActivity().startActivity(intent);
-                break;
+                return false;
+            case R.id.drawer_feeds:
+                intent = new Intent(getActivity(), FeedActivity.class);
+                getActivity().startActivity(intent);
+                return false;
+            case R.id.drawer_feedback:
+                Helper.sendFeedback(getActivity());
+                return false;
             case R.id.drawer_settings:
                 intent = new Intent(getActivity(), SettingsActivity.class);
                 getActivity().startActivityForResult(intent, 10);

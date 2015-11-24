@@ -37,7 +37,7 @@ android {
     }
 
     compileSdkVersion 23
-    buildToolsVersion '23.0.0'
+    buildToolsVersion '23.0.1'
     useLibrary 'org.apache.http.legacy'
     defaultConfig {
         minSdkVersion 11
@@ -116,10 +116,6 @@ android {
         exclude 'META-INF/NOTICE.txt'
     }
 
-    compileOptions {
-        sourceCompatibility JavaVersion.VERSION_1_8
-        targetCompatibility JavaVersion.VERSION_1_8
-    }
 }
 apply plugin: 'com.neenbedankt.android-apt'
 
@@ -166,4 +162,6 @@ dependencies {
         transitive = true
     }
     compile 'com.github.anrwatchdog:anrwatchdog:1.1.+'
+    compile project(':Nearby')
+    compile project(':Base Library')
 }
